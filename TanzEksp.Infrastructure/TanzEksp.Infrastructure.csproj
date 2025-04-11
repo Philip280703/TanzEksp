@@ -10,4 +10,8 @@
     <Folder Include="API\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TanzEksp\Server\TanzEksp.Server.csproj" />
+  </ItemGroup>
+
 </Project>

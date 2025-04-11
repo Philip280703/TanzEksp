@@ -11,4 +11,8 @@
     <Folder Include="Repositories\Interfaces\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TanzEksp\Server\TanzEksp.Server.csproj" />
+  </ItemGroup>
+
 </Project>
