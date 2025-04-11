@@ -21,7 +21,8 @@ namespace TanzEksp.Shared.Domain
         [Range(0, 10, ErrorMessage = "Antal børn skal være mellem 0 og 10")]
         public int? ChildCount { get; set; }
 
-
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
 
         public Customer? Customer { get; set; }
 

@@ -8,7 +8,7 @@ using TanzEksp.Shared.Domain;
 
 namespace TanzEksp.Persistence.EFContext
 {
-    internal class AppDbContext : DbContext
+    public class AppDbContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
