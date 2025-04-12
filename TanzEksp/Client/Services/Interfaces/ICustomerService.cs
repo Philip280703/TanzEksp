@@ -4,10 +4,10 @@ namespace TanzEksp.Client.Services.Interfaces
 {
     public interface ICustomerService
     {
-        Task<List<Customer>> GetAllCustomersAsync();
-        Task<Customer?> GetCustomerByIdAsync(int id);
-        Task<int> AddCustomerAsync(Customer customer);
-        Task<int> UpdateCustomerAsync(Customer customer);
+        Task<List<CustomerDTO>> GetAllCustomersAsync();
+        Task<CustomerDTO?> GetCustomerByIdAsync(int id);
+        Task<int> AddCustomerAsync(CustomerDTO customer);
+        Task<int> UpdateCustomerAsync(CustomerDTO customer);
         Task<int> DeleteCustomerAsync(int id);
     }
 }

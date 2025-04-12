@@ -18,7 +18,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Client\TanzEksp.Client.csproj" />
+    <ProjectReference Include="..\..\TanzEksp.Application\TanzEksp.Application.csproj" />
+    <ProjectReference Include="..\..\TanzEksp.Infrastructure\TanzEksp.Domain.csproj" />
+    <ProjectReference Include="..\..\TanzEksp.Persistence\TanzEksp.Infrastructure.csproj" />
     <ProjectReference Include="..\Shared\TanzEksp.Shared.csproj" />
   </ItemGroup>
 </Project>

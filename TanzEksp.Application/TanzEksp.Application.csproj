@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TanzEksp.Infrastructure\TanzEksp.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

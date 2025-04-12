@@ -20,12 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TanzEksp\Server\TanzEksp.Server.csproj" />
-    <ProjectReference Include="..\TanzEksp\Shared\TanzEksp.Shared.csproj" />
+    <Folder Include="ExternalAPI\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ExternalAPI\" />
+    <ProjectReference Include="..\TanzEksp.Application\TanzEksp.Application.csproj" />
+    <ProjectReference Include="..\TanzEksp.Infrastructure\TanzEksp.Domain.csproj" />
   </ItemGroup>
 
 </Project>

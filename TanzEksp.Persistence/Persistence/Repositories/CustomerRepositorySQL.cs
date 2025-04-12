@@ -22,27 +22,27 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
 
         }
 
-        private static readonly List<Customer> _customerList;
+        private static readonly List<CustomerDTO> _customerList;
 
-        public List<Customer> GetAll()
+        public List<CustomerDTO> GetAll()
         {
             var result = _db.CustomerEF.ToList();
             return result;
         }
 
-        public Customer GetById(int id)
+        public CustomerDTO GetById(int id)
         {
             var result = _db.CustomerEF.Single(c => c.Id == id);
             return result;
         }
 
-        public void Add(Customer customer)
+        public void Add(CustomerDTO customer)
         {
             _db.CustomerEF.Add(customer);
             _db.SaveChanges();
         }
 
-        public void Update(Customer customer)
+        public void Update(CustomerDTO customer)
         {
             var existingCustomer = GetById(customer.Id);
             _unitOfWork.BeginTransaction(System.Data.IsolationLevel.Serializable);
@@ -80,7 +80,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
 
         static CustomerRepositorySQL()
         {
-            _customerList = new List<Customer>();
+            _customerList = new List<CustomerDTO>();
             _customerList.Clear();
         }
     }

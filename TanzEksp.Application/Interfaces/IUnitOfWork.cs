@@ -1,4 +1,4 @@
-﻿namespace TanzEksp.Server.RepositoryInterfaces
+﻿namespace TanzEksp.Application.Interfaces
 {
     public interface IUnitOfWork
     {

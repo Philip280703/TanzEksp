@@ -13,9 +13,9 @@ namespace TanzEksp.Client.Services
             _httpClient = httpClient;
         }
 
-        public async Task<List<Customer>> GetAllCustomersAsync()
+        public async Task<List<CustomerDTO>> GetAllCustomersAsync()
         {
-            var customer = await _httpClient.GetFromJsonAsync<List<Customer>>("api/customer");
+            var customer = await _httpClient.GetFromJsonAsync<List<CustomerDTO>>("api/customer");
             if (customer == null)
             {
                 throw new Exception("Failed to load customers");
@@ -23,9 +23,9 @@ namespace TanzEksp.Client.Services
             return customer;
         }
 
-        public async Task<Customer> GetCustomerByIdAsync(int id)
+        public async Task<CustomerDTO> GetCustomerByIdAsync(int id)
         {
-            var customer = await _httpClient.GetFromJsonAsync<Customer>($"api/customer/{id}");
+            var customer = await _httpClient.GetFromJsonAsync<CustomerDTO>($"api/customer/{id}");
             if (customer == null)
             {
                 throw new Exception($"Failed to load customer with ID {id}");
@@ -33,14 +33,14 @@ namespace TanzEksp.Client.Services
             return customer;
         }
 
-        public async Task<int> AddCustomerAsync(Customer customer)
+        public async Task<int> AddCustomerAsync(CustomerDTO customer)
         {
             var answer = await _httpClient.PostAsJsonAsync("api/customer", customer);
             var answerCode = (int)answer.StatusCode;
             return answerCode;
         }
 
-        public async Task<int> UpdateCustomerAsync(Customer customer)
+        public async Task<int> UpdateCustomerAsync(CustomerDTO customer)
         {
             var answer = await _httpClient.PutAsJsonAsync($"api/customer/{customer.Id}", customer);
             var answerCode = (int)answer.StatusCode;

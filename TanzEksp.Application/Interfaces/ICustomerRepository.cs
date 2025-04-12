@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TanzEksp.Shared.Domain;
+using TanzEksp.Domain.Entities;
 
-namespace TanzEksp.Server.RepositoryInterfaces
+namespace TanzEksp.Application.Interfaces
 {
     public interface ICustomerRepository
     {
