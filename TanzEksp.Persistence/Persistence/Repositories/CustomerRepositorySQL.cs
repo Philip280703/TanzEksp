@@ -7,6 +7,7 @@ using TanzEksp.Infrastructure.Persistence.EFContext;
 using TanzEksp.Application.Interfaces;
 using TanzEksp.Infrastructure.Persistence.Repositories;
 using TanzEksp.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace TanzEksp.Infrastructure.Persistence.Repositories
 {
@@ -24,27 +25,29 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
 
         private static readonly List<Customer> _customerList;
 
-        public List<Customer> GetAll()
+        public async Task<List<Customer>> GetAll()
         {
-            var result = _db.CustomerEF.ToList();
+            var result = await _db.CustomerEF.ToListAsync();
             return result;
         }
 
-        public Customer GetById(int id)
+        public async Task<Customer> GetById(int id)
         {
-            var result = _db.CustomerEF.Single(c => c.Id == id);
+            var result = await _db.CustomerEF.SingleOrDefaultAsync(c => c.Id == id);
             return result;
         }
 
-        public void Add(Customer customer)
+
+        public async Task Add(Customer customer)
         {
-            _db.CustomerEF.Add(customer);
-            _db.SaveChanges();
+            await _db.CustomerEF.AddAsync(customer);
+            await _db.SaveChangesAsync();
         }
 
-        public void Update(Customer customer)
+
+        public async Task Update(Customer customer)
         {
-            var existingCustomer = GetById(customer.Id);
+            var existingCustomer = await GetById(customer.Id); // Vent på asynkrone metode
             _unitOfWork.BeginTransaction(System.Data.IsolationLevel.Serializable);
             try
             {
@@ -58,23 +61,23 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
                     existingCustomer.HouseNumber = customer.HouseNumber;
                 }
                 _unitOfWork.Commit();
-                _db.SaveChanges();
+                await _db.SaveChangesAsync(); // Brug asynkrone version
             }
             catch (Exception ex)
             {
                 _unitOfWork.Rollback();
                 throw new Exception("Error updating customer", ex);
             }
-
         }
 
-        public void Delete(int id)
+
+        public async Task Delete(int id)
         {
-            var customer = GetById(id);
+            var customer = await GetById(id); // Vent på asynkrone metode
             if (customer != null)
             {
                 _db.CustomerEF.Remove(customer);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync(); // Brug asynkrone version
             }
         }
 

@@ -17,9 +17,28 @@ namespace TanzEksp.Application.UseCases
             _customerRepository = customerRepository;
         }
 
-        public List<Customer> GetAll()
+        public async Task<List<Customer>> GetAll()
         {
-            return _customerRepository.GetAll();
+            return await _customerRepository.GetAll();
+        }
+
+        public async Task<Customer> GetById(int id)
+        {
+            return await _customerRepository.GetById(id);
+        }
+
+        public async Task Add(Customer customer)
+        {
+            await _customerRepository.Add(customer);
+        }
+
+        public async Task Update(Customer customer)
+        {
+            await _customerRepository.Update(customer);
+        }
+        public async Task Delete(int id)
+        {
+            await _customerRepository.Delete(id);
         }
     }
 }
