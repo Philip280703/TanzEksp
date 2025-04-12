@@ -15,10 +15,10 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
         private AppDbContext _db;
         private IUnitOfWork _unitOfWork;
 
-        public CustomerRepositorySQL()
+        public CustomerRepositorySQL(AppDbContext db, IUnitOfWork unitOfWork)
         {
-            _db = new AppDbContext();
-            _unitOfWork = new UnitOfWork(_db);
+            _db = db;
+            _unitOfWork = unitOfWork;
 
         }
 
