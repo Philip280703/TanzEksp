@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TanzEksp.Server.RepositoryInterfaces;
-using TanzEksp.Persistence.EFContext;
+using TanzEksp.Infrastructure.Persistence.EFContext;
 
-namespace TanzEksp.Persistence.Repositories
+namespace TanzEksp.Infrastructure.Persistence.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {

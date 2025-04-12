@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TanzEksp.Shared.Domain;
 
-namespace TanzEksp.Persistence.EFContext
+namespace TanzEksp.Infrastructure.Persistence.EFContext
 {
     public class AppDbContext : DbContext
     {
@@ -16,13 +16,13 @@ namespace TanzEksp.Persistence.EFContext
         }
 
         public DbSet<Booking> BookingEF { get; set; }
-        public DbSet<TripEvent> TripEventEF { get; set; } 
+        public DbSet<TripEvent> TripEventEF { get; set; }
         public DbSet<Customer> CustomerEF { get; set; }
         public DbSet<DayPlan> DayPlanEF { get; set; }
         public DbSet<EmployeeUser> EmployeeUserEF { get; set; }
         public DbSet<Trip> TripEF { get; set; }
         public DbSet<Zipcode> ZipcodeEF { get; set; }
 
-      
+
     }
 }

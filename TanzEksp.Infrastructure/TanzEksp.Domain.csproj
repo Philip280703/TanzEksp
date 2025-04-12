@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TanzEksp\Server\TanzEksp.Server.csproj" />
-    <ProjectReference Include="..\TanzEksp\Shared\TanzEksp.Shared.csproj" />
   </ItemGroup>
 
 </Project>
