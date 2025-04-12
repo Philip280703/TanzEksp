@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TanzEksp.Persistence.EFContext;
+using TanzEksp.Infrastructure.Persistence.EFContext;
+using TanzEksp.Persistence.Repositories;
 using TanzEksp.Server.RepositoryInterfaces;
 using TanzEksp.Shared.Domain;
 
-namespace TanzEksp.Persistence.Repositories
+namespace TanzEksp.Infrastructure.Persistence.Repositories
 {
     public class CustomerRepositorySQL : ICustomerRepository
     {
@@ -35,7 +36,7 @@ namespace TanzEksp.Persistence.Repositories
             return result;
         }
 
-        public  void Add(Customer customer)
+        public void Add(Customer customer)
         {
             _db.CustomerEF.Add(customer);
             _db.SaveChanges();

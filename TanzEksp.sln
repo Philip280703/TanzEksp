@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Client", "TanzEksp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Shared", "TanzEksp\Shared\TanzEksp.Shared.csproj", "{1A424BF2-3A5F-442A-ACCC-A79D0EEB0076}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Infrastructure", "TanzEksp.Infrastructure\TanzEksp.Infrastructure.csproj", "{44F95BFA-A104-4DC6-AF6E-3D9CA4737B2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Domain", "TanzEksp.Infrastructure\TanzEksp.Domain.csproj", "{44F95BFA-A104-4DC6-AF6E-3D9CA4737B2C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Persistence", "TanzEksp.Persistence\TanzEksp.Persistence.csproj", "{9B94F408-6135-427D-8FB1-5A98006A0484}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Infrastructure", "TanzEksp.Persistence\TanzEksp.Infrastructure.csproj", "{9B94F408-6135-427D-8FB1-5A98006A0484}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TanzEksp.Application", "TanzEksp.Application\TanzEksp.Application.csproj", "{DFA5E5A7-B4AD-4FD3-B0C8-06E70249F11A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{9B94F408-6135-427D-8FB1-5A98006A0484}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B94F408-6135-427D-8FB1-5A98006A0484}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B94F408-6135-427D-8FB1-5A98006A0484}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFA5E5A7-B4AD-4FD3-B0C8-06E70249F11A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFA5E5A7-B4AD-4FD3-B0C8-06E70249F11A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFA5E5A7-B4AD-4FD3-B0C8-06E70249F11A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFA5E5A7-B4AD-4FD3-B0C8-06E70249F11A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
