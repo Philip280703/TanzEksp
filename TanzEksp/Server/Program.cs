@@ -12,10 +12,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 
+builder.Services.AddServerServices(); // Register IOC service her
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddServerServices(); // Register IOC service her
 
 var app = builder.Build();
 
