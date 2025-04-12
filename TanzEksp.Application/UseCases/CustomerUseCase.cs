@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TanzEksp.Application.Interfaces;
+using TanzEksp.Domain.Entities;
 
 namespace TanzEksp.Application.UseCases
 {
-    public class CustomersUseCase
+    public class CustomerUseCase
     {
         private readonly ICustomerRepository _customerRepository;
 
-        public CustomersUseCase(ICustomerRepository customerRepository)
+        public CustomerUseCase(ICustomerRepository customerRepository)
         {
             _customerRepository = customerRepository;
         }

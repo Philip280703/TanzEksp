@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-    namespace TanzEksp.Shared.Domain
+    namespace TanzEksp.Domain.Entities
     {
     public class DayPlan
     {

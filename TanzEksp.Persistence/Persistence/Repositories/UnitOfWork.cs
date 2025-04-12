@@ -5,8 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TanzEksp.Server.RepositoryInterfaces;
 using TanzEksp.Infrastructure.Persistence.EFContext;
+using TanzEksp.Infrastructure.Persistence.EFContext;
+using TanzEksp.Application.Interfaces;
+using TanzEksp.Infrastructure.Persistence.Repositories;
+using TanzEksp.Domain.Entities;
+
 
 namespace TanzEksp.Infrastructure.Persistence.Repositories
 {

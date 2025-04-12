@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TanzEksp.Infrastructure.Persistence.EFContext;
-using TanzEksp.Persistence.Repositories;
-using TanzEksp.Server.RepositoryInterfaces;
-using TanzEksp.Shared.Domain;
+using TanzEksp.Application.Interfaces;
+using TanzEksp.Infrastructure.Persistence.Repositories;
+using TanzEksp.Domain.Entities;
 
 namespace TanzEksp.Infrastructure.Persistence.Repositories
 {
@@ -22,27 +22,27 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
 
         }
 
-        private static readonly List<CustomerDTO> _customerList;
+        private static readonly List<Customer> _customerList;
 
-        public List<CustomerDTO> GetAll()
+        public List<Customer> GetAll()
         {
             var result = _db.CustomerEF.ToList();
             return result;
         }
 
-        public CustomerDTO GetById(int id)
+        public Customer GetById(int id)
         {
             var result = _db.CustomerEF.Single(c => c.Id == id);
             return result;
         }
 
-        public void Add(CustomerDTO customer)
+        public void Add(Customer customer)
         {
             _db.CustomerEF.Add(customer);
             _db.SaveChanges();
         }
 
-        public void Update(CustomerDTO customer)
+        public void Update(Customer customer)
         {
             var existingCustomer = GetById(customer.Id);
             _unitOfWork.BeginTransaction(System.Data.IsolationLevel.Serializable);
@@ -80,7 +80,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
 
         static CustomerRepositorySQL()
         {
-            _customerList = new List<CustomerDTO>();
+            _customerList = new List<Customer>();
             _customerList.Clear();
         }
     }

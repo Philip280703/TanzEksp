@@ -3,7 +3,7 @@ using TanzEksp.Client.Services;
 
 namespace TanzEksp.Client.DI
 {
-    public static class ClientCollection
+    public static class ClientDICollection
     {
         public static IServiceCollection AddClientServices(this IServiceCollection services)
         {

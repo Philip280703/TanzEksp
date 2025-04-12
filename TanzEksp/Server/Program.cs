@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.ResponseCompression;
-using TanzEksp.Server.RepositoryInterfaces;
+using TanzEksp.Infrastructure.Persistence.EFContext;
 using TanzEksp.Server.ServerIOC;
 
 
@@ -10,7 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-builder.Services.AddServerServices();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer("Server=localhost;Database=TanzEksp;Trusted_Connection=True;"));
+
+builder.Services.AddServerServices(); // Register IOC service her
 
 var app = builder.Build();
 

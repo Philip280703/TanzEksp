@@ -1,4 +1,4 @@
-﻿using TanzEksp.Shared.Domain;
+﻿using TanzEksp.Shared.DTO;
 
 namespace TanzEksp.Client.Services.Interfaces
 {

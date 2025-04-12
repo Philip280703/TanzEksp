@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Json;
 using TanzEksp.Client.Services.Interfaces;
-using TanzEksp.Shared.Domain;
+using TanzEksp.Shared.DTO;
 
 namespace TanzEksp.Client.Services
 {

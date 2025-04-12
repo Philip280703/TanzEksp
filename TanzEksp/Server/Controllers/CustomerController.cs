@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TanzEksp.Server.RepositoryInterfaces;
-using TanzEksp.Shared.Domain;
+using TanzEksp.Application.UseCases;
+using TanzEksp.Domain.Entities;
 
 namespace TanzEksp.Server.Controllers
 {
