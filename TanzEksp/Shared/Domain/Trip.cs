@@ -16,6 +16,8 @@ namespace TanzEksp.Shared.Domain
     {
         public int Id { get; set; }
 
+        public DateTime? StartDate { get; set; }
+
         public TripType TripType { get; set; }
 
 

@@ -11,42 +11,60 @@ namespace TanzEksp.Persistence.Repositories
 {
     public class CustomerRepositorySQL : ICustomerRepository
     {
-        AppDbContext _db = new AppDbContext();
+        private AppDbContext _db;
+        private IUnitOfWork _unitOfWork;
 
         public CustomerRepositorySQL()
         {
-            
+            _db = new AppDbContext();
+            _unitOfWork = new UnitOfWork(_db);
+
         }
 
         private static readonly List<Customer> _customerList;
 
         public List<Customer> GetAll()
         {
-            return _customerList;
+            var result = _db.CustomerEF.ToList();
+            return result;
         }
 
         public Customer GetById(int id)
         {
-            return _customerList.FirstOrDefault(c => c.Id == id);
+            var result = _db.CustomerEF.Single(c => c.Id == id);
+            return result;
         }
 
-        public void Add(Customer customer)
+        public  void Add(Customer customer)
         {
-            _customerList.Add(customer);
+            _db.CustomerEF.Add(customer);
+            _db.SaveChanges();
         }
 
         public void Update(Customer customer)
         {
             var existingCustomer = GetById(customer.Id);
-            if (existingCustomer != null)
+            _unitOfWork.BeginTransaction(System.Data.IsolationLevel.Serializable);
+            try
             {
-                existingCustomer.FirstName = customer.FirstName;
-                existingCustomer.Email = customer.Email;
-                existingCustomer.PhoneNumber = customer.PhoneNumber;
-                existingCustomer.Address = customer.Address;
-                existingCustomer.Zipcode = customer.Zipcode;
-                existingCustomer.HouseNumber = customer.HouseNumber;
+                if (existingCustomer != null)
+                {
+                    existingCustomer.FirstName = customer.FirstName;
+                    existingCustomer.Email = customer.Email;
+                    existingCustomer.PhoneNumber = customer.PhoneNumber;
+                    existingCustomer.Address = customer.Address;
+                    existingCustomer.Zipcode = customer.Zipcode;
+                    existingCustomer.HouseNumber = customer.HouseNumber;
+                }
+                _unitOfWork.Commit();
+                _db.SaveChanges();
             }
+            catch (Exception ex)
+            {
+                _unitOfWork.Rollback();
+                throw new Exception("Error updating customer", ex);
+            }
+
         }
 
         public void Delete(int id)
@@ -54,7 +72,8 @@ namespace TanzEksp.Persistence.Repositories
             var customer = GetById(id);
             if (customer != null)
             {
-                _customerList.Remove(customer);
+                _db.CustomerEF.Remove(customer);
+                _db.SaveChanges();
             }
         }
 
