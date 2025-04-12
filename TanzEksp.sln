@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TanzEksp.Server", "TanzEksp\Server\TanzEksp.Server.csproj", "{E78ED0DF-0BC6-4A1B-AD9C-608D2EA3ED18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Server", "TanzEksp\Server\TanzEksp.Server.csproj", "{E78ED0DF-0BC6-4A1B-AD9C-608D2EA3ED18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TanzEksp.Client", "TanzEksp\Client\TanzEksp.Client.csproj", "{7396AE03-16D1-411B-924F-18A884C39665}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Client", "TanzEksp\Client\TanzEksp.Client.csproj", "{7396AE03-16D1-411B-924F-18A884C39665}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TanzEksp.Shared", "TanzEksp\Shared\TanzEksp.Shared.csproj", "{1A424BF2-3A5F-442A-ACCC-A79D0EEB0076}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Shared", "TanzEksp\Shared\TanzEksp.Shared.csproj", "{1A424BF2-3A5F-442A-ACCC-A79D0EEB0076}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TanzEksp.Infrastructure", "TanzEksp.Infrastructure\TanzEksp.Infrastructure.csproj", "{44F95BFA-A104-4DC6-AF6E-3D9CA4737B2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Infrastructure", "TanzEksp.Infrastructure\TanzEksp.Infrastructure.csproj", "{44F95BFA-A104-4DC6-AF6E-3D9CA4737B2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TanzEksp.Persistence", "TanzEksp.Persistence\TanzEksp.Persistence.csproj", "{9B94F408-6135-427D-8FB1-5A98006A0484}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Persistence", "TanzEksp.Persistence\TanzEksp.Persistence.csproj", "{9B94F408-6135-427D-8FB1-5A98006A0484}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

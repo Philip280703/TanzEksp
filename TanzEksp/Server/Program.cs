@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.ResponseCompression;
 using TanzEksp.Server.RepositoryInterfaces;
+using TanzEksp.Server.ServerIOC;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-
+builder.Services.AddServerServices();
 
 var app = builder.Build();
 
