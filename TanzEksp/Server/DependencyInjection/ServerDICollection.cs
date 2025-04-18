@@ -12,6 +12,7 @@ namespace TanzEksp.Server.ServerIOC
             // Register IOC service her
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICustomerRepository, CustomerRepositorySQL>();
+            services.AddScoped<IUserAccountRepository, UserAccountRepositorySql>();
 
             return services;
         }
