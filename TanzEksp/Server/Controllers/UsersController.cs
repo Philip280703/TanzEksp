@@ -42,18 +42,51 @@ namespace TanzEksp.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterDto model)
         {
-            var user = new ApplicationUser
+            try
             {
-                UserName = model.Username,
-                FullName = model.FullName
-            };
+                var user = new ApplicationUser
+                {
+                    UserName = model.Username,
+                    FullName = model.FullName
+                };
 
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded) return BadRequest(result.Errors);
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (!result.Succeeded)
+                {
+                    var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                    return BadRequest("Create failed: " + errors);
+                }
 
-            await _userManager.AddToRoleAsync(user, "User");
-            return Ok();
-        }
+                var roleResult = await _userManager.AddToRoleAsync(user, "User");
+                if (!roleResult.Succeeded)
+                {
+                    var roleErrors = string.Join(", ", roleResult.Errors.Select(e => e.Description));
+                    return BadRequest("Role failed: " + roleErrors);
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Undtagelse: {ex.Message}");
+            }
+        } 
+        //[HttpPost]
+        //public async Task<IActionResult> Register(RegisterDto model)
+        //{
+        //    var user = new ApplicationUser
+        //    {
+        //        UserName = model.Username,
+        //        FullName = model.FullName
+        //    };
+
+        //    var roleResult = await _userManager.AddToRoleAsync(user, "User");
+        //    if (!roleResult.Succeeded) return BadRequest(roleResult.Errors);
+
+
+        //    await _userManager.AddToRoleAsync(user, "User");
+        //    return Ok();
+        //}
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(string id, UpdateUserDto dto)

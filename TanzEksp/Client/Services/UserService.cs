@@ -35,8 +35,17 @@ namespace TanzEksp.Client.Services
 
         public async Task<List<UserDto>> GetUsers()
         {
-            return await _http.GetFromJsonAsync<List<UserDto>>("api/users");
+            var response = await _http.GetAsync("api/users");
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Fejl ved hentning af brugere: {response.StatusCode} - {error}");
+                return new List<UserDto>();
+            }
+
+            return await response.Content.ReadFromJsonAsync<List<UserDto>>();
         }
+
 
         public async Task Register(RegisterDto dto)
         {

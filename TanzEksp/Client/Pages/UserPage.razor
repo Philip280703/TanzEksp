@@ -24,7 +24,10 @@ else
                     <td>@user.FullName</td>
                     <td>@user.Username</td>
                     <td>@user.Role</td>
-                    <td><button @onclick="() => DeleteUser(user.Id)">Slet</button></td>
+                    @if(user.Role == "User")
+                    {
+                        <td><button @onclick="() => DeleteUser(user.Id)">Slet</button></td>
+                    }
                 </tr>
             }
         </tbody>
@@ -59,7 +62,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        users = await UserService.GetUsers();
+         users = await UserService.GetUsers();
     }
 
     async Task DeleteUser(string id)
