@@ -21,7 +21,7 @@ namespace TanzEksp.Infrastructure.Persistence.EFContext
         public DbSet<DayPlan> DayPlanEF { get; set; }
         public DbSet<EmployeeUser> EmployeeUserEF { get; set; }
         public DbSet<Trip> TripEF { get; set; }
-        public DbSet<Zipcode> ZipcodeEF { get; set; }
+       
 
 
     }

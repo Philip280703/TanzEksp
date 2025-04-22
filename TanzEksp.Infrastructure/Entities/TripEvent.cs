@@ -20,11 +20,11 @@ namespace TanzEksp.Domain.Entities
 
         [Required(ErrorMessage = "Antal dage er påkrævet")]
         [Range(1, 30, ErrorMessage = "Antal dage skal være mellem 1 og 30")]
-        public int Days { get; set; }
+        public int Days { get; set; } = 1;
 
         [Required(ErrorMessage = "Standart pris er påkrævet")]
         [Range(0, 100000, ErrorMessage = "Standart pris skal være mellem 0 og 100000")]
-        public decimal Price { get; set; }
+        public decimal ?Price { get; set; }
 
 
         public List<DayPlan>? DayPlans { get; set; }

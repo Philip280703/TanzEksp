@@ -56,9 +56,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
                     existingCustomer.FirstName = customer.FirstName;
                     existingCustomer.Email = customer.Email;
                     existingCustomer.PhoneNumber = customer.PhoneNumber;
-                    existingCustomer.Address = customer.Address;
-                    existingCustomer.Zipcode = customer.Zipcode;
-                    existingCustomer.HouseNumber = customer.HouseNumber;
+                   
                 }
                 _unitOfWork.Commit();
                 await _db.SaveChangesAsync(); // Brug asynkrone version

@@ -34,24 +34,9 @@ namespace TanzEksp.Domain.Entities
         public string PhoneNumber { get; set; }
 
 
-        [Required(ErrorMessage = "Adresse er påkrævet")]
-        [StringLength(100, ErrorMessage = "Adresse må højst være 100 tegn")]
-        public string Address { get; set; }
-
-
-        [Required(ErrorMessage = "Husnummer er påkrævet")]
-        [StringLength(10, ErrorMessage = "Husnummer må højst være 10 tegn")]
-        public string HouseNumber { get; set; }
-
-
-        [Required(ErrorMessage = "Postnummer er påkrævet")]
-        [RegularExpression(@"^\d{4}$", ErrorMessage = "Postnummer skal være 4 cifre")]
-        public string Zipcode { get; set; }
-
-
         public List<Booking>? Bookings { get; set; } = new List<Booking>();
 
 
-        public Zipcode? ZipcodeDetails { get; set; }
+       
     }
 }
