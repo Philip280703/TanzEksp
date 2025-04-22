@@ -19,12 +19,14 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _config;
 
-        public AuthRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration config)
+        public AuthRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, IConfiguration config)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _config = config;
         }
 
@@ -39,11 +41,19 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
             var result = await _signInManager.CheckPasswordSignInAsync(user, command.Password, false);
             if(!result.Succeeded) return null;
 
-            var claims = new[]
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -62,5 +72,35 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
             };
 
         }
+
+        public async Task<RegisterResult> RegisterAsync(RegisterCommand command)
+        {
+            var user = new ApplicationUser
+            {
+                UserName = command.Email,
+                Email = command.Email
+            };
+
+            var result = await _userManager.CreateAsync(user, command.Password);
+            if (!result.Succeeded)
+            {
+                return new RegisterResult
+                {
+                    Success = false,
+                    Errors = result.Errors.Select(e => e.Description)
+                };
+            }
+
+            // Tildel rolle (default = "User")
+            if (!await _roleManager.RoleExistsAsync(command.Role))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(command.Role));
+            }
+
+            await _userManager.AddToRoleAsync(user, command.Role);
+
+            return new RegisterResult { Success = true };
+        }
+
     }
 }

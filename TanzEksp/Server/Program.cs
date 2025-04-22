@@ -23,6 +23,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+
 builder.Services.AddServerServices(); // Register IOC service her
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -45,6 +50,43 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!))
         };
     });
+
+
+async Task SeedRolesAndAdminUserAsync(IServiceProvider services)
+{
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+    // Sørg for rollerne findes
+    string[] roles = ["Admin", "User"];
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+
+    // Tilføj Admin-bruger, hvis den ikke findes
+    var adminEmail = "admin@tanzeksp.dk";
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    if (adminUser == null)
+    {
+        adminUser = new ApplicationUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail
+        };
+
+        var result = await userManager.CreateAsync(adminUser, "Admin123!"); // Husk: stærk adgangskode
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+    }
+}
+
+
 
 var app = builder.Build();
 
@@ -71,5 +113,11 @@ app.UseRouting();
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
+
+// Kald dette lige før app.Run()
+using (var scope = app.Services.CreateScope())
+{
+    await SeedRolesAndAdminUserAsync(scope.ServiceProvider);
+}
 
 app.Run();

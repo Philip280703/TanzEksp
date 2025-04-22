@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace TanzEksp.Application.Auth
 {
-    public class LoginCommand
+    public class RegisterResult
     {
-        public string Email { get; set; } = "";
-
-        public string Password { get; set; } = "";
-
-     
-
+        public bool Success { get; set; }
+        public IEnumerable<string> Errors { get; set; }
     }
 }
