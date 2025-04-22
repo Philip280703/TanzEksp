@@ -1,0 +1,47 @@
+﻿@inject UserService UserService
+@attribute [Authorize(Roles = "Admin")]
+@using Microsoft.AspNetCore.Authorization
+@using TanzEksp.Shared.Login
+@using TanzEksp.Client.Services
+
+@page "/admin/users"
+
+
+<h3>Brugeradministration</h3>
+
+@if (users == null)
+{
+    <p>Henter brugere...</p>
+}
+else
+{
+    <table>
+        <thead><tr><th>Navn</th><th>Brugernavn</th><th>Rolle</th><th></th></tr></thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.FullName</td>
+                    <td>@user.Username</td>
+                    <td>@user.Role</td>
+                    <td><button @onclick="() => DeleteUser(user.Id)">Slet</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    List<UserDto> users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await UserService.GetUsers();
+    }
+
+    async Task DeleteUser(string id)
+    {
+        await UserService.Delete(id);
+        users = await UserService.GetUsers();
+    }
+}

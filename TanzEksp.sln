@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Domain", "TanzEksp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Infrastructure", "TanzEksp.Persistence\TanzEksp.Infrastructure.csproj", "{9B94F408-6135-427D-8FB1-5A98006A0484}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TanzEksp.Application", "TanzEksp.Application\TanzEksp.Application.csproj", "{DFA5E5A7-B4AD-4FD3-B0C8-06E70249F11A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Application", "TanzEksp.Application\TanzEksp.Application.csproj", "{DFA5E5A7-B4AD-4FD3-B0C8-06E70249F11A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

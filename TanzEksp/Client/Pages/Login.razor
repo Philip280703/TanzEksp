@@ -1,0 +1,23 @@
+﻿@inject UserService UserService
+@inject NavigationManager Nav
+@using TanzEksp.Shared.Login
+@using TanzEksp.Client.Services
+@page "/login"
+
+<h3>Login</h3>
+
+<EditForm Model="model" OnValidSubmit="HandleLogin">
+    <InputText @bind-Value="model.Username" placeholder="Username" />
+    <InputText @bind-Value="model.Password" placeholder="Password" type="password" />
+    <button type="submit">Login</button>
+</EditForm>
+
+@code {
+    private LoginDto model = new();
+
+    private async Task HandleLogin()
+    {
+        var success = await UserService.Login(model);
+        if (success) Nav.NavigateTo("/admin/users");
+    }
+}
