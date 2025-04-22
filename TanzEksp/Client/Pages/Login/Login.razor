@@ -1,0 +1,22 @@
+﻿@inject AuthService AuthService
+@inject NavigationManager Navigation
+@using TanzEksp.Client.Services;
+@using TanzEksp.Shared.Login;
+@page "/login"
+
+<EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+    <InputText @bind-Value="loginModel.Email" />
+    <InputText @bind-Value="loginModel.Password" type="password" />
+    <button type="submit">Login</button>
+</EditForm>
+
+@code {
+    private LoginRequest loginModel = new();
+
+    private async Task HandleLogin()
+    {
+        var success = await AuthService.LoginAsync(loginModel.Email, loginModel.Password);
+        if (success)
+            Navigation.NavigateTo("/");
+    }
+}

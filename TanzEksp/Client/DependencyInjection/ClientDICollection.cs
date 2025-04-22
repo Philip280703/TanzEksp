@@ -10,6 +10,7 @@ namespace TanzEksp.Client.DI
             // Register IOC service her
             services.AddScoped<ICustomerService, CustomerService>();
 
+            services.AddScoped<AuthService>();
 
             return services;
         }
