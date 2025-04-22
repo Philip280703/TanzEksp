@@ -1,4 +1,6 @@
-﻿@page "/counter"
+﻿@attribute [Authorize(Roles = "Admin")]
+@using Microsoft.AspNetCore.Authorization
+@page "/counter"
 
 <PageTitle>Counter</PageTitle>
 

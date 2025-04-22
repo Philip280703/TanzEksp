@@ -31,8 +31,31 @@ else
     </table>
 }
 
+<h4>Opret Bruger</h4>
+
+<EditForm Model="newUser" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="FullName">Navn</label>
+        <InputText id="FullName" @bind-Value="newUser.FullName" />
+    </div>
+    <div>
+        <label for="Username">Brugernavn</label>
+        <InputText id="Username" @bind-Value="newUser.Username" />
+    </div>
+    <div>
+        <label for="Password">Adgangskode</label>
+        <InputText id="Password" @bind-Value="newUser.Password" />
+    </div>
+   
+    <button type="submit">Opret Bruger</button>
+</EditForm>
+
 @code {
     List<UserDto> users;
+    RegisterDto newUser = new RegisterDto();
 
     protected override async Task OnInitializedAsync()
     {
@@ -43,5 +66,12 @@ else
     {
         await UserService.Delete(id);
         users = await UserService.GetUsers();
+    }
+
+    async Task HandleValidSubmit()
+    {
+        await UserService.Register(newUser);
+        users = await UserService.GetUsers();
+        newUser = new RegisterDto(); // Reset the form
     }
 }
