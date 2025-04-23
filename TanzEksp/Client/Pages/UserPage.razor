@@ -1,0 +1,80 @@
+﻿@inject UserService UserService
+@attribute [Authorize(Roles = "Admin")]
+@using Microsoft.AspNetCore.Authorization
+@using TanzEksp.Shared.Login
+@using TanzEksp.Client.Services
+
+@page "/admin/users"
+
+
+<h3>Brugeradministration</h3>
+
+@if (users == null)
+{
+    <p>Henter brugere...</p>
+}
+else
+{
+    <table>
+        <thead><tr><th>Navn</th><th>Brugernavn</th><th>Rolle</th><th></th></tr></thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.FullName</td>
+                    <td>@user.Username</td>
+                    <td>@user.Role</td>
+                    @if(user.Role == "User")
+                    {
+                        <td><button @onclick="() => DeleteUser(user.Id)">Slet</button></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<h4>Opret Bruger</h4>
+
+<EditForm Model="newUser" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="FullName">Navn</label>
+        <InputText id="FullName" @bind-Value="newUser.FullName" />
+    </div>
+    <div>
+        <label for="Username">Brugernavn</label>
+        <InputText id="Username" @bind-Value="newUser.Username" />
+    </div>
+    <div>
+        <label for="Password">Adgangskode</label>
+        <InputText id="Password" @bind-Value="newUser.Password" />
+    </div>
+   
+    <button type="submit">Opret Bruger</button>
+</EditForm>
+
+@code {
+    List<UserDto> users;
+    RegisterDto newUser = new RegisterDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+         users = await UserService.GetUsers();
+    }
+
+    async Task DeleteUser(string id)
+    {
+        await UserService.Delete(id);
+        users = await UserService.GetUsers();
+    }
+
+    async Task HandleValidSubmit()
+    {
+        await UserService.Register(newUser);
+        users = await UserService.GetUsers();
+        newUser = new RegisterDto(); // Reset the form
+    }
+}
