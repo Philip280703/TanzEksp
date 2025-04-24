@@ -3,7 +3,7 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
-                        <p class="text-danger">Du har ikke adgang til denne side.</p>
+                        <h2 class="text-danger">Du har ikke adgang til denne side.</h2>
                 </NotAuthorized>
                 <Authorizing>
                     <LayoutView Layout="@typeof(MainLayout)">
@@ -15,7 +15,7 @@
         </Found>
         <NotFound>
             <LayoutView Layout="@typeof(MainLayout)">
-                <p>Siden blev ikke fundet.</p>
+                <h1>Siden blev ikke fundet.</h1>
             </LayoutView>
         </NotFound>
     </Router>

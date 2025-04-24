@@ -26,10 +26,15 @@
         
     </nav>
 </div> *@
-
+@using TanzEksp.Client.Services
 <nav class="navbar">
     <ul class="nav-left">
-        <li><a href="#">Home</a></li>
+        <AuthorizeView Roles="Admin, User">
+            <Authorized>
+                <li><a href="NewFuckingPage">Home</a></li>
+            </Authorized>
+        </AuthorizeView>
+
         <AuthorizeView Roles="Admin">
             <Authorized>
                 <li><a href="Counter">Counter</a></li>
@@ -39,10 +44,10 @@
     <ul class="nav-right">
         <AuthorizeView>
             <Authorized>
-                <li class="login-btn"><a href="Login">Logout</a></li>
+                <li class="login-btn" @onclick="Logout"><a href="">Logout</a></li>
             </Authorized>
             <NotAuthorized>
-                <li class="login-btn"><a href="Login">Login</a></li>
+                <li class="login-btn"><a href="">Login</a></li>
             </NotAuthorized>
         </AuthorizeView>
     </ul>
@@ -54,6 +59,12 @@
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
+    [Inject]
+    private UserService service { get; set; }
+
+    [Inject]
+    private NavigationManager _navigationManager { get; set; }
+
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
@@ -61,6 +72,7 @@
 
     private async Task Logout()
     {
+        service.Logout();
         
     }
 }

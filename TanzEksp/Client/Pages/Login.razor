@@ -2,15 +2,18 @@
 @inject NavigationManager Nav
 @using TanzEksp.Shared.Login
 @using TanzEksp.Client.Services
-@page "/login"
+@page "/"
 
-<h3>Login</h3>
+<div class="login-container">
+    <h3>Login</h3>
 
-<EditForm Model="model" OnValidSubmit="HandleLogin">
-    <InputText @bind-Value="model.Username" placeholder="Username" />
-    <InputText @bind-Value="model.Password" placeholder="Password" type="password" />
-    <button type="submit">Login</button>
-</EditForm>
+    <EditForm Model="model" OnValidSubmit="HandleLogin">
+        <InputText @bind-Value="model.Username" placeholder="Username" class="form-control" />
+        <InputText @bind-Value="model.Password" placeholder="Password" type="password" class="form-control" />
+        <button type="submit" class="btn-login">Login</button>
+    </EditForm>
+</div>
+
 
 @code {
     private LoginDto model = new();
@@ -18,6 +21,53 @@
     private async Task HandleLogin()
     {
         var success = await UserService.Login(model);
-        if (success) Nav.NavigateTo("/admin/users");
+        if (success)
+            Nav.NavigateTo("/admin/users");
     }
 }
+
+
+
+<style>
+    .login-container {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 2rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        background-color: #f9f9f9;
+    }
+
+        .login-container h3 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        padding: 0.6rem 0.75rem;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-login:hover {
+            background-color: #0056b3;
+        }
+</style>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using TanzEksp.Client.Auth;
@@ -10,6 +11,7 @@ namespace TanzEksp.Client.Services
     {
         private readonly HttpClient _http;
         private readonly AuthenticationStateProvider _authStateProvider;
+        private readonly NavigationManager _navigationManager;
         public string Token { get; private set; }
 
         public UserService(HttpClient http, AuthenticationStateProvider authStateProvider)
@@ -33,6 +35,17 @@ namespace TanzEksp.Client.Services
             return true;
         }
 
+
+        public async Task Logout()
+        {
+            Token = null;
+            _http.DefaultRequestHeaders.Authorization = null;
+
+            if (_authStateProvider is CustomAuthStateProvider provider)
+            {
+                provider.MarkUserAsLoggedOut();
+            }   
+        }
 
 
         public async Task<List<UserDto>> GetUsers()

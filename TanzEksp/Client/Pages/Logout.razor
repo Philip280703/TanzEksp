@@ -1,0 +1,32 @@
+﻿@inject NavigationManager NavigationManager
+@using TanzEksp.Client.Services
+@page "/logout"
+<h3>Logout</h3>
+
+<div class="row">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-header">
+				<h5 class="card-title">Logged out</h5>
+			</div>
+			<div class="card-body">
+				<p class="card-text">Du er nu logged ud.</p>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+@code {
+
+	[Inject]
+	public UserService UserService { get; set; } = default!;
+
+	protected override async Task OnInitializedAsync()
+	{
+		await UserService.Logout();
+		// NavigationManager.NavigateTo("/");
+	}
+
+}
