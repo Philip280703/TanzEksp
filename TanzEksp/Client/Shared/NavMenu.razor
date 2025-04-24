@@ -1,4 +1,4 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@* <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">TanzEksp</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -25,7 +25,29 @@
         </AuthorizeView>
         
     </nav>
-</div>
+</div> *@
+
+<nav class="navbar">
+    <ul class="nav-left">
+        <li><a href="#">Home</a></li>
+        <AuthorizeView Roles="Admin">
+            <Authorized>
+                <li><a href="Counter">Counter</a></li>
+            </Authorized>
+        </AuthorizeView>
+    </ul>
+    <ul class="nav-right">
+        <AuthorizeView>
+            <Authorized>
+                <li class="login-btn"><a href="Login">Logout</a></li>
+            </Authorized>
+            <NotAuthorized>
+                <li class="login-btn"><a href="Login">Login</a></li>
+            </NotAuthorized>
+        </AuthorizeView>
+    </ul>
+</nav>
+
 
 @code {
     private bool collapseNavMenu = true;
@@ -35,5 +57,10 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private async Task Logout()
+    {
+        
     }
 }
