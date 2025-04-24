@@ -18,6 +18,79 @@
     top: -2px;
 }
 
+/* Reset og font */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar base */
+.navbar {
+    background-color: #1e1e2f;
+    padding: 1rem 2rem;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+    /* Almindelige links */
+    .navbar ul {
+        list-style: none;
+        display: flex;
+        gap: 2rem;
+    }
+
+    /* Link styling */
+    .navbar li a {
+        text-decoration: none;
+        color: #ffffffcc;
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        /* Hover-effekt */
+        .navbar li a:hover {
+            background-color: #3a3a5c;
+            color: #ffffff;
+        }
+
+    /* Login knap specifikt */
+    .navbar .login-btn a {
+        background-color: #ff8c00; /* orange */
+        color: white;
+    }
+
+        .navbar .login-btn a:hover {
+            background-color: #e67e00;
+        }
+
+/* Responsiv */
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .navbar ul {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+    .nav-right {
+        align-self: flex-end;
+    }
+}
+
+
 .nav-item {
     font-size: 0.9rem;
     padding-bottom: 0.5rem;
