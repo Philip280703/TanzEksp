@@ -34,6 +34,8 @@ namespace TanzEksp.Server.Controllers
             return Unauthorized();
         }
 
+        
+
         private async Task<string> GenerateJwtToken(ApplicationUser user)
         {
             var userRoles = await _userManager.GetRolesAsync(user);

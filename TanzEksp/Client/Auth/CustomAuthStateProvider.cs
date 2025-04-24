@@ -34,5 +34,12 @@ namespace TanzEksp.Client.Auth
 
             return Task.FromResult(new AuthenticationState(user));
         }
+
+        public void MarkUserAsLoggedOut()
+        {
+            var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(anonymousUser)));
+        }
+
     }
 }
