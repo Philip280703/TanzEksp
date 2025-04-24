@@ -44,7 +44,7 @@
     <ul class="nav-right">
         <AuthorizeView>
             <Authorized>
-                <li class="login-btn" @onclick="Logout"><a>Logout</a></li>
+                <li class="login-btn" @onclick="Logout"><a href="">Logout</a></li>
             </Authorized>
             <NotAuthorized>
                 <li class="login-btn"><a href="">Login</a></li>
@@ -73,6 +73,6 @@
     private async Task Logout()
     {
         service.Logout();
-        _navigationManager.NavigateTo("/");
+        
     }
 }
