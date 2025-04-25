@@ -80,7 +80,7 @@ using (var scope = app.Services.CreateScope())
     var admin = await userManager.FindByNameAsync("admin");
     if (admin == null)
     {
-        var adminUser = new ApplicationUser { UserName = "admin", Email = "admin@example.com", FullName = "Administrator" };
+        var adminUser = new ApplicationUser { UserName = "admin@tanzaniaeksperten.dk", Email = "admin@example.com", FullName = "Administrator" };
         var result = await userManager.CreateAsync(adminUser, "Admin123!");
         if (result.Succeeded) await userManager.AddToRoleAsync(adminUser, "Admin");
     }

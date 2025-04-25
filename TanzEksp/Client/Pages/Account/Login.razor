@@ -8,7 +8,7 @@
     <h3>Login</h3>
 
     <EditForm Model="model" OnValidSubmit="HandleLogin">
-        <InputText @bind-Value="model.Username" placeholder="Username" class="form-control" />
+        <InputText @bind-Value="model.Username" placeholder="E-mail" class="form-control" />
         <InputText @bind-Value="model.Password" placeholder="Password" type="password" class="form-control" />
         <button type="submit" class="btn-login">Login</button>
     </EditForm>
