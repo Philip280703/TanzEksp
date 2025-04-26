@@ -10,7 +10,7 @@ namespace TanzEksp.Shared.DTO
     public class CustomerDTO
     {
        
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         public string FirstName { get; set; } = "";
 
