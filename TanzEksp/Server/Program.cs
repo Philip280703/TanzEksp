@@ -7,6 +7,8 @@ using TanzEksp.Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TanzEksp.Application.Interfaces;
+using TanzEksp.Infrastructure.Persistence.Repositories;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,12 +21,19 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddServerServices(); // Register IOC service her
 
+builder.Services.AddScoped<ICustomerRepository, CustomerRepositorySQL>();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+
+
+
 
 builder.Services.AddAuthentication(options =>
 {

@@ -1,0 +1,66 @@
+﻿@inject CustomerService customerservice
+@attribute [Authorize(Roles = "Admin")]
+@using Microsoft.AspNetCore.Authorization
+@using TanzEksp.Shared.DTO
+@using TanzEksp.Client.Services
+
+@page "/customers"
+
+<div class="admin-container">
+    <h3>Kunder</h3>
+
+    @if (errorMessage != null)
+    {
+        <p class="error">@errorMessage</p>
+    }
+
+    @if (customer == null)
+    {
+        <p>Henter kunder...</p>
+    }
+    else
+    {
+        <table class="customer-table">
+            <thead>
+                <tr>
+                    <th>Fornavn</th>
+                    <th>Efternavn</th>
+                    <th>Email</th>
+                    <th>Telefonnummer</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customer in customer)
+                {
+                    <tr>
+                        <td>@customer.FirstName</td>
+                        <td>@customer.LastName</td>
+                        <td>@customer.Email</td>
+                        <td>@customer.PhoneNumber</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    private List<CustomerDTO> customer;
+    private string errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            customer = await customerservice.GetAllCustomersAsync();
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = "Der opstod en fejl ved hentning af kunder: " + ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "En ukendt fejl opstod: " + ex.Message;
+        }
+    }
+}

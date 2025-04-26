@@ -15,7 +15,7 @@ namespace TanzEksp.Client.Services
 
         public async Task<List<CustomerDTO>> GetAllCustomersAsync()
         {
-            var customer = await _httpClient.GetFromJsonAsync<List<CustomerDTO>>("api/customer");
+            var customer = await _httpClient.GetFromJsonAsync<List<CustomerDTO>>("api/customers");
             if (customer == null)
             {
                 throw new Exception("Failed to load customers");
