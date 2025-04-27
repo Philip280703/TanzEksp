@@ -7,7 +7,7 @@ namespace TanzEksp.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, User")]
     public class CustomerController : ControllerBase
     {
         private readonly CustomerUseCase _customerUseCase;

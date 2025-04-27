@@ -1,6 +1,6 @@
 ﻿@inject CustomerService customerservice
 @inject NavigationManager NavigationManager
-@attribute [Authorize(Roles = "Admin")]
+@attribute [Authorize(Roles = "Admin, User")]
 @using Microsoft.AspNetCore.Authorization
 @using TanzEksp.Shared.DTO
 @using TanzEksp.Client.Services
