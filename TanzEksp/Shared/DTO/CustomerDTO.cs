@@ -12,9 +12,11 @@ namespace TanzEksp.Shared.DTO
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Fornavn er påkrævet.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Fornavn skal være mellem 2 og 50 tegn.")]
         public string? FirstName { get; set; }
 
         [Required(ErrorMessage = "Efternavn er påkrævet.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Efternavn skal være mellem 2 og 50 tegn.")]
         public string? LastName { get; set; }
 
         [Required(ErrorMessage = "Email er påkrævet.")]
@@ -22,7 +24,7 @@ namespace TanzEksp.Shared.DTO
         public string? Email { get; set; }
 
         [Required(ErrorMessage = "Telefonnummer er påkrævet.")]
-        [Phone(ErrorMessage = "Indtast et gyldigt telefonnummer.")]
+        [RegularExpression(@"^\d{8}$", ErrorMessage = "Telefonnummer skal være præcist 8 cifre.")]
         public string? PhoneNumber { get; set; }
     }
 }

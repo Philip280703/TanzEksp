@@ -23,7 +23,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
 
         }
 
-        private static readonly List<Customer> _customerList;
+        //private static readonly List<Customer> _customerList;
 
         public async Task<List<Customer>> GetAll()
         {
@@ -79,10 +79,10 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
             }
         }
 
-        static CustomerRepositorySQL()
-        {
-            _customerList = new List<Customer>();
-            _customerList.Clear();
-        }
+        //static CustomerRepositorySQL()
+        //{
+        //    _customerList = new List<Customer>();
+        //    _customerList.Clear();
+        //}
     }
 }
