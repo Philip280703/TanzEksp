@@ -1,4 +1,5 @@
 ﻿@inject CustomerService customerservice
+@inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "Admin")]
 @using Microsoft.AspNetCore.Authorization
 @using TanzEksp.Shared.DTO
@@ -6,8 +7,13 @@
 
 @page "/customers"
 
+<h3 class="customer-heading">Kundeoversigt</h3>
+
+<div class="button-wrapper">
+    <button class="btn-add" @onclick="ShowAddCustomerModal">Tilføj Kunde</button>
+</div>
+
 <div class="admin-container">
-    <h3>Kunder</h3>
 
     @if (errorMessage != null)
     {
@@ -20,33 +26,74 @@
     }
     else
     {
-        <table class="customer-table">
-            <thead>
-                <tr>
-                    <th>Fornavn</th>
-                    <th>Efternavn</th>
-                    <th>Email</th>
-                    <th>Telefonnummer</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var customer in customer)
-                {
+        <div class="table-wrapper">
+            <table class="customer-table">
+                <thead>
                     <tr>
-                        <td>@customer.FirstName</td>
-                        <td>@customer.LastName</td>
-                        <td>@customer.Email</td>
-                        <td>@customer.PhoneNumber</td>
+                        <th>Fornavn</th>
+                        <th>Efternavn</th>
+                        <th>Email</th>
+                        <th>Telefonnummer</th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var customer in customer)
+                    {
+                        <tr>
+                            <td>@customer.FirstName</td>
+                            <td>@customer.LastName</td>
+                            <td>@customer.Email</td>
+                            <td>@customer.PhoneNumber</td>
+                            <td class="action-buttons">
+                                <button class="btn-delete" @onclick="() => DeleteCustomer(customer.Id)">Slet</button>
+                                <button class="btn-update" @onclick="() => UpdateCustomer(customer.Id)">Rediger</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     }
 </div>
+
+<!-- Modal for Adding Customer -->
+@if (showAddCustomerModal)
+{
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <h3>Tilføj Kunde</h3>
+            <form @onsubmit="AddCustomer">
+                <div>
+                    <label for="firstName">Fornavn:</label>
+                    <input type="text" id="firstName" @bind="newCustomer.FirstName" required />
+                </div>
+                <div>
+                    <label for="lastName">Efternavn:</label>
+                    <input type="text" id="lastName" @bind="newCustomer.LastName" required />
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" @bind="newCustomer.Email" required />
+                </div>
+                <div>
+                    <label for="phone">Telefonnummer:</label>
+                    <input type="tel" id="phone" @bind="newCustomer.PhoneNumber" required />
+                </div>
+                <button type="submit" class="btn-add">Gem Kunde</button>
+                <button type="button" class="btn-delete" @onclick="HideAddCustomerModal">Luk</button>
+            </form>
+        </div>
+    </div>
+}
 
 @code {
     private List<CustomerDTO> customer;
     private string errorMessage;
+
+    private bool showAddCustomerModal = false;
+    private CustomerDTO newCustomer = new CustomerDTO();
+    private CustomerDTO selectCustomer;
 
     protected override async Task OnInitializedAsync()
     {
@@ -63,78 +110,38 @@
             errorMessage = "En ukendt fejl opstod: " + ex.Message;
         }
     }
+
+    async Task DeleteCustomer(int id)
+    {
+        await customerservice.DeleteCustomerAsync(id);
+        customer = await customerservice.GetAllCustomersAsync();
+    }
+
+    void ShowAddCustomerModal()
+    {
+        showAddCustomerModal = true;
+    }
+
+    void HideAddCustomerModal()
+    {
+        showAddCustomerModal = false;
+    }
+
+    private async Task AddCustomer()
+    {
+        try
+        {
+            await customerservice.AddCustomerAsync(newCustomer);
+            showAddCustomerModal = false;
+            await OnInitializedAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "En fejl opstod ved tilføjelse af kunde: " + ex.Message;
+        }
+    }
+    private async Task UpdateCustomer(int id)
+    {
+        
+    }
 }
-
-<style>
-    .admin-container {
-        max-width: 900px;
-        margin: 50px auto;
-        padding: 2rem;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    }
-
-        .admin-container h3,
-        .admin-container h4 {
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-    .user-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 2rem;
-    }
-
-        .user-table th,
-        .user-table td {
-            border: 1px solid #ccc;
-            padding: 0.75rem;
-            text-align: left;
-        }
-
-        .user-table th {
-            background-color: #f0f0f0;
-        }
-
-    .form-group {
-        margin-bottom: 1rem;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 0.6rem 0.75rem;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 1rem;
-    }
-
-    .btn-create {
-        padding: 0.7rem 1.2rem;
-        background-color: #28a745;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        font-size: 1rem;
-        cursor: pointer;
-    }
-
-        .btn-create:hover {
-            background-color: #218838;
-        }
-
-    .btn-delete {
-        padding: 0.5rem 1rem;
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        font-size: 0.9rem;
-        cursor: pointer;
-    }
-
-        .btn-delete:hover {
-            background-color: #c82333;
-        }
-</style>

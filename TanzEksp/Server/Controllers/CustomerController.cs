@@ -60,7 +60,7 @@ namespace TanzEksp.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var customer = _customerUseCase.GetById(id);
+            var customer = await _customerUseCase.GetById(id);
             if (customer == null)
             {
                 return NotFound();
