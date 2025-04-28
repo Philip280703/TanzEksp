@@ -14,6 +14,5 @@ namespace TanzEksp.Application.Interfaces
         Task Add(Customer customer);
         Task Update(Customer customer);
         Task Delete(int id);
-
     }
 }
