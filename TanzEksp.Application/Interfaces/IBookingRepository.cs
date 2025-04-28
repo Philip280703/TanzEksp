@@ -13,6 +13,6 @@ namespace TanzEksp.Application.Interfaces
         Task<List<Booking>> GetAllBookings();
         Task AddBooking(Booking booking);
         Task UpdateBooking(Booking booking);
-        Task DeleteBooking(Booking booking);
+        Task DeleteBooking(int id);
     }
 }

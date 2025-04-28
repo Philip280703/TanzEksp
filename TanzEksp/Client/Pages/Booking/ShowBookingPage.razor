@@ -1,0 +1,104 @@
+﻿@inject BookingService bookingService
+@inject NavigationManager navigationManager
+@attribute [Authorize(Roles = "Admin, User")]
+@using Microsoft.AspNetCore.Authorization
+@using TanzEksp.Shared.DTO
+@using TanzEksp.Client.Services
+
+@page "/bookings"
+
+<h3 class="customer-heading">Bookinger</h3>
+
+<div class="admin-container">
+    @if (errorMessage != null)
+    {
+        <p class="error">@errorMessage</p>
+    }
+
+    @if (bookings == null)
+    {
+        <p>Henter Bookinger...</p>
+    }
+    else
+    {
+        <div class="table-wrapper">
+            <table class="bookings-table">
+                <thead>
+                    <tr>
+                        <th>BookingId</th>
+                        <th>KundeId</th>
+                        <th>TripId</th>
+                        <th>Antal Voksne</th>
+                        <th>Antal Børn</th>
+                        <th>Lufthavn</th>
+                        <th>Afgangsdato</th>
+                        <th>Varighed</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var booking in bookings)
+                    {
+                        <tr>
+                            <td>@booking.Id</td>
+                            <td>@booking.CustomerId</td>
+                            <td>@booking.TripId</td>
+                            <td>@booking.AdultCount</td>
+                            <td>@booking.ChildCount</td>
+                            <td>@booking.Airport</td>
+                            <td>@booking.DepartureDate</td>
+                            <td>@booking.TripLength</td>
+                            <td class="action-buttons">
+                                <button class="btn-delete" @onclick="() => DeleteBooking(booking.Id)">Slet</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@code {
+    private List<BookingDTO> bookings;
+    private string errorMessage;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            bookings = await bookingService.GetAllBookingsAsync();
+            if (bookings == null)
+            {
+                errorMessage = "Kunne ikke hente bookinger fra serveren.";
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = "Der opstod en HTTP-fejl ved hentning af bookinger: " + ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "En ukendt fejl opstod: " + ex.Message;
+        }
+    }
+
+  
+    private async Task DeleteBooking(int bookingId)
+    {
+        try
+        {
+            await bookingService.DeleteBookingAsync(bookingId);
+            bookings = await bookingService.GetAllBookingsAsync();
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = "Der opstod en fejl ved sletning af booking: " + ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "En ukendt fejl opstod: " + ex.Message;
+        }
+    }
+}

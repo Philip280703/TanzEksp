@@ -1,0 +1,94 @@
+﻿
+/* Header Styling */
+.customer-heading {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+    font-size: 2rem;
+    width: 100%;
+}
+
+
+/* Button Styling */
+.btn-delete, .btn-add, .btn-update {
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Delete Button */
+.btn-delete {
+    background-color: #e63946;
+}
+
+    .btn-delete:hover {
+        background-color: #d62828;
+        transform: scale(1.05);
+    }
+
+    .btn-delete:active {
+        background-color: #a4161a;
+        transform: scale(0.98);
+    }
+
+/* Table Wrapper */
+.table-wrapper {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 2rem;
+    overflow-x: auto;
+}
+
+/* Table Styling */
+.bookings-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+    .bookings-table th, .bookings-table td {
+        border: 1px solid #ddd;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .bookings-table th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .bookings-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .bookings-table tr:hover {
+        background-color: #e9ecef;
+    }
+
+/* Flexbox for Action Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    width: auto;
+}
+
+/* Error Message Styling */
+.error {
+    color: #e63946;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+/* General Admin Container */
+.admin-container {
+    padding: 2rem;
+}

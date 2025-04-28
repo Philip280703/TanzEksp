@@ -17,7 +17,7 @@ namespace TanzEksp.Application.UseCases
             _bookingRepository = bookingRepository;
         }
 
-        public async Task<Booking> GetBooking(int id)
+        public async Task<Booking> GetBookingById(int id)
         {
             return await _bookingRepository.GetBookingById(id);
         }
@@ -37,9 +37,9 @@ namespace TanzEksp.Application.UseCases
             await _bookingRepository.UpdateBooking(booking);
         }
 
-        public async Task Delete(Booking booking)
+        public async Task Delete(int id)
         {
-            await _bookingRepository.DeleteBooking(booking);
+            await _bookingRepository.DeleteBooking(id);
         }   
     }
 }
