@@ -1,0 +1,149 @@
+﻿@* @inject CustomerService customerservice
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Admin")]
+@using Microsoft.AspNetCore.Authorization
+@using TanzEksp.Shared.DTO
+@using TanzEksp.Client.Services
+
+@page "/customers"
+
+<h3 class="customer-heading">Kundeoversigt</h3>
+
+<div class="button-wrapper">
+    <button class="btn-add" @onclick="ShowAddCustomerModal">Tilføj Kunde</button>
+</div>
+
+<div class="admin-container">
+
+    @if (errorMessage != null)
+    {
+        <p class="error">@errorMessage</p>
+    }
+
+    @if (customer == null)
+    {
+        <p>Henter kunder...</p>
+    }
+    else
+    {
+        <div class="table-wrapper">
+            <table class="customer-table">
+                <thead>
+                    <tr>
+                        <th>Fornavn</th>
+                        <th>Efternavn</th>
+                        <th>Email</th>
+                        <th>Telefonnummer</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var customer in customer)
+                    {
+                        <tr>
+                            <td>@customer.FirstName</td>
+                            <td>@customer.LastName</td>
+                            <td>@customer.Email</td>
+                            <td>@customer.PhoneNumber</td>
+                            <td class="action-buttons">
+                                <button class="btn-delete" @onclick="() => DeleteCustomer(customer.Id)">Slet</button>
+                                <button class="btn-update" @onclick="() => UpdateCustomer(customer.Id)">Rediger</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<!-- Modal for Adding Customer -->
+@if (showAddCustomerModal)
+{
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <h3>Tilføj Kunde</h3>
+            <form @onsubmit="AddCustomer">
+                <div>
+                    <label for="firstName">Fornavn:</label>
+                    <input type="text" id="firstName" @bind="newCustomer.FirstName" required />
+                </div>
+                <div>
+                    <label for="lastName">Efternavn:</label>
+                    <input type="text" id="lastName" @bind="newCustomer.LastName" required />
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" @bind="newCustomer.Email" required />
+                </div>
+                <div>
+                    <label for="phone">Telefonnummer:</label>
+                    <input type="tel" id="phone" @bind="newCustomer.PhoneNumber" required />
+                </div>
+                <button type="submit" class="btn-add">Gem Kunde</button>
+                <button type="button" class="btn-delete" @onclick="HideAddCustomerModal">Luk</button>
+            </form>
+        </div>
+    </div>
+}
+
+@code {
+    private List<CustomerDTO> customer;
+    private string errorMessage;
+
+    private bool showAddCustomerModal = false;
+    private CustomerDTO newCustomer = new CustomerDTO();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            customer = await customerservice.GetAllCustomersAsync();
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = "Der opstod en fejl ved hentning af kunder: " + ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "En ukendt fejl opstod: " + ex.Message;
+        }
+    }
+
+    async Task DeleteCustomer(int id)
+    {
+        await customerservice.DeleteCustomerAsync(id);
+        customer = await customerservice.GetAllCustomersAsync();
+    }
+
+    void ShowAddCustomerModal()
+    {
+        showAddCustomerModal = true;
+    }
+
+    void HideAddCustomerModal()
+    {
+        newCustomer = new CustomerDTO();
+        showAddCustomerModal = false;
+    }
+
+    private async Task AddCustomer()
+    {
+        try
+        {
+            await customerservice.AddCustomerAsync(newCustomer);
+            showAddCustomerModal = false;
+            await OnInitializedAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "En fejl opstod ved tilføjelse af kunde: " + ex.Message;
+        }
+    }
+    private async Task UpdateCustomer(int id)
+    {
+
+    }
+}
+ *@

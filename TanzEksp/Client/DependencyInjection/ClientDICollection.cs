@@ -9,8 +9,6 @@ namespace TanzEksp.Client.DI
         {
             // Register IOC service her
             services.AddScoped<ICustomerService, CustomerService>();
-
-
             return services;
         }
     }
