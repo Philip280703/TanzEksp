@@ -9,6 +9,10 @@
 
 <h3 class="customer-heading">Bookinger</h3>
 
+<div class="button-wrapper">
+    <button class="btn-add" @onclick="ShowNewBookingModal">Tilføj Booking</button>
+</div>
+
 <div class="admin-container">
     @if (errorMessage != null)
     {
@@ -59,10 +63,64 @@
     }
 </div>
 
+
+@if (showBookingModal)
+{
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <h3>@modalTitle</h3>
+            <EditForm Model="@currentBooking" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div>
+                    <label for="customerId">Kunde ID:</label>
+                    <input type="number" id="customerId" @bind="currentBooking.CustomerId" required />
+                </div>
+                <div>
+                    <label for="tripId">Rejse ID:</label>
+                    <input type="number" id="tripId" @bind="currentBooking.TripId" required />
+                </div>
+                <div>
+                    <label for="adultCount">Antal Voksne:</label>
+                    <input type="number" id="adultCount" @bind="currentBooking.AdultCount" required />
+                </div>
+                <div>
+                    <label for="childCount">Antal Børn:</label>
+                    <input type="number" id="childCount" @bind="currentBooking.ChildCount" required />
+                </div>
+                <div>
+                    <label for="airport">Lufthavn:</label>
+                    <input type="text" id="airport" @bind="currentBooking.Airport" required />
+                </div>
+                <div>
+                    <label for="departureDate">Afgangs Dato:</label>
+                    <input type="date" id="departureDate" @bind="currentBooking.DepartureDate" required />
+                </div>
+                <div>
+                    <label for="tripLength">Varighed (dage):</label>
+                    <input type="number" id="tripLength" @bind="currentBooking.TripLength" required />
+                </div>
+
+                <button type="submit" class="btn-add">@modalButtonLabel</button>
+                <button type="button" class="btn-delete" @onclick="HideBookingModal">Luk</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+}
+
+
+
 @code {
     private List<BookingDTO> bookings;
     private string errorMessage;
 
+    private BookingDTO currentBooking = new BookingDTO();
+    private bool showBookingModal = false;
+    private string modalTitle = "Ny Booking";
+    private string modalButtonLabel = "Gem Booking";
+    private int? BookingId;
 
     protected override async Task OnInitializedAsync()
     {
@@ -84,7 +142,7 @@
         }
     }
 
-  
+
     private async Task DeleteBooking(int bookingId)
     {
         try
@@ -100,5 +158,50 @@
         {
             errorMessage = "En ukendt fejl opstod: " + ex.Message;
         }
+    }
+
+    private void ShowNewBookingModal()
+    {
+        currentBooking = new BookingDTO();
+        modalTitle = "Ny booking";
+        modalButtonLabel = "Gem booking";
+        showBookingModal = true; 
+    }
+
+    private void HideBookingModal()
+    {
+        showBookingModal = false;
+    }
+
+    private async Task SaveBooking()
+    {
+        try
+        {
+            if (BookingId.HasValue)
+            {
+                await bookingService.UpdateBookingAsync(currentBooking);
+            }
+            else
+            {
+                await bookingService.AddBookingAsync(currentBooking);
+            }
+
+            showBookingModal = false;
+            await OnInitializedAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "En fejl opstod ved gemning af kunde: " + ex.Message;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await SaveBooking();
+    }
+
+    private Task HandleInvalidSubmit()
+    {
+        return Task.CompletedTask;
     }
 }
