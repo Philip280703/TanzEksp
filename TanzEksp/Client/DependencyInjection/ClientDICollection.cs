@@ -8,7 +8,10 @@ namespace TanzEksp.Client.DI
         public static IServiceCollection AddClientServices(this IServiceCollection services)
         {
             // Register IOC service her
-            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<TripService>();
+            services.AddScoped<UserService>();
+            services.AddScoped<CustomerService>(); // Den vil ikke køre medmindre jeg tilføjer customerService. Underligt når vi har AddClientServices. 
+            services.AddScoped<BookingService>();
             return services;
         }
     }
