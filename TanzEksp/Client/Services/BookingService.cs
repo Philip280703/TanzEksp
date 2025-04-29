@@ -2,7 +2,7 @@
 
 namespace TanzEksp.Client.Services
 {
-	public class BookingService :IBookingService
+	public class BookingService : IBookingService
 	{
 
 	}
