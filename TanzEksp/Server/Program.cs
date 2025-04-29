@@ -22,11 +22,9 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddServerServices(); // Register IOC service her
 
-builder.Services.AddScoped<ICustomerRepository, CustomerRepositorySQL>(); // måske skal den fjernes //...//...//..//..//
-builder.Services.AddScoped<CustomerUseCase>(); 
 
-builder.Services.AddScoped<IBookingRepository, BookingRepositorySQL>(); // måske skal den fjernes //...//...//..//..//
-builder.Services.AddScoped<BookingUseCase>();
+
+
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>
