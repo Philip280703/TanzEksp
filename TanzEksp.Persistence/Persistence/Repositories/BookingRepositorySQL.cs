@@ -86,9 +86,9 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
             }
         }
 
-        public async Task DeleteBooking(Booking booking)
+        public async Task DeleteBooking(int id)
         {
-            var existingBooking = await GetBookingById(booking.Id);
+            var existingBooking = await GetBookingById(id);
             if (existingBooking != null)
             {
                 _db.BookingEF.Remove(existingBooking);
