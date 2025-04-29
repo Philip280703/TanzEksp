@@ -4,7 +4,7 @@ using TanzEksp.Shared.DTO;
 
 namespace TanzEksp.Client.Services
 {
-	public class BookingService :IBookingService
+	public class BookingService : IBookingService
 	{
 		private readonly HttpClient _httpClient;
 
