@@ -7,7 +7,7 @@
 
 @page "/customers"
 
-<h3 class="customer-heading">Kundeoversigt</h3>
+<h3 class="customer-heading">Kunder</h3>
 
 <div class="button-wrapper">
     <button class="btn-add" @onclick="ShowAddCustomerModal">Tilføj Kunde</button>
@@ -56,8 +56,7 @@
         </div>
     }
 </div>
-
-<!-- Modal for Adding or Updating Customer -->
+ 
 @if (showCustomerModal)
 {
     <div class="modal-overlay">
@@ -116,7 +115,7 @@
         }
     }
 
-    async Task DeleteCustomer(int id)
+    private async Task DeleteCustomer(int id)
     {
         await customerservice.DeleteCustomerAsync(id);
         customer = await customerservice.GetAllCustomersAsync();
