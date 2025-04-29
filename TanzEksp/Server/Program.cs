@@ -7,6 +7,9 @@ using TanzEksp.Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TanzEksp.Application.Interfaces;
+using TanzEksp.Infrastructure.Persistence.Repositories;
+using TanzEksp.Application.UseCases;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,12 +22,20 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddServerServices(); // Register IOC service her
 
+builder.Services.AddScoped<ICustomerRepository, CustomerRepositorySQL>();
+builder.Services.AddScoped<CustomerUseCase>();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+
+
+
 
 builder.Services.AddAuthentication(options =>
 {
@@ -80,7 +91,7 @@ using (var scope = app.Services.CreateScope())
     var admin = await userManager.FindByNameAsync("admin");
     if (admin == null)
     {
-        var adminUser = new ApplicationUser { UserName = "admin", Email = "admin@example.com", FullName = "Administrator" };
+        var adminUser = new ApplicationUser { UserName = "admin@tanzaniaeksperten.dk", Email = "admin@example.com", FullName = "Administrator" };
         var result = await userManager.CreateAsync(adminUser, "Admin123!");
         if (result.Succeeded) await userManager.AddToRoleAsync(adminUser, "Admin");
     }

@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TanzEksp.Shared.DTO
+{
+    public class BookingDTO
+    {
+        public int BookingId { get; set; }
+        public int CustomerId { get; set; }
+        public int? TripId { get; set; }
+        public int AdultCount { get; set; }
+        public int? ChildCount { get; set; }
+        public string? Airport { get; set; }
+        public string? TripLength { get; set; }
+        public DateTime? DepartureDate { get; set; }
+        public byte[] RowVersion { get; set; }
+    }
+}

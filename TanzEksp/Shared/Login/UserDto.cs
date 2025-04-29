@@ -18,7 +18,7 @@ namespace TanzEksp.Shared.Login
     public class RegisterDto
     {
         [Required(ErrorMessage = "Brugernavn er påkrævet")]
-        [StringLength(50, MinimumLength = 8, ErrorMessage = "Username must be between 8 and 50 characters.")]
+        [EmailAddress(ErrorMessage = "Brugernavn skal være en gyldig e-mailadresse.")]
         public string Username { get; set; }
        
         [Required(ErrorMessage = "Password er påkrævet.")]

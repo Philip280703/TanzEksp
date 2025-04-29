@@ -19,7 +19,7 @@
             <thead>
                 <tr>
                     <th>Navn</th>
-                    <th>Brugernavn</th>
+                    <th>Email</th>
                     <th>Rolle</th>
                     <th></th>
                 </tr>
@@ -47,33 +47,41 @@
         </table>
     }
 
-    <h4>Opret Bruger</h4>
+    <button class="btn-create" @onclick="ViewCreate">Mere</button>
 
-    <EditForm Model="newUser" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+    @if (showCreateForm)
+    {
+        
+        <h4>Opret Bruger</h4>
 
-        <div class="form-group">
-            <label for="FullName">Navn</label>
-            <InputText id="FullName" @bind-Value="newUser.FullName" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label for="Username">Brugernavn</label>
-            <InputText id="Username" @bind-Value="newUser.Username" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label for="Password">Adgangskode</label>
-            <InputText id="Password" @bind-Value="newUser.Password" class="form-control" type="password" />
-        </div>
+        <EditForm Model="newUser" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-        <button type="submit" class="btn-create">Opret Bruger</button>
-    </EditForm>
+            <div class="form-group">
+                <label for="FullName">Navn</label>
+                <InputText id="FullName" @bind-Value="newUser.FullName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="Username">E-mail</label>
+                <InputText id="Username" @bind-Value="newUser.Username" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="Password">Adgangskode</label>
+                <InputText id="Password" @bind-Value="newUser.Password" class="form-control" type="password" />
+            </div>
+
+            <button type="submit" class="btn-create">Opret Bruger</button>
+        </EditForm>
+    }
 </div>
 
 
 @code {
     List<UserDto> users;
     RegisterDto newUser = new RegisterDto();
+
+	private bool showCreateForm = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -91,6 +99,11 @@
         await UserService.Register(newUser);
         users = await UserService.GetUsers();
         newUser = new RegisterDto(); // Reset the form
+    }
+
+	void ViewCreate()
+	{
+		showCreateForm = !showCreateForm;
     }
 }
 

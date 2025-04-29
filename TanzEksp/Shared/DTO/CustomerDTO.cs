@@ -9,16 +9,22 @@ namespace TanzEksp.Shared.DTO
 {
     public class CustomerDTO
     {
-       
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
-        public string FirstName { get; set; } = "";
+        [Required(ErrorMessage = "Fornavn er påkrævet.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Fornavn skal være mellem 2 og 50 tegn.")]
+        public string? FirstName { get; set; }
 
-        public string LastName { get; set; } = "";
+        [Required(ErrorMessage = "Efternavn er påkrævet.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Efternavn skal være mellem 2 og 50 tegn.")]
+        public string? LastName { get; set; }
 
-        public string Email { get; set; } = "";
+        [Required(ErrorMessage = "Email er påkrævet.")]
+        [EmailAddress(ErrorMessage = "Indtast en gyldig email-adresse.")]
+        public string? Email { get; set; }
 
-        public string PhoneNumber { get; set; } = "";
-
+        [Required(ErrorMessage = "Telefonnummer er påkrævet.")]
+        [RegularExpression(@"^\d{8}$", ErrorMessage = "Telefonnummer skal være præcist 8 cifre.")]
+        public string? PhoneNumber { get; set; }
     }
 }
