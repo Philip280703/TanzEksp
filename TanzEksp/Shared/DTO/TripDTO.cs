@@ -5,21 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TanzEksp.Domain.Entities
+namespace TanzEksp.Shared.DTO
 {
     public enum TripType
     {
         Group,
         Private
     }
-    public class Trip
+
+    public class TripDTO
     {
-        public int Id { get; set; }
-
+        public int Id {  get; set; }
         public TripType TripType { get; set; }
-
-        public bool IsTemplate { get; set; } = false;
-
-        public List<TripEvent>? Events { get; set; }
+        public bool IsTemplate { get; set; } = false;       
     }
 }
