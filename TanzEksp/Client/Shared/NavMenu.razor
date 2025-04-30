@@ -1,83 +1,47 @@
-﻿@* <div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">TanzEksp</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
+﻿@using TanzEksp.Client.Services
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <AuthorizeView Roles="Admin">
-            <Authorized>
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="counter">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Counter
-                </NavLink>
-            </div>
-            </Authorized>
-        </AuthorizeView>
-        
-    </nav>
-</div> *@
-@using TanzEksp.Client.Services
 <nav class="navbar">
-    <ul class="nav-left">
-        <AuthorizeView Roles="Admin, User">
-            <Authorized>
-                <li><a href="home">Home</a></li>
-                <li><a href="customers">Kunder</a></li>
-                <li><a href="bookings">Booking</a></li>
-                <li><a href="tripevents">TripEvents</a></li>
-                <li><a href="trips">Rejser</a></li>
+    <div class="nav-container">
+        <a href="home" class="logo">Tanzaniaeksperten</a>
 
-            </Authorized>
-        </AuthorizeView>
+        <ul class="nav-links">
+            <AuthorizeView Roles="Admin, User">
+                <Authorized>
+                    <li><a href="customers">Kunder</a></li>
+                    <li><a href="bookings">Booking</a></li>
+                    <li><a href="tripevents">TripEvents</a></li>
+                    <li><a href="trips">Rejser</a></li>
+                </Authorized>
+            </AuthorizeView>
+            <AuthorizeView Roles="Admin">
+                <Authorized>
+                    <li><a href="/admin/users">Administration</a></li>
+                </Authorized>
+            </AuthorizeView>
+        </ul>
 
-        <AuthorizeView Roles="Admin">
-            <Authorized>
-                <li><a href="/admin/users">Administration</a></li>
-            </Authorized>
-        </AuthorizeView>
-    </ul>
-    <ul class="nav-right">
-        <AuthorizeView>
-            <Authorized>
-                <li class="login-btn" @onclick="Logout"><a href="">Logout</a></li>
-            </Authorized>
-            <NotAuthorized>
-                <li class="login-btn"><a href="">Login</a></li>
-            </NotAuthorized>
-        </AuthorizeView>
-    </ul>
+        <ul class="nav-auth">
+            <AuthorizeView>
+                <Authorized>
+                    <li class="login-btn" @onclick="Logout"><a href="">Logout</a></li>
+                </Authorized>
+                <NotAuthorized>
+                    <li class="login-btn"><a href="">Login</a></li>
+                </NotAuthorized>
+            </AuthorizeView>
+        </ul>
+    </div>
 </nav>
 
-
 @code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
     [Inject]
     private UserService service { get; set; }
 
     [Inject]
     private NavigationManager _navigationManager { get; set; }
 
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-
     private async Task Logout()
     {
         service.Logout();
-        
     }
 }
