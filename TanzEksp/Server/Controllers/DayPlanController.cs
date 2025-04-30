@@ -11,15 +11,15 @@ namespace TanzEksp.Server.Controllers
     [Authorize(Roles = "Admin, User")]
     public class DayPlanController : ControllerBase
     {
-        private readonly DayplanUsecase _dayplanUsecase;
+        private readonly DayPlanUseCase _dayplanUsecase;
 
-        public DayPlanController(DayPlanController dayplanUsecase)
+        public DayPlanController(DayPlanUseCase dayplanUsecase)
         {
             _dayplanUsecase = dayplanUsecase;
         }
 
-        [HttpGet]
-        public IActionResult
-     
+        //[HttpGet]
+        //public IActionResult
+
     }
 }

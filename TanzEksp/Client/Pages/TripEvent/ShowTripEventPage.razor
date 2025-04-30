@@ -15,22 +15,18 @@
 	<button class="btn-add" @onclick="ShowAddTripEventModal">Tilføj TripEvent</button>
 </div>
 
-<div class="admin-container">
-
-
-
 	@if(errorMessage != null)
-	{
-		<p class="error">@errorMessage</p>
-	}
+{
+	<p class="error">@errorMessage</p>
+}
 
-	@if(tripEvents == null)
-	{
-		<p>Henter Tripevents...</p>
-	}
-	else
-	{
-		<div class="table-wrapper">
+@if(tripEvents == null)
+{
+	<p>Henter Tripevents...</p>
+}
+else
+{
+			<div class="table-wrapper">
 			<table class="tripevent-table">
 				<thead>
 					<tr>
@@ -50,13 +46,11 @@
 					}
 				</tbody>
 			</table>
-
-			
-	
-</div>
+	</div>
+}
 
 
-</div>
+
 
 
 
