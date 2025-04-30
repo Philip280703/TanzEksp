@@ -4,10 +4,10 @@ namespace TanzEksp.Client.Services.Interfaces
 {
 	public interface IBookingService
 	{
-		Task<BookingDTO> GetBookingByIdAsync(int id);
+		Task<BookingDTO> GetBookingByIdAsync(Guid id);
 		Task<List<BookingDTO>> GetAllBookingsAsync();
 		Task<int> AddBookingAsync(BookingDTO booking);
 		Task<int> UpdateBookingAsync(BookingDTO booking);
-		Task<int> DeleteBookingAsync (int id);
+		Task<int> DeleteBookingAsync (Guid id);
 	}
 }

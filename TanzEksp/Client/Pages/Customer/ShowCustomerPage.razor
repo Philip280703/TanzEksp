@@ -7,8 +7,6 @@
 
 @page "/customers"
 
-<h3 class="customer-heading">Kunder</h3>
-
 <div class="button-wrapper">
     <button class="btn-add" @onclick="ShowAddCustomerModal">Tilføj Kunde</button>
 </div>
@@ -97,7 +95,7 @@
     private string modalTitle = "Tilføj Kunde";
     private string modalButtonLabel = "Gem Kunde";
     private CustomerDTO currentCustomer = new CustomerDTO();
-    private int? customerIdToUpdate;
+    private Guid? customerIdToUpdate;
 
     protected override async Task OnInitializedAsync()
     {
@@ -115,7 +113,7 @@
         }
     }
 
-    private async Task DeleteCustomer(int id)
+    private async Task DeleteCustomer(Guid id)
     {
         await customerservice.DeleteCustomerAsync(id);
         customer = await customerservice.GetAllCustomersAsync();
@@ -130,7 +128,7 @@
         showCustomerModal = true;
     }
 
-    void ShowUpdateCustomerModal(int id)
+    void ShowUpdateCustomerModal(Guid id)
     {
         modalTitle = "Rediger Kunde";
         modalButtonLabel = "Opdater Kunde";

@@ -9,7 +9,7 @@ namespace TanzEksp.Shared.DTO
 {
     public class CustomerDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Fornavn er påkrævet.")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Fornavn skal være mellem 2 og 50 tegn.")]

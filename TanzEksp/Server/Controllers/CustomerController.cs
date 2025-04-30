@@ -25,7 +25,7 @@ namespace TanzEksp.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var customer = await _customerUseCase.GetById(id);
             if (customer == null)
@@ -47,7 +47,7 @@ namespace TanzEksp.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Customer customer)
+        public async Task<IActionResult> Update(Guid id, [FromBody] Customer customer)
         {
             if (id != customer.Id || customer == null)
             {
@@ -58,7 +58,7 @@ namespace TanzEksp.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var customer = await _customerUseCase.GetById(id);
             if (customer == null)

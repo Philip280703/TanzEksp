@@ -40,7 +40,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
 
 		public async Task<List<TripEvent>> GetAll()
 		{
-			var result  = await _db.TripEventEF.ToListAsync();
+			var result  = await _db.TripEventEF.Include(te => te.DayPlans).ToListAsync();
 			return result;
 		}
 

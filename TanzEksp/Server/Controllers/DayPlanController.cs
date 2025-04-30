@@ -18,8 +18,57 @@ namespace TanzEksp.Server.Controllers
             _dayplanUsecase = dayplanUsecase;
         }
 
-        //[HttpGet]
-        //public IActionResult
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var tripEvents = await _dayplanUsecase.GetAll();
+            return Ok(tripEvents);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var tripEvent = await _dayplanUsecase.GetById(id);
+            if (tripEvent == null)
+            {
+                return NotFound();
+            }
+            return Ok(tripEvent);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add([FromBody] DayPlan dayPlan)
+        {
+            if (dayPlan == null)
+            {
+                return BadRequest();
+            }
+            await _dayplanUsecase.Add(dayPlan);
+            return CreatedAtAction(nameof(GetById), new { id = dayPlan.Id }, dayPlan);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] DayPlan dayPlan)
+        {
+            if (id != dayPlan.Id || dayPlan == null)
+            {
+                return BadRequest();
+            }
+            await _dayplanUsecase.Update(dayPlan);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var tripEvent = await _dayplanUsecase.GetById(id);
+            if (tripEvent == null)
+            {
+                return NotFound();
+            }
+            await _dayplanUsecase.Delete(id);
+            return NoContent();
+        }
 
     }
 }

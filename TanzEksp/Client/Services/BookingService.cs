@@ -23,7 +23,7 @@ namespace TanzEksp.Client.Services
 			return bookings;
 		}
 
-		public async Task<BookingDTO> GetBookingByIdAsync(int id)
+		public async Task<BookingDTO> GetBookingByIdAsync(Guid id)
 		{
 			var booking = await _httpClient.GetFromJsonAsync<BookingDTO>($"api/booking/{id}");
 			if (booking == null)
@@ -47,7 +47,7 @@ namespace TanzEksp.Client.Services
             return answerCode;
         }
 
-        public async Task<int> DeleteBookingAsync(int id)
+        public async Task<int> DeleteBookingAsync(Guid id)
 		{
 			var answer = await _httpClient.DeleteAsync($"api/booking/{id}");
 			var answerCode = (int)answer.StatusCode;
