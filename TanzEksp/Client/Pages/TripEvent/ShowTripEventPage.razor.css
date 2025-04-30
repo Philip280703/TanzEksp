@@ -1,73 +1,90 @@
-﻿/* Generel styling til siden */
-.tripevents-heading {
-    font-size: 2rem;
-    font-weight: bold;
+﻿
+/* Generel styling til body */
+body {
+    font-family: 'Roboto', sans-serif; /* Standard font for de fleste elementer */
+    background-color: #f4f4f4;
     color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Generel styling til siden */
+.tripevents-heading {
+    font-family: 'Lora', serif; /* Serif font til overskrifter */
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #f16f21; /* Orange farve */
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
 }
 
 /* Container til admin-indhold */
 .admin-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 /* Fejlmeddelelse */
 .error {
-    color: #d9534f;
+    color: #e74c3c;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
 }
 
 /* Loading-tekst */
 .loading {
     text-align: center;
     font-style: italic;
-    color: #666;
+    color: #7f8c8d;
+    font-size: 1.2rem;
 }
 
 /* Wrapper til tabellen */
 .table-wrapper {
     overflow-x: auto;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 /* Styling til tabellen */
 .tripevent-table {
+    font-family: 'Roboto', sans-serif; /* Brug Roboto til tabeltekst */
     width: 100%;
     border-collapse: collapse;
     margin: 0 auto;
-    background-color: #fff;
+    background-color: #ffffff;
     border: 1px solid #ddd;
     font-size: 1rem;
     text-align: left;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
     .tripevent-table th,
     .tripevent-table td {
-        padding: 12px 15px;
+        padding: 15px 20px;
         border: 1px solid #ddd;
     }
 
     .tripevent-table th {
-        background-color: #007bff;
+        font-family: 'Lora', serif; /* Serif font til tabeloverskrifter */
+        background-color: #f16f21; /* Orange farve */
         color: #fff;
         font-weight: bold;
         text-transform: uppercase;
     }
 
     .tripevent-table tr:nth-child(even) {
-        background-color: #f2f2f2;
+        background-color: #f9f9f9;
     }
 
     .tripevent-table tr:hover {
-        background-color: #e9ecef;
+        background-color: #f1f1f1;
     }
 
 /* Mobilvenlig styling */
@@ -79,6 +96,62 @@
     }
 
     .tripevents-heading {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
+    }
+
+    .admin-container {
+        padding: 15px;
     }
 }
+
+/* Styling for knapper */
+.btn-add {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f16f21; /* Orange farve */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+    /* Hover effekt for knappen */
+    .btn-add:hover {
+        background-color: #e65c00; /* Mørkere orange */
+        transform: translateY(-2px); /* Løfter knappen lidt op */
+    }
+
+    /* Fokus effekt for knappen */
+    .btn-add:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(255, 87, 34, 0.6); /* Glød omkring knappen */
+    }
+
+    /* Aktiv effekt for knappen */
+    .btn-add:active {
+        transform: translateY(1px); /* Lille dypning, når knappen er trykket ned */
+    }
+
+/* Footer styling */
+.footer {
+    font-family: 'Roboto', sans-serif;
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+    .footer a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
