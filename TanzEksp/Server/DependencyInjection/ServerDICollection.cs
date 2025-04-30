@@ -16,11 +16,17 @@ namespace TanzEksp.Server.ServerIOC
             services.AddScoped<ITripRepository, TripRepositorySQL>();
             services.AddScoped<TripUseCase>();
 
-            services.AddScoped<ICustomerRepository, CustomerRepositorySQL>(); // måske skal den fjernes //...//...//..//..//
+            services.AddScoped<ICustomerRepository, CustomerRepositorySQL>(); 
             services.AddScoped<CustomerUseCase>();
 
-            services.AddScoped<IBookingRepository, BookingRepositorySQL>(); // måske skal den fjernes //...//...//..//..//
+            services.AddScoped<IBookingRepository, BookingRepositorySQL>(); 
             services.AddScoped<BookingUseCase>();
+
+            services.AddScoped<ITripEventRepository, TripEventRepositorySql>();
+            services.AddScoped<TripEventUseCase>();
+
+            services.AddScoped<IDayPlanRepository, DayPlanRepositorySQL>();
+            services.AddScoped<DayPlanUseCase>();
 
             return services;
         }

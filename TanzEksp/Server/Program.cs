@@ -24,12 +24,6 @@ builder.Services.AddServerServices(); // Register IOC service her
 
 
 
-
-
-builder.Services.AddScoped<ITripEventRepository,TripEventRepositorySql>();
-builder.Services.AddScoped<TripEventUseCase>();
-
-
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
