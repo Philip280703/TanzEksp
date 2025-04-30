@@ -26,26 +26,58 @@
 }
 else
 {
-			<div class="table-wrapper">
-			<table class="tripevent-table">
-				<thead>
+	<div class="table-wrapper">
+		<table class="tripevent-table">
+			<thead>
+				<tr>
+					<th>Titel</th>
+					<th>Beskrivelse</th>
+					<th>Varighed (dage)</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var tripEvent in tripEvents)
+				{
 					<tr>
-						<th>Titel</th>
-						<th>Beskrivelse</th>
-						<th>Varighed (dage)</th>
+						<td>@tripEvent.Title</td>
+						<td>@tripEvent.Description</td>
+						<td>@tripEvent.Days</td>
 					</tr>
-				</thead>
-				<tbody>
-					@foreach (var tripEvent in tripEvents)
-					{
-						<tr>
-							<td>@tripEvent.Title</td>
-							<td>@tripEvent.Description</td>
-							<td>@tripEvent.Days</td>
-						</tr>
-					}
-				</tbody>
-			</table>
+				}
+			</tbody>
+		</table>
+	</div>
+
+}
+
+@if (showTripEventModal)
+{
+	<div class="modal-overlay">
+		<div class="modal-content">
+			<h3>@modalTitle</h3>
+			<EditForm Model="@currentTripEvent" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+				<DataAnnotationsValidator/>
+				<ValidationSummary/>
+				<div>
+					<label for="Title">Titel:</label>
+					<input type="text" id="Title" @bind="currentTripEvent.Title" required/>
+				</div>
+				<div>
+					<label for="description">Beskrivelse:</label>
+					<input type="text" id="description" @bind="currentTripEvent.Description" required/>
+				</div>
+				<div>
+					<label for="days">Dage:</label>
+					<input type="number" id="days" @bind="currentTripEvent.Days" required/>
+				</div>
+				<div>
+					<label for="price">Pris:</label>
+					<input type="number" id="price" @bind="currentTripEvent.Price" required/>
+				</div>
+				<button type="submit" class="btn-add">@modalButtonLabel</button>
+				<button type="button" class="btn-delete" @onclick="HideTripEventModal">Luk</button>
+			</EditForm>
+		</div>
 	</div>
 }
 
@@ -54,22 +86,21 @@ else
 
 
 
-
 @code {
 
-    private List<TripEventDTO> tripEvents;
-    private string errorMessage;
+	private List<TripEventDTO> tripEvents;
+	private string errorMessage;
 	private string modalTitle = "Tilføj TripEvent";
-    private string modalButtonLabel = "Gem TripEvent";
+	private string modalButtonLabel = "Gem TripEvent";
 	private TripEventDTO currentTripEvent = new TripEventDTO();
 	private bool showTripEventModal = false;
 
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            tripEvents = await tripeventservice.GetAllTripEventsAsync();
-        }
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			tripEvents = await tripeventservice.GetAllTripEventsAsync();
+		}
 		catch (HttpRequestException ex)
 		{
 			errorMessage = "Der opstod en fejl ved hentning af tripevents: " + ex.Message;
@@ -86,6 +117,27 @@ else
 		modalButtonLabel = "Gem TripEvent";
 		currentTripEvent = new TripEventDTO();
 		showTripEventModal = true;
+	}
+
+	private async Task HandleValidSubmit()
+	{
+		await SaveTripEvent();
+	}
+
+	private async Task SaveTripEvent()
+	{
+		throw new Exception();
+	}
+
+	private Task HandleInvalidSubmit()
+	{
+		return Task.CompletedTask;
+	}
+
+	void HideTripEventModal()
+	{
+		currentTripEvent = new TripEventDTO();
+		showTripEventModal = false;
 	}
 
 }
