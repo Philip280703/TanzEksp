@@ -9,10 +9,10 @@ namespace TanzEksp.Application.Interfaces
 {
     public interface IBookingRepository
     {
-        Task<Booking> GetBookingById(int id);
+        Task<Booking> GetBookingById(Guid id);
         Task<List<Booking>> GetAllBookings();
         Task AddBooking(Booking booking);
         Task UpdateBooking(Booking booking);
-        Task DeleteBooking(int id);
+        Task DeleteBooking(Guid id);
     }
 }

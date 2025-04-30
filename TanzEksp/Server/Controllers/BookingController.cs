@@ -26,7 +26,7 @@ namespace TanzEksp.Server.Controllers
         }
 
         [HttpGet("{bookingId}")]
-        public async Task<IActionResult> GetBookingById(int bookingId)
+        public async Task<IActionResult> GetBookingById(Guid bookingId)
         {
             var bookings = await _bookingUseCase.GetBookingById(bookingId);
             if (bookings == null)
@@ -49,7 +49,7 @@ namespace TanzEksp.Server.Controllers
         }
 
         [HttpDelete("{bookingid}")]
-        public async Task<IActionResult> Delete(int bookingid)
+        public async Task<IActionResult> Delete(Guid bookingid)
         {
             var customer = await _bookingUseCase.GetBookingById(bookingid);
             if (customer == null)

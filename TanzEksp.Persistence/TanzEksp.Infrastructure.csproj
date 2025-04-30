@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="ExternalAPI\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>

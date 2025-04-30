@@ -31,7 +31,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
             return result;
         }
 
-        public async Task<Customer> GetById(int id)
+        public async Task<Customer> GetById(Guid id)
         {
             var result = await _db.CustomerEF.SingleOrDefaultAsync(c => c.Id == id);
             return result;
@@ -69,7 +69,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
         }
 
 
-        public async Task Delete(int id)
+        public async Task Delete(Guid id)
         {
             var customer = await GetById(id); // Vent på asynkrone metode
             if (customer != null)

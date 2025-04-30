@@ -10,7 +10,7 @@ namespace TanzEksp.Domain.Entities
     public class Customer
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
 
         [Required(ErrorMessage = "Fornavn er påkrævet")]

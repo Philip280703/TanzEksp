@@ -8,8 +8,8 @@ namespace TanzEksp.Shared.DTO
 {
     public class BookingDTO
     {
-        public int Id { get; set; }
-        public int CustomerId { get; set; }
+        public Guid Id { get; set; }
+        public Guid CustomerId { get; set; }
         public int? TripId { get; set; }
         public int AdultCount { get; set; }
         public int? ChildCount { get; set; }
