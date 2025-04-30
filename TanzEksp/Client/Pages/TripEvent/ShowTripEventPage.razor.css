@@ -1,0 +1,84 @@
+﻿/* Generel styling til siden */
+.tripevents-heading {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Container til admin-indhold */
+.admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Fejlmeddelelse */
+.error {
+    color: #d9534f;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Loading-tekst */
+.loading {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+}
+
+/* Wrapper til tabellen */
+.table-wrapper {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+/* Styling til tabellen */
+.tripevent-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    text-align: left;
+}
+
+    .tripevent-table th,
+    .tripevent-table td {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+    }
+
+    .tripevent-table th {
+        background-color: #007bff;
+        color: #fff;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .tripevent-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .tripevent-table tr:hover {
+        background-color: #e9ecef;
+    }
+
+/* Mobilvenlig styling */
+@media (max-width: 768px) {
+    .tripevent-table th,
+    .tripevent-table td {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .tripevents-heading {
+        font-size: 1.5rem;
+    }
+}

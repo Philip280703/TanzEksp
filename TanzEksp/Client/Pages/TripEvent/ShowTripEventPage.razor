@@ -1,0 +1,97 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using TanzEksp.Client.Services
+@using TanzEksp.Shared.DTO
+@inject TripEventService tripeventservice
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Admin,User")]
+
+
+@page "/tripevents"
+
+
+<h3 class="tripevents-heading">TripEvents</h3>
+
+<div class="button-wrapper">
+	<button class="btn-add" @onclick="ShowAddTripEventModal">Tilføj TripEvent</button>
+</div>
+
+<div class="admin-container">
+
+
+
+	@if(errorMessage != null)
+	{
+		<p class="error">@errorMessage</p>
+	}
+
+	@if(tripEvents == null)
+	{
+		<p>Henter Tripevents...</p>
+	}
+	else
+	{
+		<div class="table-wrapper">
+			<table class="tripevent-table">
+				<thead>
+					<tr>
+						<th>Titel</th>
+						<th>Beskrivelse</th>
+						<th>Varighed (dage)</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var tripEvent in tripEvents)
+					{
+						<tr>
+							<td>@tripEvent.Title</td>
+							<td>@tripEvent.Description</td>
+							<td>@tripEvent.Days</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+
+			
+	
+</div>
+
+}
+</div>
+
+
+
+
+@code {
+
+    private List<TripEventDTO> tripEvents;
+    private string errorMessage;
+	private string modalTitle = "Tilføj TripEvent";
+    private string modalButtonLabel = "Gem TripEvent";
+	private TripEventDTO currentTripEvent = new TripEventDTO();
+	private bool showTripEventModal = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            tripEvents = await tripeventservice.GetAllTripEventsAsync();
+        }
+		catch (HttpRequestException ex)
+		{
+			errorMessage = "Der opstod en fejl ved hentning af tripevents: " + ex.Message;
+		}
+		catch (Exception ex)
+		{
+			errorMessage = "En ukendt fejl opstod: " + ex.Message;
+		}
+	}
+
+	void ShowAddTripEventModal()
+	{
+		modalTitle = "Tilføj TripEvent";
+		modalButtonLabel = "Gem TripEvent";
+		currentTripEvent = new TripEventDTO();
+		showTripEventModal = true;
+	}
+
+}

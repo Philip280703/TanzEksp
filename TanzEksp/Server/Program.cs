@@ -28,6 +28,9 @@ builder.Services.AddScoped<CustomerUseCase>();
 builder.Services.AddScoped<IBookingRepository, BookingRepositorySQL>(); // måske skal den fjernes //...//...//..//..//
 builder.Services.AddScoped<BookingUseCase>();
 
+builder.Services.AddScoped<ITripEventRepository,TripEventRepositorySql>();
+builder.Services.AddScoped<TripEventUseCase>();
+
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

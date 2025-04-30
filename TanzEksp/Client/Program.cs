@@ -17,6 +17,7 @@ builder.Services.AddClientServices(); // Register IOC service her
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<CustomerService>(); // Den vil ikke køre medmindre jeg tilføjer customerService. Underligt når vi har AddClientServices. 
 builder.Services.AddScoped<BookingService>();
+builder.Services.AddScoped<TripEventService>();
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
