@@ -43,14 +43,14 @@
                     @foreach (var booking in bookings)
                     {
                         <tr>
-                            <td>@booking.Id</td>
-                            <td>@booking.CustomerId</td>
-                            <td>@booking.TripId</td>
-                            <td>@booking.AdultCount</td>
-                            <td>@booking.ChildCount</td>
-                            <td>@booking.Airport</td>
-                            <td>@booking.DepartureDate</td>
-                            <td>@booking.TripLength</td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@booking.Id</td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@booking.CustomerId</td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@booking.TripId</td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@booking.AdultCount</td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@booking.ChildCount</td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@booking.Airport</td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@booking.DepartureDate</td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@booking.TripLength</td>
                             <td class="action-buttons">
                                 <button class="btn-delete" @onclick="() => DeleteBooking(booking.Id)">Slet</button>
                             </td>
@@ -206,5 +206,10 @@
     private Task HandleInvalidSubmit()
     {
         return Task.CompletedTask;
+    }
+
+    private void NavigateTo(Guid bookingId)
+    {
+        navigationManager.NavigateTo($"/TripsOnCertainBooking/{bookingId}");
     }
 }

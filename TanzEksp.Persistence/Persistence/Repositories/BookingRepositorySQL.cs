@@ -23,7 +23,8 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
         public async Task<Booking> GetBookingById(Guid id)
         {
             var result = await _db.BookingEF.SingleOrDefaultAsync(b => b.Id == id);
-            return result;
+
+            return booking;
         }
 
         public async Task<List<Booking>> GetAllBookings()

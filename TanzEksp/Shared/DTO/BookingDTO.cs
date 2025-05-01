@@ -10,6 +10,7 @@ namespace TanzEksp.Shared.DTO
     {
         public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
+        public string? CustomerName { get; set; }
         public int? TripId { get; set; }
         public int AdultCount { get; set; }
         public int? ChildCount { get; set; }
