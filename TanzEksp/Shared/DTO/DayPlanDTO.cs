@@ -18,5 +18,8 @@ namespace TanzEksp.Shared.DTO
 
         public string? Meals { get; set; }
 
+        // Tilføjelse ellers kunne jeg ikke linke en Dayplan til et specifikt Tripevent.
+        public int TripEventId { get; set; }
+
     }
 }

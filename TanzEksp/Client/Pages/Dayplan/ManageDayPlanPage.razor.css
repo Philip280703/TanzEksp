@@ -1,6 +1,352 @@
-﻿namespace TanzEksp.Client.Pages.Dayplan
-{
-    public class MangeDayPlanPage
-    {
-    }
+﻿/* === Grundlæggende styling === */
+body {
+	font-family: 'Roboto', sans-serif;
+	background-color: #f4f4f4;
+	color: #333;
+	margin: 0;
+	padding: 0;
 }
+
+/* === Overskrifter === */
+.tripevents-heading {
+	font-family: 'Lora', serif;
+	font-size: 2.5rem;
+	font-weight: 600;
+	color: #f16f21;
+	text-align: center;
+	margin-bottom: 30px;
+	text-transform: uppercase;
+}
+
+/* === Admin container === */
+.admin-container {
+	margin: 0;
+	max-width: none;
+}
+
+/* === Fejlmeddelelse === */
+.error {
+	color: #e74c3c;
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 30px;
+	font-size: 1.1rem;
+}
+
+/* === Loading tekst === */
+.loading {
+	text-align: center;
+	font-style: italic;
+	color: #7f8c8d;
+	font-size: 1.2rem;
+}
+
+/* === Tabel wrapper === */
+.table-wrapper {
+	overflow-x: auto;
+	margin-top: 30px;
+}
+
+/* === Tabel === */
+.tripevent-table {
+	font-family: 'Roboto', sans-serif;
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0 auto;
+	background-color: #ffffff;
+	border: 1px solid #ddd;
+	font-size: 1rem;
+	text-align: left;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+	.tripevent-table th,
+	.tripevent-table td {
+		padding: 15px 20px;
+		border: 1px solid #ddd;
+	}
+
+	.tripevent-table th {
+		font-family: 'Lora', serif;
+		background-color: #f16f21;
+		color: #fff;
+		font-weight: bold;
+		text-transform: uppercase;
+	}
+
+	.tripevent-table tr:nth-child(even) {
+		background-color: #f9f9f9;
+	}
+
+	.tripevent-table tr:hover {
+		background-color: #f1f1f1;
+	}
+
+/* === Mobiltilpasning === */
+@media (max-width: 768px) {
+	.tripevent-table th,
+	.tripevent-table td {
+		font-size: 0.9rem;
+		padding: 10px;
+	}
+
+	.tripevents-heading {
+		font-size: 1.8rem;
+	}
+
+	.admin-container {
+		padding: 15px;
+	}
+}
+
+/* === Tilføj-knap === */
+.btn-add {
+	font-family: 'Roboto', sans-serif;
+	background-color: #f16f21;
+	color: white;
+	border: none;
+	padding: 12px 25px;
+	font-size: 1.2rem;
+	font-weight: bold;
+	text-transform: uppercase;
+	cursor: pointer;
+	border-radius: 8px;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+	.btn-add:hover {
+		background-color: #e65c00;
+		transform: translateY(-2px);
+	}
+
+	.btn-add:focus {
+		outline: none;
+		box-shadow: 0 0 0 2px rgba(255, 87, 34, 0.6);
+	}
+
+	.btn-add:active {
+		transform: translateY(1px);
+	}
+
+/* === Footer === */
+.footer {
+	font-family: 'Roboto', sans-serif;
+	background-color: #333;
+	color: #fff;
+	padding: 20px 0;
+	text-align: center;
+	font-size: 0.9rem;
+}
+
+	.footer a {
+		color: #fff;
+		text-decoration: none;
+	}
+
+		.footer a:hover {
+			text-decoration: underline;
+		}
+
+/* === Modal Overlay === */
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+
+/* === Modal Content === */
+.modal-content {
+	background-color: white;
+	padding: 2rem;
+	border-radius: 12px;
+	width: 450px;
+	max-width: 90%;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+	font-family: 'Roboto', sans-serif;
+	animation: fadeIn 0.3s ease;
+}
+
+	.modal-content h3 {
+		font-size: 1.5rem;
+		margin-bottom: 1rem;
+		color: #f16f21;
+		text-align: center;
+	}
+
+	.modal-content form {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.modal-content label {
+		font-size: 1rem;
+		margin-bottom: 0.25rem;
+		color: #555;
+	}
+
+	.modal-content input {
+		padding: 0.8rem;
+		border-radius: 8px;
+		border: 1px solid #ddd;
+		font-size: 1rem;
+		background-color: #f8f9fa;
+		width: 100%;
+		box-sizing: border-box;
+		transition: all 0.3s ease-in-out;
+	}
+
+		.modal-content input:focus {
+			border-color: #38b000;
+			background-color: #ffffff;
+			box-shadow: 0 0 8px rgba(56, 176, 0, 0.5);
+		}
+
+	/* === Modal knapper === */
+	.modal-content button {
+		margin-top: 1.25rem;
+		padding: 0.8rem 1.5rem;
+		font-size: 1rem;
+		border-radius: 6px;
+		cursor: pointer;
+		transition: background-color 0.3s ease, transform 0.2s ease;
+		border: none;
+	}
+
+		/* Grøn tilføj-knap i modal */
+		.modal-content button.btn-add {
+			background-color: #38b000;
+			color: white;
+		}
+
+			.modal-content button.btn-add:hover {
+				background-color: #2d6a4f;
+				transform: scale(1.05);
+			}
+
+			.modal-content button.btn-add:active {
+				background-color: #1b4332;
+				transform: scale(0.98);
+			}
+
+		/* Rød luk-knap i modal */
+		.modal-content button.btn-delete {
+			background-color: #e63946;
+			color: white;
+			margin-top: 0.5rem;
+		}
+
+			.modal-content button.btn-delete:hover {
+				background-color: #d62828;
+				transform: scale(1.05);
+			}
+
+			.modal-content button.btn-delete:active {
+				background-color: #a4161a;
+				transform: scale(0.98);
+			}
+
+/* === Fade-in animation === */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+/* === Trip Event Cards === */
+.trip-event-card {
+	background-color: white;
+	border: 1px solid #ddd; /* Border around each card */
+	border-radius: 8px;
+	padding: 20px;
+	margin-bottom: 20px; /* Space between each trip event card */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	transition: box-shadow 0.3s ease;
+}
+
+	.trip-event-card:hover {
+		box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Slight shadow effect on hover */
+	}
+
+/* === Wrapper for Trip Event Cards === */
+.trip-event-wrapper {
+	padding: 20px;
+}
+
+/* === Styling for Trip Event Details === */
+.trip-event-title,
+.trip-event-description,
+.trip-event-duration,
+.trip-event-price {
+	margin-bottom: 10px; /* Space between each text block */
+}
+
+.trip-event-actions {
+	margin-top: 20px; /* Space above the action buttons */
+}
+
+	.trip-event-actions button {
+		font-size: 0.8rem; /* 50% smaller font size */
+		padding: 6px 12px; /* Adjust padding to make the button smaller */
+		border-radius: 6px; /* Keep the rounded corners consistent */
+		font-weight: normal; /* Optionally, make the font weight lighter */
+	}
+
+/* === Styling for Trip Event Title with Underline === */
+.trip-event-title {
+	position: relative;
+	display: inline-block; /* Allow content to be inline for the border effect */
+	padding-bottom: 5px; /* Adjust spacing between the title and the underline */
+}
+
+	.trip-event-title::after {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 2px; /* Thickness of the underline */
+		background-color: #f16f21; /* Color of the underline */
+	}
+
+/* === More space between each “category” === */
+.trip-event-title,
+.trip-event-description,
+.trip-event-duration,
+.trip-event-price {
+	margin-bottom: 16px; /* adjust to taste */
+}
+
+/* (keep existing trip-event-actions styles here) */
+
+/* === Underline on titles (option 1) === */
+.trip-event-title {
+	position: relative;
+	display: inline-block;
+	padding-bottom: 5px;
+	margin-bottom: 20px; /* extra space below the title */
+}
+
+	.trip-event-title::after {
+		content: "";
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 2px;
+		background-color: #f16f21;
+	}
