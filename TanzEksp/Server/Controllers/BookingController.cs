@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TanzEksp.Application.Interfaces;
 using TanzEksp.Application.UseCases;
 using TanzEksp.Domain.Entities;
+using TanzEksp.Shared.DTO;
 
 namespace TanzEksp.Server.Controllers
 {
@@ -16,6 +17,20 @@ namespace TanzEksp.Server.Controllers
         public BookingController(BookingUseCase bookingUseCase)
         {
             _bookingUseCase = bookingUseCase;
+        }
+
+        private Booking convert(BookingDTO bookingDTO)
+        {
+            return new Booking
+            {
+                CustomerId = bookingDTO.CustomerId,
+                AdultCount = bookingDTO.AdultCount,
+                ChildCount = bookingDTO.ChildCount,
+                Airport = bookingDTO.Airport,
+                DepartureDate = bookingDTO.DepartureDate,
+                TripLength = bookingDTO.TripLength,
+                TripId = bookingDTO.TripId
+            };
         }
 
         [HttpGet]
@@ -37,14 +52,15 @@ namespace TanzEksp.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] Booking booking)
+        public async Task<IActionResult> Add([FromBody] BookingDTO booking)
         {
+            var _booking = convert(booking);
             if (booking == null)
             {
                 return BadRequest();
             }
 
-            await _bookingUseCase.Add(booking);
+            await _bookingUseCase.Add(_booking);
             return CreatedAtAction(nameof(GetBookingById), new { bookingId = booking.Id }, booking);
         }
 
