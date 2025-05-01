@@ -21,8 +21,9 @@ else if (booking != null && customer == null)
 }
 else
 {
-	<h7>Booking ID: @bookingId</h7>
-	<h7>Kunde info: @customer.FirstName @customer.LastName</h7>
+	<h4>Kunde info: @customer.FirstName @customer.LastName</h4>
+	<h4>Booking ID: @bookingId</h4>
+	<h5>Afrejsedato: @booking.DepartureDate.Value.ToShortDateString()</h5>
 }
 
 
