@@ -31,6 +31,8 @@ else
 					<th>Titel</th>
 					<th>Beskrivelse</th>
 					<th>Varighed (dage)</th>
+					<th>Pris</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -40,6 +42,10 @@ else
 						<td>@tripEvent.Title</td>
 						<td>@tripEvent.Description</td>
 						<td>@tripEvent.Days</td>
+						<td>@tripEvent.Price</td>
+						<td>
+@* 							<button class="btn-add" @onclick="() => AddDayPlan(customer.Id)">Tilføj DayPlan</button>
+ *@						</td>
 					</tr>
 				}
 			</tbody>
@@ -87,10 +93,12 @@ else
 @code {
 
 	private List<TripEventDTO> tripEvents;
+	private TripEventDTO currentTripEvent = new TripEventDTO();
+	private Guid? TripEventIdUpdate;
+
 	private string errorMessage;
 	private string modalTitle = "Tilføj TripEvent";
 	private string modalButtonLabel = "Gem TripEvent";
-	private TripEventDTO currentTripEvent = new TripEventDTO();
 	private bool showTripEventModal = false;
 
 	protected override async Task OnInitializedAsync()
@@ -123,9 +131,26 @@ else
 	}
 
 	private async Task SaveTripEvent()
-	{
-		throw new Exception();
-	}
+    {
+        try
+        {
+            if (TripEventIdUpdate.HasValue)
+            {
+				await tripeventservice.UpdateTripEventAsync(currentTripEvent);
+            }
+            else
+            {
+                await tripeventservice.AddTripEventAsync(currentTripEvent);
+            }
+
+			showTripEventModal = false;
+            await OnInitializedAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "En fejl opstod ved gemning af kunde: " + ex.Message;
+        }
+    }
 
 	private Task HandleInvalidSubmit()
 	{
@@ -137,5 +162,4 @@ else
 		currentTripEvent = new TripEventDTO();
 		showTripEventModal = false;
 	}
-
 }

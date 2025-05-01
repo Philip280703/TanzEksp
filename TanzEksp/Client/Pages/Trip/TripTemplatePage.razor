@@ -1,0 +1,14 @@
+﻿@* @inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Admin, User")]
+@using Microsoft.AspNetCore.Authorization
+@using TanzEksp.Shared.DTO
+@using TanzEksp.Client.Services
+
+<h3>TripTemplate</h3>
+
+@page "/TripTemplatePage/{BookingId:int}"
+
+@code {
+	private BookingDTO currentBooking = new BookingDTO();
+	private List<TripDTO>
+} *@
