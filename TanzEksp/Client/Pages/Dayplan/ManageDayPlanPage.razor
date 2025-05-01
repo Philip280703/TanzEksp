@@ -1,0 +1,33 @@
+﻿@page "/ManageDayPlanPage/{id:int}"
+
+@using TanzEksp.Client.Services
+@using TanzEksp.Shared.DTO
+@inject TripEventService tripeventservice
+@inject NavigationManager NavigationManager
+
+<h3>Dagsplan for: @tripEvent?.Title</h3>
+
+
+
+
+@code {
+
+	[Parameter]
+	public int id { get; set; }
+
+	private TripEventDTO tripEvent;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            tripEvent = await tripeventservice.GetTripEventByIdAsync(id);
+        }
+        catch (Exception ex)
+        {
+            // Optional: Add error handling here
+            Console.WriteLine($"Fejl under hentning af tripEvent: {ex.Message}");
+        }
+    }
+
+}

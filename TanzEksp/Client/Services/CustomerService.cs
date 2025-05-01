@@ -54,6 +54,4 @@ namespace TanzEksp.Client.Services
             return answerCode;
         }
     }
-    
-    
 }

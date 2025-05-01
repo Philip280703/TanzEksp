@@ -32,7 +32,8 @@ else
                 <p class="trip-event-duration"><strong>Varighed:</strong> @tripEvent.Days dage</p>
                 <p class="trip-event-price"><strong>Pris:</strong> @tripEvent.Price DKK</p>
                 <div class="trip-event-actions">
-                    <button class="btn-add" @onclick="() => NavigateToEditTemplatePage(tripEvent.Id)">Redigere Dagsplan</button>
+                    <button class="btn-add" @onclick="() => NavigateToManageDayPlanPage(tripEvent.Id)"> Se dagsplan</button>
+                    <button class="btn-add" @onclick="() => NavigateToEditTemplatePage(tripEvent.Id)">Redigere </button>
                 </div>
             </div>
         }
@@ -155,5 +156,10 @@ else
     private void NavigateToEditTemplatePage(int id)
     {
         NavigationManager.NavigateTo($"/EditTemplatePage/{id}");
+    }
+
+    private void NavigateToManageDayPlanPage(int id)
+    {
+        NavigationManager.NavigateTo($"/ManageDayPlanPage/{id}");
     }
 }
