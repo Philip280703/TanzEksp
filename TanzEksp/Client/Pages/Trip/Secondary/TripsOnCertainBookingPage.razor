@@ -22,7 +22,7 @@ else if (booking != null && customer == null)
 else
 {
 	<h2>@bookingId</h2>
-	<h2>@customer.FirstName @customer.LastName</h2>
+	<h2>@booking.Customer.FirstName @booking.Customer.LastName</h2>
 }
 
 
@@ -36,7 +36,7 @@ else
 	protected override async Task OnInitializedAsync()
 	{
 		booking = await bookingService.GetBookingByIdAsync(bookingId);
-		customer = await customerService.GetCustomerByIdAsync(booking.CustomerId);
+		// customer = await customerService.GetCustomerByIdAsync(booking.CustomerId);
 	}
 
 }
