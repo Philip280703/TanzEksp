@@ -1,0 +1,91 @@
+﻿@page "/EditTemplatePage/{id:int}"
+
+@using TanzEksp.Client.Services
+@using TanzEksp.Shared.DTO
+@inject TripEventService tripeventservice
+@inject NavigationManager NavigationManager
+
+<div class="button-wrapper">
+    <button class="btn-add" @onclick="GoBackToPrevious">Tilbage</button>
+</div>
+
+@if (tripEvent == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <EditForm Model="@tripEvent" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit" class="edit-form">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="edit-page-container">
+            <h3 class="edit-page-heading">Rediger Dagsplan</h3>
+
+            <div class="form-group">
+                <label for="Title">Titel:</label>
+                <input type="text" id="Title" @bind="tripEvent.Title" />
+            </div>
+
+            <div class="form-group">
+                <label for="Description">Beskrivelse:</label>
+                <textarea id="Description" @bind="tripEvent.Description" rows="6"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="Days">Varighed (dage):</label>
+                <input type="number" id="Days" @bind="tripEvent.Days" />
+            </div>
+
+            <div class="form-group">
+                <label for="Price">Pris (DKK):</label>
+                <input type="number" id="Price" @bind="tripEvent.Price" />
+            </div>
+
+            <button type="submit" class="btn-save">Gem ændringer</button>
+        </div>
+    </EditForm>
+
+}
+
+
+@code {
+    [Parameter] public int id { get; set; }
+    private TripEventDTO tripEvent;
+    private string errorMessage; 
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            tripEvent = await tripeventservice.GetTripEventByIdAsync(id);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "En fejl opstod da rejsen skulle loades: " + ex.Message;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            await tripeventservice.UpdateTripEventAsync(tripEvent);
+            NavigationManager.NavigateTo("/templates");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "En fejl opstod ved gemning af trip event: " + ex.Message;
+        }
+    }
+
+    private Task HandleInvalidSubmit()
+    {
+        return Task.CompletedTask;
+    }
+
+    private void GoBackToPrevious()
+    {
+        NavigationManager.NavigateTo("/templates");
+    }
+}

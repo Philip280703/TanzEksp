@@ -270,3 +270,88 @@ body {
         transform: scale(1);
     }
 }
+
+/* === Trip Event Cards === */
+.trip-event-card {
+    background-color: white;
+    border: 1px solid #ddd; /* Border around each card */
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px; /* Space between each trip event card */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+    .trip-event-card:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Slight shadow effect on hover */
+    }
+
+/* === Wrapper for Trip Event Cards === */
+.trip-event-wrapper {
+    padding: 20px;
+}
+
+/* === Styling for Trip Event Details === */
+.trip-event-title,
+.trip-event-description,
+.trip-event-duration,
+.trip-event-price {
+    margin-bottom: 10px; /* Space between each text block */
+}
+
+.trip-event-actions {
+    margin-top: 20px; /* Space above the action buttons */
+}
+
+.trip-event-actions button {
+        font-size: 0.8rem; /* 50% smaller font size */
+        padding: 6px 12px; /* Adjust padding to make the button smaller */
+        border-radius: 6px; /* Keep the rounded corners consistent */
+        font-weight: normal; /* Optionally, make the font weight lighter */
+
+}
+
+/* === Styling for Trip Event Title with Underline === */
+.trip-event-title {
+    position: relative;
+    display: inline-block; /* Allow content to be inline for the border effect */
+    padding-bottom: 5px; /* Adjust spacing between the title and the underline */
+}
+
+    .trip-event-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px; /* Thickness of the underline */
+        background-color: #f16f21; /* Color of the underline */
+    }
+
+/* === More space between each “category” === */
+.trip-event-title,
+.trip-event-description,
+.trip-event-duration,
+.trip-event-price {
+    margin-bottom: 16px; /* adjust to taste */
+}
+
+/* (keep existing trip-event-actions styles here) */
+
+/* === Underline on titles (option 1) === */
+.trip-event-title {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 5px;
+    margin-bottom: 20px; /* extra space below the title */
+}
+
+    .trip-event-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #f16f21;
+    }

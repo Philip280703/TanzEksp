@@ -2,164 +2,158 @@
 @using TanzEksp.Client.Services
 @using TanzEksp.Shared.DTO
 @inject TripEventService tripeventservice
+@inject DayPlanService dayPlan
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "Admin,User")]
 
-
 @page "/templates"
 
-
 <div class="button-wrapper">
-	<button class="btn-add" @onclick="ShowAddTripEventModal">Tilføj TripEvent</button>
+    <button class="btn-add" @onclick="ShowAddTripEventModal">Tilføj TripEvent</button>
 </div>
 
-	@if(errorMessage != null)
+@if (errorMessage != null)
 {
-	<p class="error">@errorMessage</p>
+    <p class="error">@errorMessage</p>
 }
 
-@if(tripEvents == null)
+@if (tripEvents == null)
 {
-	<p>Henter Tripevents...</p>
+    <p>Henter Tripevents...</p>
 }
 else
 {
-	<div class="table-wrapper">
-		<table class="tripevent-table">
-			<thead>
-				<tr>
-					<th>Titel</th>
-					<th>Beskrivelse</th>
-					<th>Varighed (dage)</th>
-					<th>Pris</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var tripEvent in tripEvents)
-				{
-					<tr>
-						<td>@tripEvent.Title</td>
-						<td>@tripEvent.Description</td>
-						<td>@tripEvent.Days</td>
-						<td>@tripEvent.Price</td>
-						<td>
-@* 							<button class="btn-add" @onclick="() => AddDayPlan(customer.Id)">Tilføj DayPlan</button>
- *@						</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-	</div>
-
+    <div class="trip-event-wrapper">
+        @foreach (var tripEvent in tripEvents)
+        {
+            <div class="trip-event-card">
+                <h3 class="trip-event-title">@tripEvent.Title</h3>
+                <p class="trip-event-description"><strong>Beskrivelse:</strong> @tripEvent.Description</p>
+                <p class="trip-event-duration"><strong>Varighed:</strong> @tripEvent.Days dage</p>
+                <p class="trip-event-price"><strong>Pris:</strong> @tripEvent.Price DKK</p>
+                <div class="trip-event-actions">
+                    <button class="btn-add" @onclick="() => NavigateToEditTemplatePage(tripEvent.Id)">Redigere Dagsplan</button>
+                </div>
+            </div>
+        }
+    </div>
 }
 
 @if (showTripEventModal)
 {
-	<div class="modal-overlay">
-		<div class="modal-content">
-			<h3>@modalTitle</h3>
-			<EditForm Model="@currentTripEvent" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
-				<DataAnnotationsValidator/>
-				<ValidationSummary/>
-				<div>
-					<label for="Title">Titel:</label>
-					<input type="text" id="Title" @bind="currentTripEvent.Title" required/>
-				</div>
-				<div>
-					<label for="description">Beskrivelse:</label>
-					<input type="text" id="description" @bind="currentTripEvent.Description" required/>
-				</div>
-				<div>
-					<label for="days">Dage:</label>
-					<input type="number" id="days" @bind="currentTripEvent.Days" required/>
-				</div>
-				<div>
-					<label for="price">Pris:</label>
-					<input type="number" id="price" @bind="currentTripEvent.Price" required/>
-				</div>
-				<button type="submit" class="btn-add">@modalButtonLabel</button>
-				<button type="button" class="btn-delete" @onclick="HideTripEventModal">Luk</button>
-			</EditForm>
-		</div>
-	</div>
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <h3>@modalTitle</h3>
+            <EditForm Model="@currentTripEvent" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div>
+                    <label for="Title">Titel:</label>
+                    <input type="text" id="Title" @bind="currentTripEvent.Title" required />
+                </div>
+                <div>
+                    <label for="description">Beskrivelse:</label>
+                    <input type="text" id="description" @bind="currentTripEvent.Description" required />
+                </div>
+                <div>
+                    <label for="days">Dage:</label>
+                    <input type="number" id="days" @bind="currentTripEvent.Days" required />
+                </div>
+                <div>
+                    <label for="price">Pris:</label>
+                    <input type="number" id="price" @bind="currentTripEvent.Price" required />
+                </div>
+                <button type="submit" class="btn-add">@modalButtonLabel</button>
+                <button type="button" class="btn-delete" @onclick="HideTripEventModal">Luk</button>
+            </EditForm>
+        </div>
+    </div>
 }
 
-
-
-
-
-
 @code {
+    private bool isDropdownOpen = false;
+    private List<TripEventDTO> tripEvents;
+    private TripEventDTO currentTripEvent = new TripEventDTO();
+    private int? TripEventIdUpdate;
+    private int? tripEvent; 
 
-	private List<TripEventDTO> tripEvents;
-	private TripEventDTO currentTripEvent = new TripEventDTO();
-	private Guid? TripEventIdUpdate;
+    private string errorMessage;
+    private string modalTitle = "Tilføj TripEvent";
+    private string modalButtonLabel = "Gem TripEvent";
+    private bool showTripEventModal = false;
 
-	private string errorMessage;
-	private string modalTitle = "Tilføj TripEvent";
-	private string modalButtonLabel = "Gem TripEvent";
-	private bool showTripEventModal = false;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            tripEvents = await tripeventservice.GetAllTripEventsAsync();
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = "Der opstod en fejl ved hentning af tripevents: " + ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "En ukendt fejl opstod: " + ex.Message;
+        }
+    }
 
-	protected override async Task OnInitializedAsync()
-	{
-		try
-		{
-			tripEvents = await tripeventservice.GetAllTripEventsAsync();
-		}
-		catch (HttpRequestException ex)
-		{
-			errorMessage = "Der opstod en fejl ved hentning af tripevents: " + ex.Message;
-		}
-		catch (Exception ex)
-		{
-			errorMessage = "En ukendt fejl opstod: " + ex.Message;
-		}
-	}
+    void ShowAddTripEventModal()
+    {
+        modalTitle = "Tilføj TripEvent";
+        modalButtonLabel = "Gem TripEvent";
+        currentTripEvent = new TripEventDTO();
+        showTripEventModal = true;
+    }
 
-	void ShowAddTripEventModal()
-	{
-		modalTitle = "Tilføj TripEvent";
-		modalButtonLabel = "Gem TripEvent";
-		currentTripEvent = new TripEventDTO();
-		showTripEventModal = true;
-	}
+    void ShowEditTripEventModal(TripEventDTO tripEvent)
+    {
+        modalTitle = "Redigere TripEvent";
+        modalButtonLabel = "Opdater TripEvent";
+        currentTripEvent = tripEvent;
+        showTripEventModal = true;
+    }
 
-	private async Task HandleValidSubmit()
-	{
-		await SaveTripEvent();
-	}
+    private async Task HandleValidSubmit()
+    {
+        await SaveTripEvent();
+    }
 
-	private async Task SaveTripEvent()
+    private async Task SaveTripEvent()
     {
         try
         {
             if (TripEventIdUpdate.HasValue)
             {
-				await tripeventservice.UpdateTripEventAsync(currentTripEvent);
+                await tripeventservice.UpdateTripEventAsync(currentTripEvent);
             }
             else
             {
                 await tripeventservice.AddTripEventAsync(currentTripEvent);
             }
 
-			showTripEventModal = false;
+            showTripEventModal = false;
             await OnInitializedAsync();
         }
         catch (Exception ex)
         {
-            errorMessage = "En fejl opstod ved gemning af kunde: " + ex.Message;
+            errorMessage = "En fejl opstod ved gemning af trip event: " + ex.Message;
         }
     }
 
-	private Task HandleInvalidSubmit()
-	{
-		return Task.CompletedTask;
-	}
+    private Task HandleInvalidSubmit()
+    {
+        return Task.CompletedTask;
+    }
 
-	void HideTripEventModal()
-	{
-		currentTripEvent = new TripEventDTO();
-		showTripEventModal = false;
-	}
+    void HideTripEventModal()
+    {
+        currentTripEvent = new TripEventDTO();
+        showTripEventModal = false;
+    }
+
+    private void NavigateToEditTemplatePage(int id)
+    {
+        NavigationManager.NavigateTo($"/EditTemplatePage/{id}");
+    }
 }
