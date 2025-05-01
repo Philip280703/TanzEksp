@@ -17,6 +17,7 @@ namespace TanzEksp.Shared.DTO
     {
         public int Id {  get; set; }
         public TripType TripType { get; set; }
-        public bool IsTemplate { get; set; } = false;       
+        public bool IsTemplate { get; set; } = false;
+        public List<TripEventDTO>? Events { get; set; }
     }
 }
