@@ -19,6 +19,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
             _unitOfWork = unitOfWork;
         }
 
+        private readonly Booking booking = new Booking();
 
         public async Task<Booking> GetBookingById(Guid id)
         {

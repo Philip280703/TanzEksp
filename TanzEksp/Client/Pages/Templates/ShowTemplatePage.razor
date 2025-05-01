@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Authorization
 @using TanzEksp.Client.Services
 @using TanzEksp.Shared.DTO
-@inject TripEventService tripeventservice
+@inject TripEventService tripEventService
 @inject DayPlanService dayPlan
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "Admin,User")]
@@ -86,7 +86,7 @@ else
     {
         try
         {
-            tripEvents = await tripeventservice.GetAllTripEventsAsync();
+            tripEvents = await tripEventService.GetAllTripEventsAsync();
         }
         catch (HttpRequestException ex)
         {
@@ -125,11 +125,11 @@ else
         {
             if (TripEventIdUpdate.HasValue)
             {
-                await tripeventservice.UpdateTripEventAsync(currentTripEvent);
+                await tripEventService.UpdateTripEventAsync(currentTripEvent);
             }
             else
             {
-                await tripeventservice.AddTripEventAsync(currentTripEvent);
+                await tripEventService.AddTripEventAsync(currentTripEvent);
             }
 
             showTripEventModal = false;
@@ -155,5 +155,11 @@ else
     private void NavigateToEditTemplatePage(int id)
     {
         NavigationManager.NavigateTo($"/EditTemplatePage/{id}");
+    }
+
+    private async Task DeleteTripEvent(int id)
+    {
+        await tripEventService.DeleteTripEventAsync(id);
+        tripEvents = await tripEventService.GetAllTripEventsAsync();
     }
 }
