@@ -196,10 +196,10 @@
 
     private async Task HandleValidSubmit()
     {
-        if (currentBooking.Id == Guid.Empty)
-        {
-            currentBooking.Id = Guid.NewGuid();
-        }
+   //      if (currentBooking.Id == Guid.Empty)
+   //      {
+			// currentBooking.Id = Guid.NewGuid();
+   //      }
         await SaveBooking();
     }
 

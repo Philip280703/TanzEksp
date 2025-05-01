@@ -26,5 +26,7 @@ namespace TanzEksp.Shared.DTO
         [Required(ErrorMessage = "Telefonnummer er påkrævet.")]
         [RegularExpression(@"^\d{8}$", ErrorMessage = "Telefonnummer skal være præcist 8 cifre.")]
         public string? PhoneNumber { get; set; }
+
+        public List<BookingDTO>? Bookings { get; set; } = new List<BookingDTO>();
     }
 }

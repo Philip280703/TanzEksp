@@ -36,5 +36,7 @@ namespace TanzEksp.Domain.Entities
 
         public Trip? Trip { get; set; }
 
+
+       
     }
 }
