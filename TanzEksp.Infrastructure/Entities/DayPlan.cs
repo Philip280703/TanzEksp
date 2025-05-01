@@ -21,5 +21,7 @@ using System.Threading.Tasks;
         public string? Accommodation { get; set; }
 
         public string? Meals { get; set; }
+
+        public int TripEventId { get; set; }
     }
 }

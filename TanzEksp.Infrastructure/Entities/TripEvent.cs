@@ -26,6 +26,10 @@ namespace TanzEksp.Domain.Entities
         [Range(0, 100000, ErrorMessage = "Standart pris skal være mellem 0 og 100000")]
         public decimal ?Price { get; set; }
 
+        public bool IsTemplate { get; set; } = false;
+
+        public int ?TripId { get; set; }
+
 
         public List<DayPlan>? DayPlans { get; set; }
     }
