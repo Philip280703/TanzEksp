@@ -16,6 +16,6 @@ namespace TanzEksp.Shared.DTO
         public string? Airport { get; set; }
         public string? TripLength { get; set; }
         public DateTime? DepartureDate { get; set; }
-        public byte[] RowVersion { get; set; }
+      
     }
 }

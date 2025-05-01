@@ -73,12 +73,12 @@
                 <ValidationSummary />
                 <div>
                     <label for="customerId">Kunde ID:</label>
-                    <input type="number" id="customerId" @bind="currentBooking.CustomerId" required />
+                    <input type="text" id="customerId" @bind="currentBooking.CustomerId" required />
                 </div>
-                <div>
+               @*  <div>
                     <label for="tripId">Rejse ID:</label>
-                    <input type="number" id="tripId" @bind="currentBooking.TripId" required />
-                </div>
+                    <input type="number" id="tripId" @bind="currentBooking.TripId"  />
+                </div> *@
                 <div>
                     <label for="adultCount">Antal Voksne:</label>
                     <input type="number" id="adultCount" @bind="currentBooking.AdultCount" required />
@@ -119,7 +119,7 @@
     private bool showBookingModal = false;
     private string modalTitle = "Ny Booking";
     private string modalButtonLabel = "Gem Booking";
-    private int? BookingId;
+    private Guid? BookingId;
 
     protected override async Task OnInitializedAsync()
     {
@@ -176,14 +176,14 @@
     {
         try
         {
-            if (BookingId.HasValue)
-            {
-                await bookingService.UpdateBookingAsync(currentBooking);
-            }
-            else
-            {
+            // if (currentBooking.Id == "00000000 - 0000 - 0000 - 0000 - 000000000000")
+            // {
+            //     await bookingService.UpdateBookingAsync(currentBooking);
+            // }
+            // else
+            // {
                 await bookingService.AddBookingAsync(currentBooking);
-            }
+            // }
 
             showBookingModal = false;
             await OnInitializedAsync();
