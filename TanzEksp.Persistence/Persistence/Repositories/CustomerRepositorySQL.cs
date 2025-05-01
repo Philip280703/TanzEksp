@@ -27,7 +27,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
 
         public async Task<List<Customer>> GetAll()
         {
-            var result = await _db.CustomerEF.Include(c => c.Bookings).ToListAsync();
+            var result = await _db.CustomerEF.ToListAsync();
             return result;
         }
 
