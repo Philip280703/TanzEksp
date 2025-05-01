@@ -42,7 +42,7 @@
                             <td>@customer.FirstName</td>
                             <td>@customer.LastName</td>
                             <td>@customer.Email</td>
-                            <td>@customer.PhoneNumber</td>
+                            <td>+45 @customer.PhoneNumber</td>
                             <td class="action-buttons">
                                 <button class="btn-delete" @onclick="() => DeleteCustomer(customer.Id)">Slet</button>
                                 <button class="btn-update" @onclick="() => ShowUpdateCustomerModal(customer.Id)">Rediger</button>
