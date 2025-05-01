@@ -75,7 +75,7 @@
                     <label for="customerId">Kunde ID:</label>
                     <input type="text" id="customerId" @bind="currentBooking.CustomerId" required />
                 </div>
-               @*  <div>
+                @*  <div>
                     <label for="tripId">Rejse ID:</label>
                     <input type="number" id="tripId" @bind="currentBooking.TripId"  />
                 </div> *@
@@ -182,7 +182,7 @@
             // }
             // else
             // {
-                await bookingService.AddBookingAsync(currentBooking);
+            await bookingService.AddBookingAsync(currentBooking);
             // }
 
             showBookingModal = false;
@@ -196,6 +196,10 @@
 
     private async Task HandleValidSubmit()
     {
+        if (currentBooking.Id == Guid.Empty)
+        {
+			currentBooking.Id = Guid.NewGuid();
+        }
         await SaveBooking();
     }
 
