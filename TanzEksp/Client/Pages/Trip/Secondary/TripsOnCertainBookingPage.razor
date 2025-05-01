@@ -1,0 +1,42 @@
+﻿@inject TripService tripService
+@inject BookingService bookingService
+@inject CustomerService customerService
+@attribute [Authorize(Roles = "Admin, User")]
+@using Microsoft.AspNetCore.Authorization
+@using TanzEksp.Shared.DTO
+@using TanzEksp.Client.Services
+@page "/TripsOnCertainBooking/{bookingId:guid}"
+
+@if (booking == null && customer == null)
+{
+	<p>Henter booking...</p>
+}
+else if (booking == null && customer != null)
+{
+	<p>Henter booking...</p>
+}
+else if (booking != null && customer == null)
+{
+	<p>Henter kunde...</p>
+}
+else
+{
+	<h2>@bookingId</h2>
+	<h2>@customer.FirstName @customer.LastName</h2>
+}
+
+
+@code {
+	[Parameter]
+	public Guid bookingId { get; set; }
+
+	private BookingDTO booking { get; set; }
+	private CustomerDTO customer { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		booking = await bookingService.GetBookingByIdAsync(bookingId);
+		customer = await customerService.GetCustomerByIdAsync(booking.CustomerId);
+	}
+
+}
