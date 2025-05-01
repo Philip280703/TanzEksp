@@ -1,0 +1,62 @@
+﻿@inject BookingService bookingService
+@inject NavigationManager navigationManager
+@attribute [Authorize(Roles = "Admin, User")]
+@using Microsoft.AspNetCore.Authorization
+@using TanzEksp.Shared.DTO
+@using TanzEksp.Client.Services
+
+@page "/dayplan"
+
+<p>hej</p>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+	<p class="error">@errorMessage</p>
+}
+
+@if (dayPlans != null && dayPlans.Any())
+{
+	<div class="table-wrapper">
+		<table class="dayplan-table">
+			<thead>
+				<tr>
+					<th>Titel</th>
+					<th>Beskrivelse</th>
+					<th>Måltider</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var dayplan in dayPlans)
+				{
+					<tr>
+						<td>@dayplan.Title</td>
+						<td>@dayplan.Description</td>
+						<td>@dayplan.Meals</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+}
+
+
+@code {
+
+	[Inject]
+	private DayPlanService dayPlanService { get; set; }
+
+	private List<DayPlanDTO> dayPlans;
+	private string errorMessage;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			dayPlans = await dayPlanService.GetAll();
+		}
+		catch (Exception ex)
+		{
+			errorMessage = "Der opstod en fejl under hentning af dagplaner: " + ex.Message;
+		}
+	}
+}

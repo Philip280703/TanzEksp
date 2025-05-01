@@ -42,13 +42,19 @@
     display: flex;
     gap: 2rem;
     margin-left: 2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    align-items: flex-end; /* <-- Ændret fra center til flex-end */
+    height: 100%; /* Sikrer de kan alignes inden for navbarens højde */
 }
+
+
 
     .nav-links li a {
         text-decoration: none;
         color: #444;
         font-size: 1rem;
-        transition: color 0.3s ease;
+        transition: color 0.1s ease;
     }
 
         .nav-links li a:hover {

@@ -7,7 +7,7 @@ namespace TanzEksp.Server.Controllers
 {
 
     [ApiController]
-    [Route("/api[controller]")]
+    [Route("api/[controller]")]
     [Authorize(Roles = "Admin, User")]
     public class DayPlanController : ControllerBase
     {
