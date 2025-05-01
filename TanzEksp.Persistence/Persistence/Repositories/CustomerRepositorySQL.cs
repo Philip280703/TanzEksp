@@ -54,6 +54,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
                 if (existingCustomer != null)
                 {
                     existingCustomer.FirstName = customer.FirstName;
+                    existingCustomer.LastName = customer.LastName;
                     existingCustomer.Email = customer.Email;
                     existingCustomer.PhoneNumber = customer.PhoneNumber;
                    
