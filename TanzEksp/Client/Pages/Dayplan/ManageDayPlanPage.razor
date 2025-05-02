@@ -93,7 +93,6 @@
         tripEvent = await tripeventservice.GetTripEventByIdAsync(id);
         var response = await dayPlanService.GetAll();
 		DayPlans = response.Where(x => x.TripEventId == id).ToList();
-
     }
 
 
