@@ -118,7 +118,10 @@
 
     private void ShowAddDayPlanModal()
     {
-        
+        currentDayPlan = new DayPlanDTO { TripEventId = id };
+        modalTitle = "Tilføj dagsplan";
+        modalButtonLabel = "Gem dagsplan";
+        showDayPlanModal = true;
     }
 
     private async Task HandleValidSubmit()
@@ -137,6 +140,7 @@
 			}
 
             showDayPlanModal = false;
+			OnInitializedAsync();
         }
         catch (Exception ex)
         {
