@@ -32,7 +32,7 @@
 
                     <div class="trip-event-actions">
                         <button class="btn-add" @onclick="() => ShowUpdateDayPlanModal(dayPlan)">Rediger</button>
-                        @*   <button class="btn-delete" @onclick="() => DeleteDayPlan(dayPlan.Id)">Slet</button> *@
+                        <button class="btn-delete" @onclick="() => DeleteDayPlan(dayPlan.Id)">Slet</button>
                     </div>
                 </div>
             }
@@ -92,7 +92,8 @@
     {
         tripEvent = await tripeventservice.GetTripEventByIdAsync(id);
         var response = await dayPlanService.GetAll();
-		DayPlans = response.Where(x => x.TripEventId == id).ToList();
+        DayPlans = response.Where(x => x.TripEventId == id).ToList();
+
     }
 
 
@@ -127,24 +128,30 @@
     {
         try
         {
-			if (currentDayPlan.Id != 0)
-			{
-				currentDayPlan.TripEventId = tripEvent.Id;
-				await dayPlanService.UpdateDayPlanAsync(currentDayPlan);
-			}
-			else
-			{
-				currentDayPlan.TripEventId = tripEvent.Id;
-				await dayPlanService.AddDayPlanAsync(currentDayPlan);
-			}
+            if (currentDayPlan.Id != 0)
+            {
+                currentDayPlan.TripEventId = tripEvent.Id;
+                await dayPlanService.UpdateDayPlanAsync(currentDayPlan);
+            }
+            else
+            {
+                currentDayPlan.TripEventId = tripEvent.Id;
+                await dayPlanService.AddDayPlanAsync(currentDayPlan);
+            }
 
             showDayPlanModal = false;
-			OnInitializedAsync();
+            OnInitializedAsync();
         }
         catch (Exception ex)
         {
             errorMessage = "Fejl under gemning: " + ex.Message;
         }
+    }
+
+    private async Task DeleteDayPlan(int Id)
+    {
+		await dayPlanService.DeleteDayPlanAsync(Id);
+		OnInitializedAsync();
     }
 
     private void HandleInvalidSubmit()
