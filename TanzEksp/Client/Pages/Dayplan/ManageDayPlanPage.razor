@@ -1,33 +1,216 @@
 ﻿@page "/ManageDayPlanPage/{id:int}"
 
+@using Microsoft.AspNetCore.Authorization
 @using TanzEksp.Client.Services
 @using TanzEksp.Shared.DTO
 @inject TripEventService tripeventservice
+@inject DayPlanService dayPlanService
 @inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Admin,User")]
 
-<h3>Dagsplan for: @tripEvent?.Title</h3>
+<div class="admin-container">
+    <h2 class="tripevents-heading">Dagsplan for: @tripEvent?.Title</h2>
 
+    @if (errorMessage != null)
+    {
+        <p class="error">@errorMessage</p>
+    }
+    else if (DayPlans == null || !DayPlans.Any())
+    {
+        <p class="loading">Ingen dagsplaner fundet...</p>
+    }
+    else
+    {
+        <div class="trip-event-wrapper">
+            @foreach (var dayPlan in DayPlans)
+            {
+                <div class="trip-event-card">
+                    <h3 class="trip-event-title">@dayPlan.Title</h3>
+                    <p class="trip-event-description"><strong>Beskrivelse:</strong> @dayPlan.Description</p>
+                    <p class="trip-event-duration"><strong>Overnatning:</strong> @dayPlan.Accommodation</p>
+                    <p class="trip-event-price"><strong>Måltider:</strong> @dayPlan.Meals</p>
 
+                    <div class="trip-event-actions">
+                        <button class="btn-add" @onclick="() => ShowUpdateDayPlanModal(dayPlan)">Rediger</button>
+                        <button class="btn-delete" @onclick="() => DeleteDayPlan(dayPlan.Id)">Slet</button>
+                    </div>
+                </div>
+            }
+        </div>
+    }
 
+    <button class="btn-add" @onclick="ShowAddDayPlanModal">Tilføj Dagsplan</button>
+</div>
+
+@if (showDayPlanModal)
+{
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <h3>@modalTitle</h3>
+            <EditForm Model="@currentDayPlan" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div>
+                    <label for="title">Titel:</label>
+                    <input type="text" id="title" @bind="currentDayPlan.Title" required />
+                </div>
+                <div>
+                    <label for="description">Beskrivelse:</label>
+                    <input type="text" id="description" @bind="currentDayPlan.Description" required />
+                </div>
+                <div>
+                    <label for="accommodation">Overnatning:</label>
+                    <input type="text" id="accommodation" @bind="currentDayPlan.Accommodation" />
+                </div>
+                <div>
+                    <label for="meals">Måltider:</label>
+                    <input type="text" id="meals" @bind="currentDayPlan.Meals" />
+                </div>
+
+                <button type="submit" class="btn-add">@modalButtonLabel</button>
+                <button type="button" class="btn-delete" @onclick="HideDayPlanModal">Annuller</button>
+            </EditForm>
+        </div>
+    </div>
+}
 
 @code {
+    [Parameter]
+    public int id { get; set; }
 
-	[Parameter]
-	public int id { get; set; }
+    private TripEventDTO tripEvent;
+    public List<DayPlanDTO> DayPlans { get; set; } = new List<DayPlanDTO>();
+    private DayPlanDTO currentDayPlan = new DayPlanDTO();
+    private string errorMessage;
 
-	private TripEventDTO tripEvent;
+    private bool showDayPlanModal = false;
+    private string modalTitle = "";
+    private string modalButtonLabel = "";
 
     protected override async Task OnInitializedAsync()
     {
+        // For demo purposes, use mock data
+        MockDayPlans();
+
+        // If you later want to fetch actual data, you can uncomment the following lines:
+        // try
+        // {
+        //     tripEvent = await tripeventservice.GetTripEventByIdAsync(id);
+        //     DayPlans = tripEvent.DayPlans?.ToList() ?? new List<DayPlanDTO>();
+        // }
+        // catch (Exception ex)
+        // {
+        //     errorMessage = "En fejl opstod da rejsen skulle loades: " + ex.Message;
+        // }
+    }
+
+    private void MockDayPlans()
+    {
+        // Mock tripEvent data
+        tripEvent = new TripEventDTO
+            {
+                Title = "6 dage på Machame - Whisky ruten"  
+            };
+
+        // Mock DayPlans data
+        DayPlans = new List<DayPlanDTO>
+    {
+        new DayPlanDTO
+        {
+            Id = 1,
+            Title = "Dag 1: Danmark - Tanzania (Kilimanjaro)",
+            Description = "Ankomst til destinationen. Orientering og kort sightseeing.",  
+            Accommodation = "Hotel",
+            Meals = "Aftensmad på hotellets restaurant"  
+        },
+        new DayPlanDTO
+        {
+            Id = 2,
+            Title = "Dag 2: Ankomst til Tanzania",
+            Description = "Heldags guidet bytur med frokost.",  
+            Accommodation = "Du overnatter idag i byen Moshi, ved foden af Kilimanjaro",
+            Meals = "Det er muligt at spise på hotellet eller tag på opdagelse i Moshi."
+        }
+    };
+    }
+
+
+    private async Task DeleteDayPlan(int dayPlanId)
+    {
         try
         {
-            tripEvent = await tripeventservice.GetTripEventByIdAsync(id);
+            DayPlans.RemoveAll(dp => dp.Id == dayPlanId);
+            await Task.CompletedTask; // Simulate async behavior
         }
         catch (Exception ex)
         {
-            // Optional: Add error handling here
-            Console.WriteLine($"Fejl under hentning af tripEvent: {ex.Message}");
+            errorMessage = "Der opstod en fejl ved sletning af dagsplan: " + ex.Message;
         }
     }
 
+    private void ShowUpdateDayPlanModal(DayPlanDTO dayPlan)
+    {
+        currentDayPlan = new DayPlanDTO
+            {
+                Id = dayPlan.Id,
+                TripEventId = dayPlan.TripEventId,
+                Title = dayPlan.Title,
+                Description = dayPlan.Description,
+                Accommodation = dayPlan.Accommodation,
+                Meals = dayPlan.Meals
+            };
+
+        modalTitle = "Rediger dagsplan";
+        modalButtonLabel = "Opdater dagsplan";
+        showDayPlanModal = true;
+    }
+
+    private void ShowAddDayPlanModal()
+    {
+        currentDayPlan = new DayPlanDTO { TripEventId = id };
+        modalTitle = "Tilføj dagsplan";
+        modalButtonLabel = "Gem dagsplan";
+        showDayPlanModal = true;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            if (currentDayPlan.Id > 0)
+            {
+                var dayPlanToUpdate = DayPlans.FirstOrDefault(dp => dp.Id == currentDayPlan.Id);
+                if (dayPlanToUpdate != null)
+                {
+                    dayPlanToUpdate.Title = currentDayPlan.Title;
+                    dayPlanToUpdate.Description = currentDayPlan.Description;
+                    dayPlanToUpdate.Accommodation = currentDayPlan.Accommodation;
+                    dayPlanToUpdate.Meals = currentDayPlan.Meals;
+                }
+            }
+            else
+            {
+                currentDayPlan.Id = DayPlans.Max(dp => dp.Id) + 1; 
+                DayPlans.Add(currentDayPlan);
+            }
+
+            showDayPlanModal = false;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Fejl under gemning: " + ex.Message;
+        }
+    }
+
+    private void HandleInvalidSubmit()
+    {
+        errorMessage = "Der opstod en fejl under validering af formularen.";
+    }
+
+    private void HideDayPlanModal()
+    {
+        currentDayPlan = new DayPlanDTO();
+        showDayPlanModal = false;
+    }
 }

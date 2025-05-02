@@ -6,13 +6,12 @@
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Pages\Dayplan\ManageDayPlanPage.razor.css" />
     <None Remove="Pages\Dayplan\MangeDayPlanPage.razor.css" />
     <None Remove="Pages\Templates\EditTemplatePage.razor.css" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pages\Dayplan\ManageDayPlanPage.razor.css" />
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="Pages\Dayplan\ManageDayPlanPage.razor.css" />
     <Content Include="Pages\Templates\EditTemplatePage.razor.css" />
   </ItemGroup>
   <ItemGroup>
