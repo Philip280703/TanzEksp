@@ -118,17 +118,23 @@
 
     private void ShowAddDayPlanModal()
     {
-        currentDayPlan = new DayPlanDTO { TripEventId = id };
-        modalTitle = "Tilføj dagsplan";
-        modalButtonLabel = "Gem dagsplan";
-        showDayPlanModal = true;
+        
     }
 
     private async Task HandleValidSubmit()
     {
         try
         {
-            var response = dayPlanService.AddDayPlanAsync(currentDayPlan);
+			if (currentDayPlan.Id != 0)
+			{
+				currentDayPlan.TripEventId = tripEvent.Id;
+				await dayPlanService.UpdateDayPlanAsync(currentDayPlan);
+			}
+			else
+			{
+				currentDayPlan.TripEventId = tripEvent.Id;
+				await dayPlanService.AddDayPlanAsync(currentDayPlan);
+			}
 
             showDayPlanModal = false;
         }
