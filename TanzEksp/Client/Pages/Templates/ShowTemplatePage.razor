@@ -10,6 +10,15 @@
 
 <div class="button-wrapper">
     <button class="btn-add" @onclick="ShowAddTripEventModal">Tilføj TripEvent</button>
+
+    <select @bind="SelectedTripType" class="triptype-filter">
+        <option value="">Alle</option>
+        <option value="Safari">Safari</option>
+        <option value="Zanzibar">Zanzibar</option>
+        <option value="Kilimanjaro">Kilimanjaro</option>
+        <option value="Rundrejse">Rundrejse</option>
+
+    </select>
 </div>
 
 @if (errorMessage != null)
@@ -24,7 +33,7 @@
 else
 {
     <div class="trip-event-wrapper">
-        @foreach (var tripEvent in tripEvents)
+        @foreach (var tripEvent in filteredTripEvents)
         {
             <div class="trip-event-card">
                 <h3 class="trip-event-title">@tripEvent.Title</h3>
@@ -83,11 +92,28 @@ else
     private string modalButtonLabel = "Gem TripEvent";
     private bool showTripEventModal = false;
 
+    private List<TripEventDTO> filteredTripEvents;
+    private string selectedTripType = "";
+
+    private string SelectedTripType
+    {
+        get => selectedTripType;
+        set
+        {
+            if (selectedTripType != value)
+            {
+                selectedTripType = value;
+                FilterTripEvents(); // Kør filtrering hver gang værdien ændres
+            }
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
             tripEvents = await tripeventservice.GetAllTripEventsAsync();
+            filteredTripEvents = tripEvents;
         }
         catch (HttpRequestException ex)
         {
@@ -161,5 +187,24 @@ else
     private void NavigateToManageDayPlanPage(int id)
     {
         NavigationManager.NavigateTo($"/ManageDayPlanPage/{id}");
+    }
+
+    private void OnFilterChange(ChangeEventArgs e)
+    {
+        selectedTripType = e.Value?.ToString();
+        FilterTripEvents();
+    }
+
+    private void FilterTripEvents()
+    {
+        if (string.IsNullOrWhiteSpace(selectedTripType))
+        {
+            filteredTripEvents = tripEvents;
+        }
+        else 
+        {
+            filteredTripEvents = tripEvents.Where(te => te.Title != null && te.Title.Contains(selectedTripType, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        }
     }
 }
