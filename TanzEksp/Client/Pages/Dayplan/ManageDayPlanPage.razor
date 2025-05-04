@@ -22,10 +22,13 @@
     else
     {
         <div class="trip-event-wrapper">
+            @{
+                int dayCount = 1;
+            }
             @foreach (var dayPlan in DayPlans)
             {
                 <div class="trip-event-card">
-                    <h3 class="trip-event-title">@dayPlan.Title</h3>
+                    <h3 class="trip-event-title">Dag @dayCount : @dayPlan.Title</h3>
                     <p class="trip-event-description"><strong>Beskrivelse:</strong> @dayPlan.Description</p>
                     <p class="trip-event-duration"><strong>Overnatning:</strong> @dayPlan.Accommodation</p>
                     <p class="trip-event-price"><strong>Måltider:</strong> @dayPlan.Meals</p>
@@ -35,6 +38,7 @@
                         <button class="btn-delete" @onclick="() => DeleteDayPlan(dayPlan.Id)">Slet</button>
                     </div>
                 </div>
+                dayCount++;
             }
         </div>
     }
@@ -65,8 +69,14 @@
                 </div>
                 <div>
                     <label for="meals">Måltider:</label>
-                    <input type="text" id="meals" @bind="currentDayPlan.Meals" />
+                    <select id="meals" @bind="currentDayPlan.Meals">
+                        <option value="Hel pension">Hel pension</option>
+                        <option value="Halv pension">Halv pension</option>
+                        <option value="Morgenmad">Morgenmad</option>
+                        <option value="Ingen forplejning">Ingen forplejning</option>
+                    </select>
                 </div>
+
 
                 <button type="submit" class="btn-add">@modalButtonLabel</button>
                 <button type="button" class="btn-delete" @onclick="HideDayPlanModal">Annuller</button>
@@ -95,8 +105,6 @@
         DayPlans = response.Where(x => x.TripEventId == id).ToList();
 
     }
-
-
 
 
     private void ShowUpdateDayPlanModal(DayPlanDTO dayPlan)
