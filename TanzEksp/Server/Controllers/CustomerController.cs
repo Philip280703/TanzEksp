@@ -7,6 +7,7 @@ namespace TanzEksp.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class CustomerController : ControllerBase
     {
         private readonly CustomerUseCase _customerUseCase;
@@ -17,9 +18,9 @@ namespace TanzEksp.Server.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var customers = _customerUseCase.GetAll();
+            var customers = await _customerUseCase.GetAll();
             return Ok(customers);
         }
 
