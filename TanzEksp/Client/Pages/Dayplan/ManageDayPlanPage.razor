@@ -69,13 +69,17 @@
                 </div>
                 <div>
                     <label for="meals">Måltider:</label>
-                    <select id="meals" @bind="currentDayPlan.Meals">
-                        <option value="Hel pension">Hel pension</option>
-                        <option value="Halv pension">Halv pension</option>
-                        <option value="Morgenmad">Morgenmad</option>
+                    <select id="meals" @bind="currentDayPlan.Meals" class="styled-select">
                         <option value="Ingen forplejning">Ingen forplejning</option>
+                        <option value="Morgenmad">Morgenmad</option>
+                        <option value="Morgenmad og frokost">Morgenmad og frokost</option>
+                        <option value="Frokost">Frokost</option>
+                        <option value="Frokost og aftensmad">Frokost og aftensmad</option>
+                        <option value="Aftensmad">Aftensmad</option>
+                        <option value="Fuld forplejninh">fuld forplejning</option>
                     </select>
                 </div>
+
 
 
                 <button type="submit" class="btn-add">@modalButtonLabel</button>
