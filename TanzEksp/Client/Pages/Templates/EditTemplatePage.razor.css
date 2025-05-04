@@ -1,0 +1,66 @@
+﻿.edit-page-container {
+	width: 80%;
+	margin: 40px auto;
+	background-color: #fff;
+	padding: 30px;
+	border-radius: 12px;
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+	font-family: 'Roboto', sans-serif;
+}
+
+.edit-form .form-group {
+	margin-bottom: 20px;
+}
+
+.edit-form label {
+	display: block;
+	font-weight: bold;
+	margin-bottom: 8px;
+	color: #555;
+}
+
+.edit-form input,
+.edit-form textarea {
+	width: 100%;
+	padding: 12px;
+	font-size: 1rem;
+	border-radius: 8px;
+	border: 1px solid #ccc;
+	background-color: #f9f9f9;
+	transition: border 0.3s ease, box-shadow 0.3s ease;
+	box-sizing: border-box;
+}
+
+	.edit-form input:focus,
+	.edit-form textarea:focus {
+		border-color: #f16f21;
+		background-color: #fff;
+		box-shadow: 0 0 6px rgba(241, 111, 33, 0.4);
+		outline: none;
+	}
+
+.edit-form textarea {
+	resize: vertical;
+	min-height: 120px;
+}
+
+.btn-save {
+	background-color: #f16f21;
+	color: #fff;
+	font-weight: bold;
+	padding: 14px 28px;
+	border: none;
+	border-radius: 8px;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+	.btn-save:hover {
+		background-color: #e65c00;
+		transform: translateY(-2px);
+	}
+
+	.btn-save:active {
+		transform: translateY(1px);
+	}

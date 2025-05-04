@@ -22,9 +22,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddServerServices(); // Register IOC service her
 
-builder.Services.AddScoped<ICustomerRepository, CustomerRepositorySQL>();
- 
-builder.Services.AddScoped<CustomerUseCase>();
+
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -33,9 +31,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
-
-
-
 
 
 builder.Services.AddAuthentication(options =>

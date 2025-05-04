@@ -23,7 +23,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
 
         }
 
-        private static readonly List<Customer> _customerList;
+        //private static readonly List<Customer> _customerList;
 
         public async Task<List<Customer>> GetAll()
         {
@@ -31,7 +31,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
             return result;
         }
 
-        public async Task<Customer> GetById(int id)
+        public async Task<Customer> GetById(Guid id)
         {
             var result = await _db.CustomerEF.SingleOrDefaultAsync(c => c.Id == id);
             return result;
@@ -54,6 +54,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
                 if (existingCustomer != null)
                 {
                     existingCustomer.FirstName = customer.FirstName;
+                    existingCustomer.LastName = customer.LastName;
                     existingCustomer.Email = customer.Email;
                     existingCustomer.PhoneNumber = customer.PhoneNumber;
                    
@@ -69,7 +70,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
         }
 
 
-        public async Task Delete(int id)
+        public async Task Delete(Guid id)
         {
             var customer = await GetById(id); // Vent på asynkrone metode
             if (customer != null)
@@ -79,10 +80,10 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
             }
         }
 
-        static CustomerRepositorySQL()
-        {
-            _customerList = new List<Customer>();
-            _customerList.Clear();
-        }
+        //static CustomerRepositorySQL()
+        //{
+        //    _customerList = new List<Customer>();
+        //    _customerList.Clear();
+        //}
     }
 }

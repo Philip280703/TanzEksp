@@ -10,9 +10,9 @@ namespace TanzEksp.Domain.Entities
     public class Booking
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; } 
 
-        public int CustomerId { get; set; }
+        public Guid CustomerId { get; set; }
 
         public int ?TripId { get; set; }
 
@@ -36,5 +36,7 @@ namespace TanzEksp.Domain.Entities
 
         public Trip? Trip { get; set; }
 
+
+       
     }
 }

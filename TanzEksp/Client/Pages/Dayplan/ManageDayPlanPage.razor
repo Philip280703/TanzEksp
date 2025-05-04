@@ -1,0 +1,179 @@
+﻿@page "/ManageDayPlanPage/{id:int}"
+
+@using Microsoft.AspNetCore.Authorization
+@using TanzEksp.Client.Services
+@using TanzEksp.Shared.DTO
+@inject TripEventService tripeventservice
+@inject DayPlanService dayPlanService
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Admin,User")]
+
+<div class="admin-container">
+    <h2 class="tripevents-heading">Dagsplan for: @tripEvent?.Title</h2>
+
+    @if (errorMessage != null)
+    {
+        <p class="error">@errorMessage</p>
+    }
+    else if (DayPlans == null)
+    {
+        <p class="loading">Ingen dagsplaner fundet...</p>
+    }
+    else
+    {
+        <div class="trip-event-wrapper">
+            @{
+                int dayCount = 1;
+            }
+            @foreach (var dayPlan in DayPlans)
+            {
+                <div class="trip-event-card">
+                    <h3 class="trip-event-title">Dag @dayCount : @dayPlan.Title</h3>
+                    <p class="trip-event-description"><strong>Beskrivelse:</strong> @dayPlan.Description</p>
+                    <p class="trip-event-duration"><strong>Overnatning:</strong> @dayPlan.Accommodation</p>
+                    <p class="trip-event-price"><strong>Måltider:</strong> @dayPlan.Meals</p>
+
+                    <div class="trip-event-actions">
+                        <button class="btn-add" @onclick="() => ShowUpdateDayPlanModal(dayPlan)">Rediger</button>
+                        <button class="btn-delete" @onclick="() => DeleteDayPlan(dayPlan.Id)">Slet</button>
+                    </div>
+                </div>
+                dayCount++;
+            }
+        </div>
+    }
+
+    <button class="btn-add" @onclick="ShowAddDayPlanModal">Tilføj Dagsplan</button>
+</div>
+
+@if (showDayPlanModal)
+{
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <h3>@modalTitle</h3>
+            <EditForm Model="@currentDayPlan" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div>
+                    <label for="title">Titel:</label>
+                    <input type="text" id="title" @bind="currentDayPlan.Title" required />
+                </div>
+                <div>
+                    <label for="description">Beskrivelse:</label>
+                    <input type="text" id="description" @bind="currentDayPlan.Description" required />
+                </div>
+                <div>
+                    <label for="accommodation">Overnatning:</label>
+                    <input type="text" id="accommodation" @bind="currentDayPlan.Accommodation" />
+                </div>
+                <div>
+                    <label for="meals">Måltider:</label>
+                    <select id="meals" @bind="currentDayPlan.Meals" class="styled-select">
+                        <option value="Ingen forplejning">Ingen forplejning</option>
+                        <option value="Morgenmad">Morgenmad</option>
+                        <option value="Morgenmad og frokost">Morgenmad og frokost</option>
+                        <option value="Frokost">Frokost</option>
+                        <option value="Frokost og aftensmad">Frokost og aftensmad</option>
+                        <option value="Aftensmad">Aftensmad</option>
+                        <option value="Fuld forplejning">Fuld forplejning</option>
+                    </select>
+                </div>
+
+
+
+                <button type="submit" class="btn-add">@modalButtonLabel</button>
+                <button type="button" class="btn-delete" @onclick="HideDayPlanModal">Annuller</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    private TripEventDTO tripEvent;
+    public List<DayPlanDTO> DayPlans { get; set; } = new List<DayPlanDTO>();
+    private DayPlanDTO currentDayPlan = new DayPlanDTO();
+    private string errorMessage;
+
+    private bool showDayPlanModal = false;
+    private string modalTitle = "";
+    private string modalButtonLabel = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        tripEvent = await tripeventservice.GetTripEventByIdAsync(id);
+        var response = await dayPlanService.GetAll();
+        DayPlans = response.Where(x => x.TripEventId == id).ToList();
+
+    }
+
+
+    private void ShowUpdateDayPlanModal(DayPlanDTO dayPlan)
+    {
+        currentDayPlan = new DayPlanDTO
+            {
+                Id = dayPlan.Id,
+                TripEventId = dayPlan.TripEventId,
+                Title = dayPlan.Title,
+                Description = dayPlan.Description,
+                Accommodation = dayPlan.Accommodation,
+                Meals = dayPlan.Meals
+            };
+
+        modalTitle = "Rediger dagsplan";
+        modalButtonLabel = "Opdater dagsplan";
+        showDayPlanModal = true;
+    }
+
+    private void ShowAddDayPlanModal()
+    {
+        currentDayPlan = new DayPlanDTO { TripEventId = id };
+        modalTitle = "Tilføj dagsplan";
+        modalButtonLabel = "Gem dagsplan";
+        showDayPlanModal = true;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            if (currentDayPlan.Id != 0)
+            {
+                currentDayPlan.TripEventId = tripEvent.Id;
+                await dayPlanService.UpdateDayPlanAsync(currentDayPlan);
+            }
+            else
+            {
+                currentDayPlan.TripEventId = tripEvent.Id;
+                await dayPlanService.AddDayPlanAsync(currentDayPlan);
+            }
+
+            showDayPlanModal = false;
+            OnInitializedAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Fejl under gemning: " + ex.Message;
+        }
+    }
+
+    private async Task DeleteDayPlan(int Id)
+    {
+		await dayPlanService.DeleteDayPlanAsync(Id);
+		OnInitializedAsync();
+    }
+
+    private void HandleInvalidSubmit()
+    {
+        errorMessage = "Der opstod en fejl under validering af formularen.";
+    }
+
+    private void HideDayPlanModal()
+    {
+        currentDayPlan = new DayPlanDTO();
+        showDayPlanModal = false;
+    }
+}

@@ -1,0 +1,85 @@
+﻿@* 
+@inject IBookingService bookingservice
+@inject ITripEventService tripservice
+@inject ICustomerService customerservice
+
+@using Microsoft.AspNetCore.Authorization
+@using TanzEksp.Shared.DTO
+@using TanzEksp.Client.Services
+@using TanzEksp.Client.Services.Interfaces
+
+<h3>RenderTripLine</h3>
+
+
+@inject IBookingService bookingService
+@inject ITripEventService tripEventService
+@inject ICustomerService customerService
+
+@using TanzEksp.Shared.DTO
+@using TanzEksp.Client.Services.Interfaces
+@using Microsoft.AspNetCore.Components.Forms
+
+<tr>
+    <td>@Trip?.TripId</td>
+    <td>@Trip?.TripName</td>
+    <td>@Trip?.StartDate.ToShortDateString()</td>
+    <td>@Trip?.Price kr.</td>
+    <td>
+        @if (!Booking.Confirmed)
+        {
+            <EditForm Model="@Trip" OnValidSubmit="@HandleValidSubmit" class="d-inline-block">
+                <div class="input-group input-group-sm">
+                    <InputNumber @bind-Value="Trip.SeatsAvailable" Min="0" Max="1000" class="form-control form-control-sm" />
+                    <span class="input-group-text">Pladser</span>
+                </div>
+                <ValidationMessage For="@(() => Trip.SeatsAvailable)" class="text-danger small" />
+            </EditForm>
+        }
+        else
+        {
+            @($"{Trip.SeatsAvailable} pladser")
+        }
+    </td>
+    <td>
+        <b>@(Trip.Price * Trip.SeatsAvailable) kr.</b>
+    </td>
+    @if (!Booking.Confirmed)
+    {
+        <td>
+            <EditForm Model="@Trip" OnValidSubmit="@HandleValidSubmit">
+                <button type="submit" class="btn btn-opdater">Opdater</button>
+            </EditForm>
+            <button class="btn btn-fjern" @onclick="@RemoveTrip">Fjern</button>
+        </td>
+    }
+</tr>
+
+@if (SuccessMessageVisible)
+{
+    <div class="alert alert-success mt-3">
+        <strong>Opdateret!</strong> Ændringerne er gemt.
+    </div>
+}
+
+@code {
+    [Parameter] public TripDTO Trip { get; set; }
+    [Parameter] public BookingDTO Booking { get; set; }
+    [Parameter] public EventCallback OnTripRemoved { get; set; }
+
+    private bool SuccessMessageVisible { get; set; } = false;
+
+    private async Task HandleValidSubmit()
+    {
+        var result = await tripEventService.UpdateTrip(Trip);
+        SuccessMessageVisible = result;
+
+
+
+@code {
+
+	[Parameter] public TripDTO Trip { get; set; }
+	[Parameter] public BookingDTO Booking { get; set; }
+	
+
+}
+ *@

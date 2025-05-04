@@ -14,10 +14,12 @@ main {
 
 .topbar {
     justify-content: flex-end;
-    height: 3.5rem;
+    height: 100px; /* Samme som .navbar */
     display: flex;
     align-items: center;
 }
+
+
 
 .top-row {
     background-color: #f7f7f7;

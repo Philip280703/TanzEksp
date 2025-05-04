@@ -16,13 +16,9 @@ namespace TanzEksp.Domain.Entities
     {
         public int Id { get; set; }
 
-        public DateTime? StartDate { get; set; }
-
         public TripType TripType { get; set; }
 
-
-        [Timestamp]
-        public byte[] RowVersion { get; set; }
+        public bool IsTemplate { get; set; } = false;
 
         public List<TripEvent>? Events { get; set; }
     }

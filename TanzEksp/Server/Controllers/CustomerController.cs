@@ -7,7 +7,7 @@ namespace TanzEksp.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, User")]
     public class CustomerController : ControllerBase
     {
         private readonly CustomerUseCase _customerUseCase;
@@ -25,9 +25,9 @@ namespace TanzEksp.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var customer = _customerUseCase.GetById(id);
+            var customer = await _customerUseCase.GetById(id);
             if (customer == null)
             {
                 return NotFound();
@@ -36,36 +36,36 @@ namespace TanzEksp.Server.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody] Customer customer)
+        public async Task<IActionResult> Add([FromBody] Customer customer)
         {
             if (customer == null)
             {
                 return BadRequest();
             }
-            Task task = _customerUseCase.Add(customer);
+            await _customerUseCase.Add(customer);
             return CreatedAtAction(nameof(GetById), new { id = customer.Id }, customer);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Customer customer)
+        public async Task<IActionResult> Update(Guid id, [FromBody] Customer customer)
         {
             if (id != customer.Id || customer == null)
             {
                 return BadRequest();
             }
-            Task task = _customerUseCase.Update(customer);
+            await _customerUseCase.Update(customer);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var customer = _customerUseCase.GetById(id);
+            var customer = await _customerUseCase.GetById(id);
             if (customer == null)
             {
                 return NotFound();
             }
-            Task task = _customerUseCase.Delete(id);
+            await _customerUseCase.Delete(id);
             return NoContent();
         }
     }

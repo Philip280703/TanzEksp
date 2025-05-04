@@ -22,7 +22,7 @@ namespace TanzEksp.Application.UseCases
             return await _customerRepository.GetAll();
         }
 
-        public async Task<Customer> GetById(int id)
+        public async Task<Customer> GetById(Guid id)
         {
             return await _customerRepository.GetById(id);
         }
@@ -36,7 +36,7 @@ namespace TanzEksp.Application.UseCases
         {
             await _customerRepository.Update(customer);
         }
-        public async Task Delete(int id)
+        public async Task Delete(Guid id)
         {
             await _customerRepository.Delete(id);
         }

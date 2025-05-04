@@ -10,10 +10,9 @@ namespace TanzEksp.Application.Interfaces
     public interface ICustomerRepository
     {
         Task<List<Customer>> GetAll();
-        Task<Customer> GetById(int id);
+        Task<Customer> GetById(Guid id);
         Task Add(Customer customer);
         Task Update(Customer customer);
-        Task Delete(int id);
-
+        Task Delete(Guid id);
     }
 }

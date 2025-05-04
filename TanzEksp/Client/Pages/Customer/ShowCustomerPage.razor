@@ -1,13 +1,17 @@
 ﻿@inject CustomerService customerservice
-@attribute [Authorize(Roles = "Admin")]
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Admin, User")]
 @using Microsoft.AspNetCore.Authorization
 @using TanzEksp.Shared.DTO
 @using TanzEksp.Client.Services
 
 @page "/customers"
 
+<div class="button-wrapper">
+    <button class="btn-add" @onclick="ShowAddCustomerModal">Tilføj Kunde</button>
+</div>
+
 <div class="admin-container">
-    <h3>Kunder</h3>
 
     @if (errorMessage != null)
     {
@@ -20,33 +24,78 @@
     }
     else
     {
-        <table class="customer-table">
-            <thead>
-                <tr>
-                    <th>Fornavn</th>
-                    <th>Efternavn</th>
-                    <th>Email</th>
-                    <th>Telefonnummer</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var customer in customer)
-                {
+        <div class="table-wrapper">
+            <table class="customer-table">
+                <thead>
                     <tr>
-                        <td>@customer.FirstName</td>
-                        <td>@customer.LastName</td>
-                        <td>@customer.Email</td>
-                        <td>@customer.PhoneNumber</td>
+                        <th>Fornavn</th>
+                        <th>Efternavn</th>
+                        <th>Email</th>
+                        <th>Telefonnummer</th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var customer in customer)
+                    {
+                        <tr>
+                            <td>@customer.FirstName</td>
+                            <td>@customer.LastName</td>
+                            <td>@customer.Email</td>
+                            <td>+45 @customer.PhoneNumber</td>
+                            <td class="action-buttons">
+                                <button class="btn-delete" @onclick="() => DeleteCustomer(customer.Id)">Slet</button>
+                                <button class="btn-update" @onclick="() => ShowUpdateCustomerModal(customer.Id)">Rediger</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     }
 </div>
+ 
+@if (showCustomerModal)
+{
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <h3>@modalTitle</h3>
+            <EditForm Model="@currentCustomer" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div>
+                    <label for="firstName">Fornavn:</label>
+                    <input type="text" id="firstName" @bind="currentCustomer.FirstName" required />
+                </div>
+                <div>
+                    <label for="lastName">Efternavn:</label>
+                    <input type="text" id="lastName" @bind="currentCustomer.LastName" required />
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" @bind="currentCustomer.Email" required />
+                </div>
+                <div>
+                    <label for="phone">Telefonnummer:</label>
+                    <input type="tel" id="phone" @bind="currentCustomer.PhoneNumber" required />
+                </div>
+                <button type="submit" class="btn-add">@modalButtonLabel</button>
+                <button type="button" class="btn-delete" @onclick="HideCustomerModal">Luk</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
 
 @code {
     private List<CustomerDTO> customer;
     private string errorMessage;
+
+    private bool showCustomerModal = false;
+    private string modalTitle = "Tilføj Kunde";
+    private string modalButtonLabel = "Gem Kunde";
+    private CustomerDTO currentCustomer = new CustomerDTO();
+    private Guid? customerIdToUpdate;
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,5 +111,68 @@
         {
             errorMessage = "En ukendt fejl opstod: " + ex.Message;
         }
+    }
+
+    private async Task DeleteCustomer(Guid id)
+    {
+        await customerservice.DeleteCustomerAsync(id);
+        customer = await customerservice.GetAllCustomersAsync();
+    }
+
+    
+    void ShowAddCustomerModal()
+    {
+        modalTitle = "Tilføj Kunde";
+        modalButtonLabel = "Gem Kunde";
+        currentCustomer = new CustomerDTO();
+        showCustomerModal = true;
+    }
+
+    void ShowUpdateCustomerModal(Guid id)
+    {
+        modalTitle = "Rediger Kunde";
+        modalButtonLabel = "Opdater Kunde";
+        customerIdToUpdate = id;
+
+        currentCustomer = customer.FirstOrDefault(c => c.Id == id);
+        showCustomerModal = true;
+    }
+
+    void HideCustomerModal()
+    {
+        currentCustomer = new CustomerDTO();
+        showCustomerModal = false;
+    }
+
+    private async Task SaveCustomer()
+    {
+        try
+        {
+            if (customerIdToUpdate.HasValue)
+            {
+                await customerservice.UpdateCustomerAsync(currentCustomer);
+            }
+            else
+            {
+                await customerservice.AddCustomerAsync(currentCustomer);
+            }
+
+            showCustomerModal = false;
+            await OnInitializedAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "En fejl opstod ved gemning af kunde: " + ex.Message;
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await SaveCustomer();
+    }
+
+    private Task HandleInvalidSubmit()
+    {
+        return Task.CompletedTask;
     }
 }

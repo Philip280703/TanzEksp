@@ -23,7 +23,7 @@ namespace TanzEksp.Client.Services
             return customer;
         }
 
-        public async Task<CustomerDTO> GetCustomerByIdAsync(int id)
+        public async Task<CustomerDTO> GetCustomerByIdAsync(Guid id)
         {
             var customer = await _httpClient.GetFromJsonAsync<CustomerDTO>($"api/customer/{id}");
             if (customer == null)
@@ -47,13 +47,11 @@ namespace TanzEksp.Client.Services
             return answerCode;
         }
 
-        public async Task<int> DeleteCustomerAsync(int id)
+        public async Task<int> DeleteCustomerAsync(Guid id)
         {
             var answer = await _httpClient.DeleteAsync($"api/customer/{id}");
             var answerCode = (int)answer.StatusCode;
             return answerCode;
         }
     }
-    
-    
 }

@@ -226,11 +226,9 @@ namespace TanzEksp.Infrastructure.Migrations
 
             modelBuilder.Entity("TanzEksp.Domain.Entities.Booking", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AdultCount")
                         .HasColumnType("int");
@@ -241,8 +239,8 @@ namespace TanzEksp.Infrastructure.Migrations
                     b.Property<int?>("ChildCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DepartureDate")
                         .HasColumnType("datetime2");
@@ -270,11 +268,9 @@ namespace TanzEksp.Infrastructure.Migrations
 
             modelBuilder.Entity("TanzEksp.Domain.Entities.Customer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -322,7 +318,7 @@ namespace TanzEksp.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("TripEventId")
+                    b.Property<int>("TripEventId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -340,14 +336,8 @@ namespace TanzEksp.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<bool>("IsTemplate")
+                        .HasColumnType("bit");
 
                     b.Property<int>("TripType")
                         .HasColumnType("int");
@@ -370,6 +360,9 @@ namespace TanzEksp.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsTemplate")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -461,7 +454,9 @@ namespace TanzEksp.Infrastructure.Migrations
                 {
                     b.HasOne("TanzEksp.Domain.Entities.TripEvent", null)
                         .WithMany("DayPlans")
-                        .HasForeignKey("TripEventId");
+                        .HasForeignKey("TripEventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TanzEksp.Domain.Entities.TripEvent", b =>

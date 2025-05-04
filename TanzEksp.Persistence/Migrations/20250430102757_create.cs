@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TanzEksp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class loginsys : Migration
+    public partial class create : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,8 +55,7 @@ namespace TanzEksp.Infrastructure.Migrations
                 name: "CustomerEF",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -68,29 +67,13 @@ namespace TanzEksp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmployeeUserEF",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Role = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EmployeeUserEF", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TripEF",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TripType = table.Column<int>(type: "int", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false)
+                    IsTemplate = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -207,9 +190,8 @@ namespace TanzEksp.Infrastructure.Migrations
                 name: "BookingEF",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TripId = table.Column<int>(type: "int", nullable: true),
                     AdultCount = table.Column<int>(type: "int", nullable: false),
                     ChildCount = table.Column<int>(type: "int", nullable: true),
@@ -361,9 +343,6 @@ namespace TanzEksp.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "DayPlanEF");
-
-            migrationBuilder.DropTable(
-                name: "EmployeeUserEF");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

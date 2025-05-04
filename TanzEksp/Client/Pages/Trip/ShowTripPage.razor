@@ -1,0 +1,66 @@
+﻿@inject TripService tripService
+@attribute [Authorize(Roles = "Admin, User")]
+@using Microsoft.AspNetCore.Authorization
+@using TanzEksp.Shared.DTO
+@using TanzEksp.Client.Services
+
+
+@page "/trips"
+
+
+<div class="button-wrapper">
+
+</div>
+
+<div class="admin-container">
+	@if (!string.IsNullOrEmpty(errorMessage))
+	{
+		<p class="error">@errorMessage</p>
+	}
+	@if (trips == null)
+	{
+		<p>Henter rejser...</p>
+	}
+	else
+	{
+		<div class="table-wrapper">
+			<table class="rejse-table">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>TripType</th>
+						<th>Skabelon</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var trip in trips)
+					{
+						<tr>
+							<td>@trip.Id</td>
+							<td>@trip.TripType</td>
+							<td>@trip.IsTemplate</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>	
+	}
+
+</div>
+
+@code {
+	private List<TripDTO> trips;
+	private string errorMessage;
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			trips = await tripService.GetAllTripsAsync();
+		}
+		catch (Exception ex)
+		{
+			errorMessage = "Der opstod en fejl ved hentning af rejser: " + ex.Message;
+		}
+	}
+}
