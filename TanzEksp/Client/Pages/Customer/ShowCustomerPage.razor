@@ -24,6 +24,12 @@
     }
     else
     {
+        <input type="text" @bind="searchTerm" placeholder="Søg..." class="search-input"/>
+
+        @if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            <button type="clear-button" @onclick="ClearSearch">X</button>
+        }
         <div class="table-wrapper">
             <table class="customer-table">
                 <thead>
@@ -36,7 +42,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var customer in customer)
+                    @foreach (var customer in FilteredCustomers)
                     {
                         <tr>
                             <td>@customer.FirstName</td>
@@ -54,7 +60,7 @@
         </div>
     }
 </div>
- 
+
 @if (showCustomerModal)
 {
     <div class="modal-overlay">
@@ -119,7 +125,7 @@
         customer = await customerservice.GetAllCustomersAsync();
     }
 
-    
+
     void ShowAddCustomerModal()
     {
         modalTitle = "Tilføj Kunde";
@@ -175,4 +181,21 @@
     {
         return Task.CompletedTask;
     }
-}
+
+    private string searchTerm = "";
+
+    private IEnumerable<CustomerDTO> FilteredCustomers => 
+    string.IsNullOrWhiteSpace(searchTerm) 
+    ? customer
+    : customer.Where (c => 
+       (c.FirstName != null && c.FirstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                (c.LastName != null && c.LastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                (c.Email != null && c.Email.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                (c.PhoneNumber != null && c.PhoneNumber.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)));
+
+
+    private void ClearSearch()
+    {
+        searchTerm = string.Empty;
+    }
+                }
