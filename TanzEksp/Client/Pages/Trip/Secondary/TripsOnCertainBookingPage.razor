@@ -2,6 +2,7 @@
 @inject BookingService bookingService
 @inject CustomerService customerService
 @inject TripEventService tripEventService
+@inject DayPlanService dayPlanService
 @attribute [Authorize(Roles = "Admin, User")]
 @using Microsoft.AspNetCore.Authorization
 @using TanzEksp.Shared.DTO
@@ -28,6 +29,26 @@ else
 	else
 	{
 		<button class="btn-add" @onclick="ShowAddTripEventModal">Tilføj TripEvent</button>
+
+		@* <div class="table" >
+			<table class="rejse-table">
+				<thead>
+					<tr>
+						<th>Titel</th>
+						<th>Pris</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var trip in Tripevents)
+					{
+						<tr>
+							<td>@trip.Id</td>
+							<td>@trip.TripType</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div> *@
 	}
 }
 
@@ -55,7 +76,7 @@ else
 			<h3>Tilføj TripEvent</h3>
 			<div>
 				<label for="Title">Titel:</label>
-				<select @bind="selectedTripEventId">
+				<select @bind="selectedTripEventId" class="custom-select">
 					@foreach (var tripEvent in tripEvents)
 					{
 						<option value="@tripEvent.Id">@tripEvent.Title</option>
@@ -83,6 +104,7 @@ else
 	private TripDTO trip { get; set; } = new TripDTO();
 	private TripEventDTO TripEvent { get; set; } 
 
+	private List<TripEventDTO> tripEventsInTrip{ get; set; } = new List<TripEventDTO>();
 	private EditContext editContext;
 
 	private int selectedTripEventId;
@@ -95,6 +117,7 @@ else
 		booking = await bookingService.GetBookingByIdAsync(bookingId);
 		customer = await customerService.GetCustomerByIdAsync(booking.CustomerId);
 		tripEvents = await tripEventService.GetAllTripEventsAsync();
+		
 	}
 
 	private void ShowAddTripEventModal()
@@ -102,9 +125,34 @@ else
 		AddTripEventModal = !AddTripEventModal;
 	}
 
-	private void AddTripEventToBooking(Guid bookingId, int tripEventId)
+	private async Task AddTripEventToBooking(Guid bookingId, int tripEventId)
 	{
+		TripEventDTO templateTE = new TripEventDTO();
+		templateTE = await tripEventService.GetTripEventByIdAsync(tripEventId);
 
+		TripEventDTO newTripEvent = new TripEventDTO();
+		newTripEvent.Title = templateTE.Title;
+		newTripEvent.Description = templateTE.Description;
+		newTripEvent.Days = templateTE.Days;
+		newTripEvent.Price = templateTE.Price;
+		newTripEvent.TripId = booking.TripId;
+
+		await tripEventService.AddTripEventAsync(newTripEvent);
+
+		List<DayPlanDTO> dayPlanDTOs = new List<DayPlanDTO>();
+		var allDayPlans = await dayPlanService.GetAll();
+		dayPlanDTOs = allDayPlans.Where(x => x.TripEventId == tripEventId).ToList();
+
+		foreach (var dayPlan in dayPlanDTOs)
+		{
+			DayPlanDTO newDayPlan = new DayPlanDTO();
+			newDayPlan.TripEventId = newTripEvent.Id;
+			newDayPlan.Title = dayPlan.Title;
+			newDayPlan.Description = dayPlan.Description;
+			newDayPlan.Accommodation = dayPlan.Accommodation;
+			newDayPlan.Meals = dayPlan.Meals;
+			await dayPlanService.AddDayPlanAsync(newDayPlan);
+		}
 	}
 
 	private void ShowAddTripModal()

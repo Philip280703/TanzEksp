@@ -372,3 +372,23 @@ body {
         box-shadow: 0 0 8px rgba(56, 176, 0, 0.5);
         outline: none;
     }
+
+.custom-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    font-size: 1rem;
+    color: #333;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+    .custom-select:focus {
+        border-color: #4d90fe;
+        box-shadow: 0 0 5px rgba(77, 144, 254, 0.5);
+        outline: none;
+    }
