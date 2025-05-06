@@ -47,6 +47,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
             {
                 if (existingBooking != null)
                 {
+                    existingBooking.TripId = booking.TripId;
                     existingBooking.AdultCount = booking.AdultCount;
                     existingBooking.ChildCount = booking.ChildCount;
                     existingBooking.Airport = booking.Airport;

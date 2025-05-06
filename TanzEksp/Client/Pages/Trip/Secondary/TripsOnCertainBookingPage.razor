@@ -1,29 +1,75 @@
 ﻿@inject TripService tripService
 @inject BookingService bookingService
 @inject CustomerService customerService
+@inject TripEventService tripEventService
 @attribute [Authorize(Roles = "Admin, User")]
 @using Microsoft.AspNetCore.Authorization
 @using TanzEksp.Shared.DTO
 @using TanzEksp.Client.Services
+@using Microsoft.AspNetCore.Components.Forms
+
 @page "/TripsOnCertainBooking/{bookingId:guid}"
 
-@if (booking == null && customer == null)
+@if (booking == null || customer == null)
 {
-	<p>Henter booking...</p>
-}
-else if (booking == null && customer != null)
-{
-	<p>Henter booking...</p>
-}
-else if (booking != null && customer == null)
-{
-	<p>Henter kunde...</p>
+	<p>Henter data...</p>
 }
 else
 {
 	<h4>Kunde info: @customer.FirstName @customer.LastName</h4>
 	<h4>Booking ID: @bookingId</h4>
-	<h5>Afrejsedato: @booking.DepartureDate.Value.ToShortDateString()</h5>
+	<h5>Afrejsedato: @booking.DepartureDate?.ToShortDateString()</h5>
+	<h5>Trip ID : @(booking.TripId?.ToString() ?? "Ingen")</h5>
+
+	@if (booking.TripId == null)
+	{
+		<button class="btn-add" @onclick="ShowAddTripModal">Tilføj rejse til booking</button>
+	}
+	else
+	{
+		<button class="btn-add" @onclick="ShowAddTripEventModal">Tilføj TripEvent</button>
+	}
+}
+
+
+
+@if (AddTripModal)
+{
+	<div class="modal-overlay">
+		<div class="modal-content">
+			<h3>Tilføj rejse til booking</h3>
+			<div>
+				<button class="btn-add" @onclick="AddPrivateTrip">Tilføj privat rejse</button>
+			</div>
+			<div>
+				<button class="btn-add" @onclick="AddGroupTrip">Tilføj gruppe rejse</button>
+			</div>
+		</div>
+	</div>
+}
+
+@if (AddTripEventModal)
+{
+	<div class="modal-overlay">
+		<div class="modal-content">
+			<h3>Tilføj TripEvent</h3>
+			<div>
+				<label for="Title">Titel:</label>
+				<select @bind="selectedTripEventId">
+					@foreach (var tripEvent in tripEvents)
+					{
+						<option value="@tripEvent.Id">@tripEvent.Title</option>
+					}
+				</select>
+			</div>
+			<div>
+				<button class="btn-add" @onclick="() => AddTripEventToBooking(bookingId, selectedTripEventId)">Tilføj</button>
+			</div>
+			<div>
+				<button class="btn-remove" @onclick="ShowAddTripEventModal">Luk</button>
+			</div>
+		</div>
+	</div>
 }
 
 
@@ -33,11 +79,64 @@ else
 
 	private BookingDTO booking { get; set; }
 	private CustomerDTO customer { get; set; }
+	private List<TripEventDTO> tripEvents { get; set; }
+	private TripDTO trip { get; set; } = new TripDTO();
+	private TripEventDTO TripEvent { get; set; } 
+
+	private EditContext editContext;
+
+	private int selectedTripEventId;
+
+	private bool AddTripEventModal { get; set; } = false;
+	private bool AddTripModal { get; set; } = false;
 
 	protected override async Task OnInitializedAsync()
 	{
 		booking = await bookingService.GetBookingByIdAsync(bookingId);
 		customer = await customerService.GetCustomerByIdAsync(booking.CustomerId);
+		tripEvents = await tripEventService.GetAllTripEventsAsync();
 	}
 
+	private void ShowAddTripEventModal()
+	{
+		AddTripEventModal = !AddTripEventModal;
+	}
+
+	private void AddTripEventToBooking(Guid bookingId, int tripEventId)
+	{
+
+	}
+
+	private void ShowAddTripModal()
+	{
+		AddTripModal = !AddTripModal;
+	}
+
+
+	private void AddGroupTrip()
+	{
+		trip.TripType = "Group";
+		AddTripToBooking();
+	}
+	private void AddPrivateTrip()
+	{
+		trip.TripType = "Private";
+		AddTripToBooking();
+	}
+	private async Task AddTripToBooking()
+	{
+		try
+		{
+			await tripService.AddTripAsync(trip);
+			var maxtrip = await tripService.GetAllTripsAsync();
+			var xtrip = maxtrip.OrderByDescending(t => t.Id).FirstOrDefault();
+			
+			booking.TripId = xtrip.Id;
+			await bookingService.UpdateBookingAsync(booking);
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Error adding trip to booking: {ex.Message}");
+		}
+	}
 }
