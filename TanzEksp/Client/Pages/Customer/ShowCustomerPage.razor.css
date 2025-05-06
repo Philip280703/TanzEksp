@@ -285,3 +285,42 @@
         box-shadow: 0 0 5px rgba(164, 22, 26, 0.5); /* Mindre skygge */
         background-color: rgba(230, 57, 70, 0.2); /* Mørkere rød baggrund */
     }
+
+
+/* Wrapper til scroll-effekt */
+.table-scroll {
+    max-height: calc(100vh - 200px); /* Sæt en fast højde på tabellen */
+    overflow-y: auto; /* Aktiver lodret scrolling */
+    overflow-x: hidden; /* Skjul vandret scrolling */
+    border: 1px solid #ddd; /* Tilføj en kant for at adskille tabellen */
+    border-radius: 8px; /* Gør hjørnerne runde */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Tilføj en let skygge */
+}
+
+/* Styling til tabellen */
+.customer-table {
+    width: 100%; /* Sørg for, at tabellen fylder hele wrapperen */
+    border-collapse: collapse;
+}
+
+    .customer-table th, .customer-table td {
+        border: 1px solid #ddd;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .customer-table th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        color: #555;
+        top: 0; /* Fastgør overskriften til toppen */
+        z-index: 1; /* Sørg for, at overskriften er over indholdet */
+    }
+
+    .customer-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .customer-table tr:hover {
+        background-color: #e9ecef;
+    }
