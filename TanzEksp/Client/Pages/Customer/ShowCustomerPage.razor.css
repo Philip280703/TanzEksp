@@ -229,3 +229,98 @@
     .customer-table tr:hover {
         background-color: #e9ecef;
     }
+
+/* Styling til søgefelt */
+.search-input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease-in-out;
+    box-sizing: border-box; /* Sørger for, at padding og border ikke ændrer størrelsen */
+}
+
+    .search-input:focus {
+        border-color: #0077b6; /* Blå farve ved fokus */
+        background-color: #ffffff;
+        box-shadow: 0 0 8px rgba(0, 119, 182, 0.5); /* Blå skygge ved fokus */
+        outline: none; /* Fjern standard outline */
+    }
+
+/* Wrapper til søgefelt og knap */
+.search-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* Styling til "X"-knap */
+.clear-button {
+    position: absolute;
+    right: 15px; /* Juster placeringen af knappen */
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    color: #555;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    border-radius: 50%; /* Gør knappen cirkulær */
+    padding: 0.3rem; /* Tilføj lidt padding for bedre klikområde */
+}
+
+    /* Hover-effekt */
+    .clear-button:hover {
+        color: #e63946; /* Rød farve ved hover */
+        transform: scale(1.3); /* Forstør knappen lidt ved hover */
+        box-shadow: 0 0 10px rgba(230, 57, 70, 0.5); /* Tilføj en rød skygge */
+        background-color: rgba(230, 57, 70, 0.1); /* Let rød baggrund */
+    }
+
+    /* Aktiv-effekt */
+    .clear-button:active {
+        color: #a4161a; /* Mørkere rød ved klik */
+        transform: scale(1.1); /* Mindre forstørrelse ved klik */
+        box-shadow: 0 0 5px rgba(164, 22, 26, 0.5); /* Mindre skygge */
+        background-color: rgba(230, 57, 70, 0.2); /* Mørkere rød baggrund */
+    }
+
+
+/* Wrapper til scroll-effekt */
+.table-scroll {
+    max-height: calc(100vh - 200px); /* Sæt en fast højde på tabellen */
+    overflow-y: auto; /* Aktiver lodret scrolling */
+    overflow-x: hidden; /* Skjul vandret scrolling */
+    border: 1px solid #ddd; /* Tilføj en kant for at adskille tabellen */
+    border-radius: 8px; /* Gør hjørnerne runde */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Tilføj en let skygge */
+}
+
+/* Styling til tabellen */
+.customer-table {
+    width: 100%; /* Sørg for, at tabellen fylder hele wrapperen */
+    border-collapse: collapse;
+}
+
+    .customer-table th, .customer-table td {
+        border: 1px solid #ddd;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .customer-table th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        color: #555;
+        top: 0; /* Fastgør overskriften til toppen */
+        z-index: 1; /* Sørg for, at overskriften er over indholdet */
+    }
+
+    .customer-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .customer-table tr:hover {
+        background-color: #e9ecef;
+    }
