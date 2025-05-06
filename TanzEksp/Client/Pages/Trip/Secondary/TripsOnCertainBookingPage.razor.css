@@ -392,3 +392,27 @@ body {
         box-shadow: 0 0 5px rgba(77, 144, 254, 0.5);
         outline: none;
     }
+
+
+.rejse-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .rejse-table th, .rejse-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+.dayplan-subtable {
+    width: 100%;
+    background-color: #f9f9f9;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+}
+
+    .dayplan-subtable th, .dayplan-subtable td {
+        border: 1px solid #ccc;
+        padding: 6px;
+        font-size: 0.9em;
+    }

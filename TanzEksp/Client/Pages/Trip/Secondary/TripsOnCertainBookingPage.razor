@@ -30,7 +30,7 @@ else
 	{
 		<button class="btn-add" @onclick="ShowAddTripEventModal">Tilføj TripEvent</button>
 
-		@* <div class="table" >
+		<div class="table">
 			<table class="rejse-table">
 				<thead>
 					<tr>
@@ -39,16 +39,42 @@ else
 					</tr>
 				</thead>
 				<tbody>
-					@foreach (var trip in Tripevents)
+					@foreach (var tripEvent in tripEventsInTrip)
 					{
-						<tr>
-							<td>@trip.Id</td>
-							<td>@trip.TripType</td>
+						<tr class="trip-event-row">
+							<td>@tripEvent.Title</td>
+							<td>@tripEvent.Price</td>
 						</tr>
+
+						@if (tripEvent.DayPlans != null && tripEvent.DayPlans.Any())
+						{
+							<tr>
+								<td colspan="2">
+									<table class="dayplan-subtable">
+										<thead>
+											<tr>
+												<th>Dagsnummer</th>
+												<th>Forplejning</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach (var dayplan in tripEvent.DayPlans)
+											{
+												<tr class="dayplan-row">
+													<td>@dayplan.Title</td>
+													<td>@dayplan.Meals</td>
+												</tr>
+											}
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						}
 					}
 				</tbody>
 			</table>
-		</div> *@
+		</div>
+
 	}
 }
 
@@ -101,11 +127,13 @@ else
 	private BookingDTO booking { get; set; }
 	private CustomerDTO customer { get; set; }
 	private List<TripEventDTO> tripEvents { get; set; }
+	private List<DayPlanDTO> dayPlans { get; set; } 
 	private TripDTO trip { get; set; } = new TripDTO();
 	private TripEventDTO TripEvent { get; set; } 
 
 	private List<TripEventDTO> tripEventsInTrip{ get; set; } = new List<TripEventDTO>();
-	private EditContext editContext;
+	private List<DayPlanDTO> DayPlanInTrip { get; set; } = new List<DayPlanDTO>();
+
 
 	private int selectedTripEventId;
 
@@ -116,8 +144,12 @@ else
 	{
 		booking = await bookingService.GetBookingByIdAsync(bookingId);
 		customer = await customerService.GetCustomerByIdAsync(booking.CustomerId);
+
 		tripEvents = await tripEventService.GetAllTripEventsAsync();
-		
+		tripEventsInTrip = tripEvents.Where(x => x.TripId == booking.TripId).ToList();
+
+		dayPlans = await dayPlanService.GetAll();
+		DayPlanInTrip = dayPlans.Where(x => x.TripEventId == booking.TripId).ToList();
 	}
 
 	private void ShowAddTripEventModal()
@@ -146,7 +178,7 @@ else
 		foreach (var dayPlan in dayPlanDTOs)
 		{
 			DayPlanDTO newDayPlan = new DayPlanDTO();
-			newDayPlan.TripEventId = newTripEvent.Id;
+			newDayPlan.TripEventId = booking.TripId ?? 0;
 			newDayPlan.Title = dayPlan.Title;
 			newDayPlan.Description = dayPlan.Description;
 			newDayPlan.Accommodation = dayPlan.Accommodation;
