@@ -103,7 +103,7 @@ else
 			<div>
 				<label for="Title">Titel:</label>
 				<select @bind="selectedTripEventId" class="custom-select">
-					@foreach (var tripEvent in tripEvents)
+					@foreach (var tripEvent in tripEventTemplate)
 					{
 						<option value="@tripEvent.Id">@tripEvent.Title</option>
 					}
@@ -132,6 +132,7 @@ else
 	private TripEventDTO TripEvent { get; set; } 
 
 	private List<TripEventDTO> tripEventsInTrip{ get; set; } = new List<TripEventDTO>();
+	private List<TripEventDTO> tripEventTemplate { get; set; } = new List<TripEventDTO>();
 	private List<DayPlanDTO> DayPlanInTrip { get; set; } = new List<DayPlanDTO>();
 
 
@@ -146,6 +147,7 @@ else
 		customer = await customerService.GetCustomerByIdAsync(booking.CustomerId);
 
 		tripEvents = await tripEventService.GetAllTripEventsAsync();
+		tripEventTemplate = tripEvents.Where(x => x.IsTemplate == true).ToList();
 		tripEventsInTrip = tripEvents.Where(x => x.TripId == booking.TripId).ToList();
 
 		dayPlans = await dayPlanService.GetAll();
