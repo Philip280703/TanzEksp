@@ -112,7 +112,8 @@ else
     {
         try
         {
-            tripEvents = await tripeventservice.GetAllTripEventsAsync();
+            var tripEventAll = await tripeventservice.GetAllTripEventsAsync();
+			tripEvents = tripEventAll.Where(x => x.IsTemplate == true).ToList();
             filteredTripEvents = tripEvents;
         }
         catch (HttpRequestException ex)
