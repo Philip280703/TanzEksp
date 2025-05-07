@@ -181,7 +181,7 @@ else
 		foreach (var dayPlan in dayPlanDTOs)
 		{
 			DayPlanDTO newDayPlan = new DayPlanDTO();
-			newDayPlan.TripEventId = booking.TripId ?? 0;
+			newDayPlan.TripEventId = newTripEvent.Id;
 			newDayPlan.Title = dayPlan.Title;
 			newDayPlan.Description = dayPlan.Description;
 			newDayPlan.Accommodation = dayPlan.Accommodation;
