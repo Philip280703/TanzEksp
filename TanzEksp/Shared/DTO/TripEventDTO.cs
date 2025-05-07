@@ -27,6 +27,8 @@ namespace TanzEksp.Shared.DTO
 
 		public int ?TripId { get; set; }
 
+		public bool IsTemplate { get; set; } = false;
+
         public List<DayPlanDTO>? DayPlans { get; set; }
     }
 }

@@ -143,6 +143,7 @@ else
 
     private async Task HandleValidSubmit()
     {
+		currentTripEvent.IsTemplate = true; 
         await SaveTripEvent();
     }
 

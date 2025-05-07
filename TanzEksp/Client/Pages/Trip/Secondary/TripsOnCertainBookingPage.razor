@@ -167,6 +167,7 @@ else
 		newTripEvent.Description = templateTE.Description;
 		newTripEvent.Days = templateTE.Days;
 		newTripEvent.Price = templateTE.Price;
+		newTripEvent.IsTemplate = false;
 		newTripEvent.TripId = booking.TripId;
 
 		await tripEventService.AddTripEventAsync(newTripEvent);
