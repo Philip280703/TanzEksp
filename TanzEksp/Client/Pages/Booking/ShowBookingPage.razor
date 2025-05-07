@@ -192,6 +192,7 @@
         {
             errorMessage = "En fejl opstod ved gemning af kunde: " + ex.Message;
         }
+        StateHasChanged();
     }
 
     private async Task HandleValidSubmit()

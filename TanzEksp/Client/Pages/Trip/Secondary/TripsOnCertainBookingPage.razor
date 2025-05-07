@@ -190,7 +190,7 @@ else
 			newDayPlan.Description = dayPlan.Description;
 			newDayPlan.Accommodation = dayPlan.Accommodation;
 			newDayPlan.Meals = dayPlan.Meals;
-				await dayPlanService.AddDayPlanAsync(newDayPlan);
+			await dayPlanService.AddDayPlanAsync(newDayPlan);
 		}
 	}
 
@@ -204,11 +204,13 @@ else
 	{
 		trip.TripType = "Group";
 		AddTripToBooking();
+		AddTripModal = !AddTripModal;
 	}
 	private void AddPrivateTrip()
 	{
 		trip.TripType = "Private";
 		AddTripToBooking();
+		AddTripModal = !AddTripModal;
 	}
 	private async Task AddTripToBooking()
 	{
@@ -217,7 +219,7 @@ else
 			await tripService.AddTripAsync(trip);
 			var maxtrip = await tripService.GetAllTripsAsync();
 			var xtrip = maxtrip.OrderByDescending(t => t.Id).FirstOrDefault();
-			
+
 			booking.TripId = xtrip.Id;
 			await bookingService.UpdateBookingAsync(booking);
 		}
@@ -225,5 +227,6 @@ else
 		{
 			Console.WriteLine($"Error adding trip to booking: {ex.Message}");
 		}
+		StateHasChanged();
 	}
 }
