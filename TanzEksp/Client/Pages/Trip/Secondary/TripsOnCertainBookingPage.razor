@@ -179,13 +179,13 @@ else
 		dayPlanDTOs = allDayPlans.Where(x => x.TripEventId == tripEventId).ToList();
 
 		List<TripEventDTO> trips = await tripEventService.GetAllTripEventsAsync();
-		var maxTripEvent = trips.Where(x => x.TripId == booking.TripId).OrderByDescending(x => x.Id).FirstOrDefault();
-		int maxTripEventId = maxTripEvent.Id;
+		var createdTripEvent = trips.Where(x => x.TripId == booking.TripId).OrderByDescending(x => x.Id).FirstOrDefault();
+		int speceficTripEventId = createdTripEvent.Id;
 
 		foreach (var dayPlan in dayPlanDTOs)
 		{
 			DayPlanDTO newDayPlan = new DayPlanDTO();
-			newDayPlan.TripEventId = maxTripEventId;
+			newDayPlan.TripEventId = speceficTripEventId;
 			newDayPlan.Title = dayPlan.Title;
 			newDayPlan.Description = dayPlan.Description;
 			newDayPlan.Accommodation = dayPlan.Accommodation;
