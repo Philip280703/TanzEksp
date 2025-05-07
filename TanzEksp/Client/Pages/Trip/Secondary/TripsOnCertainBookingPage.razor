@@ -179,7 +179,7 @@ else
 		dayPlanDTOs = allDayPlans.Where(x => x.TripEventId == tripEventId).ToList();
 
 		List<TripEventDTO> trips = await tripEventService.GetAllTripEventsAsync();
-		var maxTripEvent = trips.OrderByDescending(t => t.Id).FirstOrDefault();
+		var maxTripEvent = trips.Where(x => x.TripId == booking.TripId).OrderByDescending(x => x.Id).FirstOrDefault();
 		int maxTripEventId = maxTripEvent.Id;
 
 		foreach (var dayPlan in dayPlanDTOs)
