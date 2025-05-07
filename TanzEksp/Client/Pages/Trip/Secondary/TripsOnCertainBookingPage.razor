@@ -135,7 +135,6 @@ else
 	private List<TripEventDTO> tripEventTemplate { get; set; } = new List<TripEventDTO>();
 	private List<DayPlanDTO> DayPlanInTrip { get; set; } = new List<DayPlanDTO>();
 
-
 	private int selectedTripEventId;
 
 	private bool AddTripEventModal { get; set; } = false;
@@ -148,7 +147,11 @@ else
 
 		tripEvents = await tripEventService.GetAllTripEventsAsync();
 		tripEventTemplate = tripEvents.Where(x => x.IsTemplate == true).ToList();
-		tripEventsInTrip = tripEvents.Where(x => x.TripId == booking.TripId).ToList();
+
+		if (booking.TripId != null)
+		{
+			tripEventsInTrip = tripEvents.Where(x => x.TripId == booking.TripId).ToList();			
+		}
 
 		dayPlans = await dayPlanService.GetAll();
 		DayPlanInTrip = dayPlans.Where(x => x.TripEventId == booking.TripId).ToList();
@@ -161,72 +164,112 @@ else
 
 	private async Task AddTripEventToBooking(Guid bookingId, int tripEventId)
 	{
-		TripEventDTO templateTE = new TripEventDTO();
-		templateTE = await tripEventService.GetTripEventByIdAsync(tripEventId);
+		// Hent template TripEvent
+		var templateTE = await tripEventService.GetTripEventByIdAsync(tripEventId);
 
-		TripEventDTO newTripEvent = new TripEventDTO();
-		newTripEvent.Title = templateTE.Title;
-		newTripEvent.Description = templateTE.Description;
-		newTripEvent.Days = templateTE.Days;
-		newTripEvent.Price = templateTE.Price;
-		newTripEvent.IsTemplate = false;
-		newTripEvent.TripId = booking.TripId;
+		// Opret nyt TripEvent baseret på template
+		var newTripEvent = new TripEventDTO
+			{
+				Title = templateTE.Title,
+				Description = templateTE.Description,
+				Days = templateTE.Days,
+				Price = templateTE.Price,
+				IsTemplate = false,
+				TripId = booking.TripId
+			};
 
+		// Gem nyt TripEvent
 		await tripEventService.AddTripEventAsync(newTripEvent);
 
-		List<DayPlanDTO> dayPlanDTOs = new List<DayPlanDTO>();
-		var allDayPlans = await dayPlanService.GetAll();
-		dayPlanDTOs = allDayPlans.Where(x => x.TripEventId == tripEventId).ToList();
+		// Hent det nyligt oprettede TripEvent fra databasen (med korrekt ID)
+		var allTripEvents = await tripEventService.GetAllTripEventsAsync();
+		var createdTripEvent = allTripEvents
+			.Where(x => x.TripId == booking.TripId)
+			.OrderByDescending(x => x.Id)
+			.FirstOrDefault();
 
-		List<TripEventDTO> trips = await tripEventService.GetAllTripEventsAsync();
-		var createdTripEvent = trips.Where(x => x.TripId == booking.TripId).OrderByDescending(x => x.Id).FirstOrDefault();
-		int speceficTripEventId = createdTripEvent.Id;
+		if (createdTripEvent == null)
+			return;
 
-		foreach (var dayPlan in dayPlanDTOs)
+		// Hent DayPlans fra template TripEvent
+		var templateDayPlans = (await dayPlanService.GetAll())
+			.Where(x => x.TripEventId == tripEventId)
+			.ToList();
+
+		// Kopiér og tilføj DayPlans til det nye TripEvent
+		foreach (var dayPlan in templateDayPlans)
 		{
-			DayPlanDTO newDayPlan = new DayPlanDTO();
-			newDayPlan.TripEventId = speceficTripEventId;
-			newDayPlan.Title = dayPlan.Title;
-			newDayPlan.Description = dayPlan.Description;
-			newDayPlan.Accommodation = dayPlan.Accommodation;
-			newDayPlan.Meals = dayPlan.Meals;
+			var newDayPlan = new DayPlanDTO
+				{
+					TripEventId = createdTripEvent.Id,
+					Title = dayPlan.Title,
+					Description = dayPlan.Description,
+					Accommodation = dayPlan.Accommodation,
+					Meals = dayPlan.Meals
+				};
+
 			await dayPlanService.AddDayPlanAsync(newDayPlan);
 		}
+
+		// 💡 HENT TRIPEVENTS + DAYPLANS FRA DATABASEN IGEN
+		tripEvents = await tripEventService.GetAllTripEventsAsync();
+		tripEventsInTrip = tripEvents
+			.Where(x => x.TripId == booking.TripId)
+			.ToList();
+
+		// DayPlans (igen) til TripEvent (til visning)
+		var allDayPlans = await dayPlanService.GetAll();
+
+		foreach (var te in tripEventsInTrip)
+		{
+			te.DayPlans = allDayPlans.Where(dp => dp.TripEventId == te.Id).ToList();
+		}
+
+		ShowAddTripEventModal(); 
+		StateHasChanged();       
 	}
+
+
 
 	private void ShowAddTripModal()
 	{
 		AddTripModal = !AddTripModal;
 	}
 
-
 	private void AddGroupTrip()
 	{
 		trip.TripType = "Group";
 		AddTripToBooking();
-		AddTripModal = !AddTripModal;
 	}
+
 	private void AddPrivateTrip()
 	{
 		trip.TripType = "Private";
 		AddTripToBooking();
-		AddTripModal = !AddTripModal;
 	}
+
 	private async Task AddTripToBooking()
 	{
 		try
 		{
 			await tripService.AddTripAsync(trip);
+
 			var maxtrip = await tripService.GetAllTripsAsync();
 			var xtrip = maxtrip.OrderByDescending(t => t.Id).FirstOrDefault();
 
 			booking.TripId = xtrip.Id;
+
 			await bookingService.UpdateBookingAsync(booking);
 		}
 		catch (Exception ex)
 		{
 			Console.WriteLine($"Error adding trip to booking: {ex.Message}");
 		}
-		StateHasChanged();
+		finally
+		{
+			ShowAddTripModal();
+			StateHasChanged();
+		}
 	}
+
 }

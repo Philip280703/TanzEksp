@@ -32,35 +32,35 @@
         }
         <div class="table-wrapper">
             <div class="table-scroll">
-            <table class="customer-table">
-                <thead>
-                    <tr>
-                        <th>Fornavn</th>
-                        <th>Efternavn</th>
-                        <th>Email</th>
-                        <th>Telefonnummer</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var customer in FilteredCustomers)
-                    {
+                <table class="customer-table">
+                    <thead>
                         <tr>
-                            <td>@customer.FirstName</td>
-                            <td>@customer.LastName</td>
-                            <td>@customer.Email</td>
-                            <td>+45 @customer.PhoneNumber</td>
-                            <td class="action-buttons">
-                                <button class="btn-delete" @onclick="() => DeleteCustomer(customer.Id)">Slet</button>
-                                <button class="btn-update" @onclick="() => ShowUpdateCustomerModal(customer.Id)">Rediger</button>
-                            </td>
+                            <th>Fornavn</th>
+                            <th>Efternavn</th>
+                            <th>Email</th>
+                            <th>Telefonnummer</th>
+                            <th></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var customer in FilteredCustomers)
+                        {
+                            <tr>
+                                <td>@customer.FirstName</td>
+                                <td>@customer.LastName</td>
+                                <td>@customer.Email</td>
+                                <td>+45 @customer.PhoneNumber</td>
+                                <td class="action-buttons">
+                                    <button class="btn-delete" @onclick="() => DeleteCustomer(customer.Id)">Slet</button>
+                                    <button class="btn-update" @onclick="() => ShowUpdateCustomerModal(customer.Id)">Rediger</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-      
+
     }
 </div>
 
@@ -134,7 +134,7 @@
         modalTitle = "Tilføj Kunde";
         modalButtonLabel = "Gem Kunde";
         currentCustomer = new CustomerDTO();
-        showCustomerModal = true;
+        showCustomerModal = !showCustomerModal;
     }
 
     void ShowUpdateCustomerModal(Guid id)
@@ -172,6 +172,11 @@
         catch (Exception ex)
         {
             errorMessage = "En fejl opstod ved gemning af kunde: " + ex.Message;
+        }
+        finally
+        {
+            showCustomerModal = false;
+            StateHasChanged();      
         }
     }
 
