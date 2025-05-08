@@ -4,8 +4,9 @@
 	<td>@dayplan.Title</td>
 	<td>@dayplan.Description</td>
 	<td>@dayplan.Meals</td>
+	<td>@dayplan.Accommodation</td>
 	<td>
-		<button @onclick="() => OnEditRequested.InvokeAsync(dayplan)">Rediger</button>
+		<button class="btn btn-primary" @onclick="() => OnEditRequested.InvokeAsync(dayplan)">Rediger</button>
 	</td>
 </tr>
 

@@ -88,6 +88,8 @@ else
 													<th>Dagsnummer</th>
 													<th>Beskrivelse</th>
 													<th>Forplejning</th>
+													<th>Overnatning</th>
+													<th>Action</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -173,11 +175,19 @@ else
 					<label for="meals">Måltider</label>
 					<select id="meals" @bind="selectedDayplan.Meals" class="custom-select">
 						<option value="">Vælg måltid</option>
-						<option value="N/A">N/A</option>
+						<option value="Ingen forplejning">Ingen forplejning</option>
 						<option value="Morgenmad">Morgenmad</option>
-						<option value="Fuld Forplejning">Fuld Forplejning</option>
-						<option value="Medbring selv snacks, fx chokoladebar">Alle måltider</option>
+						<option value="Morgenmad og frokost">Morgenmad og frokost</option>
+						<option value="Frokost">Frokost</option>
+						<option value="Frokost og aftensmad">Frokost og aftensmad</option>
+						<option value="Aftensmad">Aftensmad</option>
+						<option value="Fuld forplejning">Fuld forplejning</option>
 					</select>
+				</div>
+
+				<div class="form-group">
+					<label for="accommodation">Overnatning</label>
+					<input id="accomodation" @bind="selectedDayplan.Accommodation" type="text" class="custom-input" />
 				</div>
 
 				<button type="submit" class="save-button">Gem</button>
