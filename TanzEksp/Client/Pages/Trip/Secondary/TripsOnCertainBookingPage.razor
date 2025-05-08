@@ -73,7 +73,7 @@ else
 								<button class="btn btn-primary" @onclick="() => ToggleCollapse(tripEvent.Id)">
 									@(expandedTripEventIds.Contains(tripEvent.Id) ? "Skjul" : "Vis")
 								</button>
-
+								<button class="btn btn-primary" @onclick="() => DeleteTripEvent(tripEvent)">Slet</button>
 							</td>
 						</tr>
 
@@ -93,7 +93,7 @@ else
 											<tbody>
 												@foreach (var dayplan in tripEvent.DayPlans)
 												{
-													<TanzEksp.Client.Pages.Trip.ChildComponent.RenderDayplan dayplan="@dayplan" />
+													<TanzEksp.Client.Pages.Trip.ChildComponent.RenderDayplan dayplan="@dayplan" OnEditRequested="OpenEditModal" />
 												}
 											</tbody>
 										</table>
@@ -106,8 +106,8 @@ else
 			</table>
 		</div>
 	}
-<h4>Sum: @CalculateSum()</h4>
-<h4>Antal dage: @CalculateDays()</h4>
+	<h4>Sum: @CalculateSum()</h4>
+	<h4>Antal dage: @CalculateDays()</h4>
 }
 
 
@@ -151,6 +151,41 @@ else
 	</div>
 }
 
+@if (showEditModal == true)
+{
+	<div class="custom-modal-overlay">
+		<div class="custom-modal-content">
+			<button class="close-button" @onclick="CloseEditModal">×</button>
+			<h3>Rediger Dagsplan: @selectedDayplan.Title</h3>
+
+			<EditForm Model="selectedDayplan" OnValidSubmit="HandleValidSubmit">
+				<div class="form-group">
+					<label for="title">Titel</label>
+					<input id="title" @bind="selectedDayplan.Title" type="text" class="custom-input" />
+				</div>
+
+				<div class="form-group">
+					<label for="description">Beskrivelse</label>
+					<textarea id="description" @bind="selectedDayplan.Description" class="custom-textarea"></textarea>
+				</div>
+
+				<div class="form-group">
+					<label for="meals">Måltider</label>
+					<select id="meals" @bind="selectedDayplan.Meals" class="custom-select">
+						<option value="">Vælg måltid</option>
+						<option value="N/A">N/A</option>
+						<option value="Morgenmad">Morgenmad</option>
+						<option value="Fuld Forplejning">Fuld Forplejning</option>
+						<option value="Medbring selv snacks, fx chokoladebar">Alle måltider</option>
+					</select>
+				</div>
+
+				<button type="submit" class="save-button">Gem</button>
+			</EditForm>
+		</div>
+	</div>
+}
+
 
 @code {
 	[Parameter]
@@ -161,7 +196,10 @@ else
 	private List<TripEventDTO> tripEvents { get; set; }
 	private List<DayPlanDTO> dayPlans { get; set; } 
 	private TripDTO trip { get; set; } = new TripDTO();
-	private TripEventDTO TripEvent { get; set; } 
+	private TripEventDTO TripEvent { get; set; }
+
+	private DayPlanDTO selectedDayplan;
+	private bool showEditModal = false;
 
 	private List<TripEventDTO> tripEventsInTrip{ get; set; } = new List<TripEventDTO>();
 	private List<TripEventDTO> tripEventTemplate { get; set; } = new List<TripEventDTO>();
@@ -398,4 +436,28 @@ else
 		return days;
 	}
 
+	// en metode til at slette et tripevent fra trip
+	private async Task DeleteTripEvent(TripEventDTO tripEvent)
+	{
+		await tripEventService.DeleteTripEventAsync(tripEvent.Id);
+		tripEventsInTrip.Remove(tripEvent);
+		StateHasChanged();
+	}
+
+	private void OpenEditModal(DayPlanDTO dayPlan)
+	{
+		selectedDayplan = dayPlan;
+		showEditModal = true;
+	}
+
+	private void CloseEditModal()
+	{
+		showEditModal = false;
+	}
+
+	private async Task HandleValidSubmit()
+	{
+		await dayPlanService.UpdateDayPlanAsync(selectedDayplan);
+		showEditModal = false;
+	}
 }

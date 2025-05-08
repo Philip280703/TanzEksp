@@ -4,9 +4,17 @@
 	<td>@dayplan.Title</td>
 	<td>@dayplan.Description</td>
 	<td>@dayplan.Meals</td>
+	<td>
+		<button @onclick="() => OnEditRequested.InvokeAsync(dayplan)">Rediger</button>
+	</td>
 </tr>
+
 
 @code {
 	[Parameter]
 	public DayPlanDTO dayplan { get; set; }
+
+	[Parameter]
+	public EventCallback<DayPlanDTO> OnEditRequested { get; set; }
+	public bool ShowModal { get; set; } = false;
 }
