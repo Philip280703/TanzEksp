@@ -14,6 +14,7 @@ namespace TanzEksp.Client.DI
             services.AddScoped<BookingService>();
             services.AddScoped<DayPlanService>();
             services.AddScoped<TripEventService>();
+            services.AddScoped<IPdfService, PdfService>();
             return services;
         }
     }

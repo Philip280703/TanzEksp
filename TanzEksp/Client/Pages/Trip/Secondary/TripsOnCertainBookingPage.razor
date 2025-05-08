@@ -3,255 +3,265 @@
 @inject CustomerService customerService
 @inject TripEventService tripEventService
 @inject DayPlanService dayPlanService
+@inject IPdfService pdfService
 @attribute [Authorize(Roles = "Admin, User")]
 @using Microsoft.AspNetCore.Authorization
+@using TanzEksp.Client.Services.Interfaces
 @using TanzEksp.Shared.DTO
 @using TanzEksp.Client.Services
 @using Microsoft.AspNetCore.Components.Forms
+@using QuestPDF.Fluent;
+@using QuestPDF.Helpers;
+@using QuestPDF.Infrastructure;
+@inject IJSRuntime JSRuntime
+
 
 @page "/TripsOnCertainBooking/{bookingId:guid}"
 
 @if (booking == null || customer == null)
 {
-	<p>Henter data...</p>
+    <p>Henter data...</p>
 }
 else
 {
-	<table class="info-table">
-		<thead>
-			<tr>
-				<th>Kunde information</th>
-				<th>Booking Information</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>
-					<h4>@customer.FirstName @customer.LastName</h4>
-					<p>@customer.Email</p>
-					<p>@customer.PhoneNumber</p>
-				</td>
-				<td>
-					<h4>Booking ID: @booking.Id</h4>
-					<p>Antal voksne: @booking.AdultCount</p>
-					<p>Antal børn: @booking.ChildCount</p>
-					<p>Afrejsedato: @booking.DepartureDate?.ToShortDateString()</p>
-					@if (booking.TripId != null)
-					{
-						<button class="btn-add" @onclick="ShowAddTripEventModal">Tilføj TripEvent</button>
-					}
-				</td>
-			</tr>
-		</tbody>
-	</table>
+    <table class="info-table">
+        <thead>
+            <tr>
+                <th>Kunde information</th>
+                <th>Booking Information</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <h4>@customer.FirstName @customer.LastName</h4>
+                    <p>@customer.Email</p>
+                    <p>@customer.PhoneNumber</p>
+                </td>
+                <td>
+                    <h4>Booking ID: @booking.Id</h4>
+                    <p>Antal voksne: @booking.AdultCount</p>
+                    <p>Antal børn: @booking.ChildCount</p>
+                    <p>Afrejsedato: @booking.DepartureDate?.ToShortDateString()</p>
+                    @if (booking.TripId != null)
+                    {
+                        <button class="btn-add" @onclick="ShowAddTripEventModal">Tilføj TripEvent</button>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-	@if (booking.TripId == null)
-	{
-		<button class="btn-add" @onclick="ShowAddTripModal">Tilføj rejse til booking</button>
-	}
-	else
-	{
+    @if (booking.TripId == null)
+    {
+        <button class="btn-add" @onclick="ShowAddTripModal">Tilføj rejse til booking</button>
+    }
+    else
+    {
 
-		<div class="table">
-			<table class="rejse-table">
-				<thead>
-					<tr>
-						<th>Titel</th>
-						<th>Pris</th>
-						<th>Prioritet</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach (var tripEvent in tripEventsInTrip)
-					{
-						<tr class="trip-event-row">
-							<td>@tripEvent.Title</td>
-							<td>@tripEvent.Price kr</td>
-							<td>
-								<button class="btn btn-primary" @onclick="() => MoveUpOnList(tripEvent)">↑</button>
-								<button class="btn btn-primary" @onclick="() => MoveDownOnList(tripEvent)">↓</button>
-								<button class="btn btn-primary" @onclick="() => ToggleCollapse(tripEvent.Id)">
-									@(expandedTripEventIds.Contains(tripEvent.Id) ? "Skjul" : "Vis")
-								</button>
-								<button class="btn btn-primary" @onclick="() => DeleteTripEvent(tripEvent)">Slet</button>
-							</td>
-						</tr>
+        <div class="table">
+            <table class="rejse-table">
+                <thead>
+                    <tr>
+                        <th>Titel</th>
+                        <th>Pris</th>
+                        <th>Prioritet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var tripEvent in tripEventsInTrip)
+                    {
+                        <tr class="trip-event-row">
+                            <td>@tripEvent.Title</td>
+                            <td>@tripEvent.Price kr</td>
+                            <td>
+                                <button class="btn btn-primary" @onclick="() => MoveUpOnList(tripEvent)">↑</button>
+                                <button class="btn btn-primary" @onclick="() => MoveDownOnList(tripEvent)">↓</button>
+                                <button class="btn btn-primary" @onclick="() => ToggleCollapse(tripEvent.Id)">
+                                    @(expandedTripEventIds.Contains(tripEvent.Id) ? "Skjul" : "Vis")
+                                </button>
+                                <button class="btn btn-primary" @onclick="() => DeleteTripEvent(tripEvent)">Slet</button>
+                            </td>
+                        </tr>
 
-						@if (tripEvent.DayPlans != null && tripEvent.DayPlans.Any() && expandedTripEventIds.Contains(tripEvent.Id))
-						{
-							<tr>
-								<td colspan="3">
-									<div class="dayplan-wrapper">
-										<table class="dayplan-subtable">
-											<thead>
-												<tr>
-													<th>Dagsnummer</th>
-													<th>Beskrivelse</th>
-													<th>Forplejning</th>
-													<th>Overnatning</th>
-													<th>Action</th>
-												</tr>
-											</thead>
-											<tbody>
-												@foreach (var dayplan in tripEvent.DayPlans)
-												{
-													<TanzEksp.Client.Pages.Trip.ChildComponent.RenderDayplan dayplan="@dayplan" OnEditRequested="OpenEditModal" />
-												}
-											</tbody>
-										</table>
-									</div>
-								</td>
-							</tr>
-						}
-					}
-				</tbody>
-			</table>
-		</div>
-	}
-	<h4>Sum: @CalculateSum()</h4>
-	<h4>Antal dage: @CalculateDays()</h4>
+                        @if (tripEvent.DayPlans != null && tripEvent.DayPlans.Any() && expandedTripEventIds.Contains(tripEvent.Id))
+                        {
+                            <tr>
+                                <td colspan="3">
+                                    <div class="dayplan-wrapper">
+                                        <table class="dayplan-subtable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Dagsnummer</th>
+                                                    <th>Beskrivelse</th>
+                                                    <th>Forplejning</th>
+                                                    <th>Overnatning</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var dayplan in tripEvent.DayPlans)
+                                                {
+                                                    <TanzEksp.Client.Pages.Trip.ChildComponent.RenderDayplan dayplan="@dayplan" OnEditRequested="OpenEditModal" />
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    <h4>Sum: @CalculateSum()</h4>
+    <h4>Antal dage: @CalculateDays()</h4>
+    <button class="btn-add" @onclick="MakePdf">Lav PDF</button>
+
 }
 
 
 
 @if (AddTripModal)
 {
-	<div class="modal-overlay">
-		<div class="modal-content">
-			<h3>Tilføj rejse til booking</h3>
-			<div>
-				<button class="btn-add" @onclick="AddPrivateTrip">Tilføj privat rejse</button>
-			</div>
-			<div>
-				<button class="btn-add" @onclick="AddGroupTrip">Tilføj gruppe rejse</button>
-			</div>
-		</div>
-	</div>
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <h3>Tilføj rejse til booking</h3>
+            <div>
+                <button class="btn-add" @onclick="AddPrivateTrip">Tilføj privat rejse</button>
+            </div>
+            <div>
+                <button class="btn-add" @onclick="AddGroupTrip">Tilføj gruppe rejse</button>
+            </div>
+        </div>
+    </div>
 }
 
 @if (AddTripEventModal)
 {
-	<div class="modal-overlay">
-		<div class="modal-content">
-			<h3>Tilføj TripEvent</h3>
-			<div>
-				<label for="Title">Titel:</label>
-				<select @bind="selectedTripEventId" class="custom-select">
-					@foreach (var tripEvent in tripEventTemplate)
-					{
-						<option value="@tripEvent.Id">@tripEvent.Title</option>
-					}
-				</select>
-			</div>
-			<div>
-				<button class="btn-add" @onclick="() => AddTripEventToBooking(bookingId, selectedTripEventId)">Tilføj</button>
-			</div>
-			<div>
-				<button class="btn-remove" @onclick="ShowAddTripEventModal">Luk</button>
-			</div>
-		</div>
-	</div>
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <h3>Tilføj TripEvent</h3>
+            <div>
+                <label for="Title">Titel:</label>
+                <select @bind="selectedTripEventId" class="custom-select">
+                    @foreach (var tripEvent in tripEventTemplate)
+                    {
+                        <option value="@tripEvent.Id">@tripEvent.Title</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <button class="btn-add" @onclick="() => AddTripEventToBooking(bookingId, selectedTripEventId)">Tilføj</button>
+            </div>
+            <div>
+                <button class="btn-remove" @onclick="ShowAddTripEventModal">Luk</button>
+            </div>
+        </div>
+    </div>
 }
 
 @if (showEditModal == true)
 {
-	<div class="custom-modal-overlay">
-		<div class="custom-modal-content">
-			<button class="close-button" @onclick="CloseEditModal">×</button>
-			<h3>Rediger Dagsplan: @selectedDayplan.Title</h3>
+    <div class="custom-modal-overlay">
+        <div class="custom-modal-content">
+            <button class="close-button" @onclick="CloseEditModal">×</button>
+            <h3>Rediger Dagsplan: @selectedDayplan.Title</h3>
 
-			<EditForm Model="selectedDayplan" OnValidSubmit="HandleValidSubmit">
-				<div class="form-group">
-					<label for="title">Titel</label>
-					<input id="title" @bind="selectedDayplan.Title" type="text" class="custom-input" />
-				</div>
+            <EditForm Model="selectedDayplan" OnValidSubmit="HandleValidSubmit">
+                <div class="form-group">
+                    <label for="title">Titel</label>
+                    <input id="title" @bind="selectedDayplan.Title" type="text" class="custom-input" />
+                </div>
 
-				<div class="form-group">
-					<label for="description">Beskrivelse</label>
-					<textarea id="description" @bind="selectedDayplan.Description" class="custom-textarea"></textarea>
-				</div>
+                <div class="form-group">
+                    <label for="description">Beskrivelse</label>
+                    <textarea id="description" @bind="selectedDayplan.Description" class="custom-textarea"></textarea>
+                </div>
 
-				<div class="form-group">
-					<label for="meals">Måltider</label>
-					<select id="meals" @bind="selectedDayplan.Meals" class="custom-select">
-						<option value="">Vælg måltid</option>
-						<option value="Ingen forplejning">Ingen forplejning</option>
-						<option value="Morgenmad">Morgenmad</option>
-						<option value="Morgenmad og frokost">Morgenmad og frokost</option>
-						<option value="Frokost">Frokost</option>
-						<option value="Frokost og aftensmad">Frokost og aftensmad</option>
-						<option value="Aftensmad">Aftensmad</option>
-						<option value="Fuld forplejning">Fuld forplejning</option>
-					</select>
-				</div>
+                <div class="form-group">
+                    <label for="meals">Måltider</label>
+                    <select id="meals" @bind="selectedDayplan.Meals" class="custom-select">
+                        <option value="">Vælg måltid</option>
+                        <option value="Ingen forplejning">Ingen forplejning</option>
+                        <option value="Morgenmad">Morgenmad</option>
+                        <option value="Morgenmad og frokost">Morgenmad og frokost</option>
+                        <option value="Frokost">Frokost</option>
+                        <option value="Frokost og aftensmad">Frokost og aftensmad</option>
+                        <option value="Aftensmad">Aftensmad</option>
+                        <option value="Fuld forplejning">Fuld forplejning</option>
+                    </select>
+                </div>
 
-				<div class="form-group">
-					<label for="accommodation">Overnatning</label>
-					<input id="accomodation" @bind="selectedDayplan.Accommodation" type="text" class="custom-input" />
-				</div>
+                <div class="form-group">
+                    <label for="accommodation">Overnatning</label>
+                    <input id="accomodation" @bind="selectedDayplan.Accommodation" type="text" class="custom-input" />
+                </div>
 
-				<button type="submit" class="save-button">Gem</button>
-			</EditForm>
-		</div>
-	</div>
+                <button type="submit" class="save-button">Gem</button>
+            </EditForm>
+        </div>
+    </div>
 }
 
 
 @code {
-	[Parameter]
-	public Guid bookingId { get; set; }
+    [Parameter]
+    public Guid bookingId { get; set; }
 
-	private BookingDTO booking { get; set; }
-	private CustomerDTO customer { get; set; }
-	private List<TripEventDTO> tripEvents { get; set; }
-	private List<DayPlanDTO> dayPlans { get; set; } 
-	private TripDTO trip { get; set; } = new TripDTO();
-	private TripEventDTO TripEvent { get; set; }
+    private BookingDTO booking { get; set; }
+    private CustomerDTO customer { get; set; }
+    private List<TripEventDTO> tripEvents { get; set; }
+    private List<DayPlanDTO> dayPlans { get; set; } 
+    private TripDTO trip { get; set; } = new TripDTO();
+    private TripEventDTO TripEvent { get; set; }
 
-	private DayPlanDTO selectedDayplan;
-	private bool showEditModal = false;
+    private const string V = "rejseplan.pdf";
+    private DayPlanDTO selectedDayplan;
+    private bool showEditModal = false;
 
-	private List<TripEventDTO> tripEventsInTrip{ get; set; } = new List<TripEventDTO>();
-	private List<TripEventDTO> tripEventTemplate { get; set; } = new List<TripEventDTO>();
-	private List<DayPlanDTO> DayPlanInTrip { get; set; } = new List<DayPlanDTO>();
+    private List<TripEventDTO> tripEventsInTrip{ get; set; } = new List<TripEventDTO>();
+    private List<TripEventDTO> tripEventTemplate { get; set; } = new List<TripEventDTO>();
+    private List<DayPlanDTO> DayPlanInTrip { get; set; } = new List<DayPlanDTO>();
 
-	private int selectedTripEventId;
+    private int selectedTripEventId;
 
-	private bool AddTripEventModal { get; set; } = false;
-	private bool AddTripModal { get; set; } = false;
+    private bool AddTripEventModal { get; set; } = false;
+    private bool AddTripModal { get; set; } = false;
 
-	private HashSet<int> expandedTripEventIds = new HashSet<int>();
+    private HashSet<int> expandedTripEventIds = new HashSet<int>();
 
 
-	protected override async Task OnInitializedAsync()
-	{
-		booking = await bookingService.GetBookingByIdAsync(bookingId);
-		customer = await customerService.GetCustomerByIdAsync(booking.CustomerId);
+    protected override async Task OnInitializedAsync()
+    {
+        booking = await bookingService.GetBookingByIdAsync(bookingId);
+        customer = await customerService.GetCustomerByIdAsync(booking.CustomerId);
 
-		tripEvents = await tripEventService.GetAllTripEventsAsync();
-		tripEventTemplate = tripEvents.Where(x => x.IsTemplate == true).ToList();
+        tripEvents = await tripEventService.GetAllTripEventsAsync();
+        tripEventTemplate = tripEvents.Where(x => x.IsTemplate == true).ToList();
 
-		if (booking.TripId != null)
-		{
-			tripEventsInTrip = tripEvents.Where(x => x.TripId == booking.TripId).ToList();			
-		}
+        if (booking.TripId != null)
+        {
+            tripEventsInTrip = tripEvents.Where(x => x.TripId == booking.TripId).ToList();			
+        }
 
-		dayPlans = await dayPlanService.GetAll();
-		DayPlanInTrip = dayPlans.Where(x => x.TripEventId == booking.TripId).ToList();
-	}
+        dayPlans = await dayPlanService.GetAll();
+        DayPlanInTrip = dayPlans.Where(x => x.TripEventId == booking.TripId).ToList();
+    }
 
-	private void ShowAddTripEventModal()
-	{
-		AddTripEventModal = !AddTripEventModal;
-	}
+    private void ShowAddTripEventModal()
+    {
+        AddTripEventModal = !AddTripEventModal;
+    }
 
-	private async Task AddTripEventToBooking(Guid bookingId, int tripEventId)
-	{
-		// Hent template TripEvent
-		var templateTE = await tripEventService.GetTripEventByIdAsync(tripEventId);
+    private async Task AddTripEventToBooking(Guid bookingId, int tripEventId)
+    {
+        // Hent template TripEvent
+        var templateTE = await tripEventService.GetTripEventByIdAsync(tripEventId);
 
-		// Opret nyt TripEvent baseret på template
-		var newTripEvent = new TripEventDTO
+        // Opret nyt TripEvent baseret på template
+        var newTripEvent = new TripEventDTO
 			{
 				Title = templateTE.Title,
 				Description = templateTE.Description,
@@ -261,28 +271,28 @@ else
 				TripId = booking.TripId
 			};
 
-		// Gem nyt TripEvent
-		await tripEventService.AddTripEventAsync(newTripEvent);
+        // Gem nyt TripEvent
+        await tripEventService.AddTripEventAsync(newTripEvent);
 
-		// Hent det nyligt oprettede TripEvent fra databasen (med korrekt ID)
-		var allTripEvents = await tripEventService.GetAllTripEventsAsync();
-		var createdTripEvent = allTripEvents
-			.Where(x => x.TripId == booking.TripId)
-			.OrderByDescending(x => x.Id)
-			.FirstOrDefault();
+        // Hent det nyligt oprettede TripEvent fra databasen (med korrekt ID)
+        var allTripEvents = await tripEventService.GetAllTripEventsAsync();
+        var createdTripEvent = allTripEvents
+            .Where(x => x.TripId == booking.TripId)
+            .OrderByDescending(x => x.Id)
+            .FirstOrDefault();
 
-		if (createdTripEvent == null)
-			return;
+        if (createdTripEvent == null)
+            return;
 
-		// Hent DayPlans fra template TripEvent
-		var templateDayPlans = (await dayPlanService.GetAll())
-			.Where(x => x.TripEventId == tripEventId)
-			.ToList();
+        // Hent DayPlans fra template TripEvent
+        var templateDayPlans = (await dayPlanService.GetAll())
+            .Where(x => x.TripEventId == tripEventId)
+            .ToList();
 
-		// Kopiér og tilføj DayPlans til det nye TripEvent
-		foreach (var dayPlan in templateDayPlans)
-		{
-			var newDayPlan = new DayPlanDTO
+        // Kopiér og tilføj DayPlans til det nye TripEvent
+        foreach (var dayPlan in templateDayPlans)
+        {
+            var newDayPlan = new DayPlanDTO
 				{
 					TripEventId = createdTripEvent.Id,
 					Title = dayPlan.Title,
@@ -291,183 +301,189 @@ else
 					Meals = dayPlan.Meals
 				};
 
-			await dayPlanService.AddDayPlanAsync(newDayPlan);
-		}
+            await dayPlanService.AddDayPlanAsync(newDayPlan);
+        }
 
-		// 💡 HENT TRIPEVENTS + DAYPLANS FRA DATABASEN IGEN
-		tripEvents = await tripEventService.GetAllTripEventsAsync();
-		tripEventsInTrip = tripEvents
-			.Where(x => x.TripId == booking.TripId)
-			.OrderBy(x => x.Priority)
-			.ToList();
+        // 💡 HENT TRIPEVENTS + DAYPLANS FRA DATABASEN IGEN
+        tripEvents = await tripEventService.GetAllTripEventsAsync();
+        tripEventsInTrip = tripEvents
+            .Where(x => x.TripId == booking.TripId)
+            .OrderBy(x => x.Priority)
+            .ToList();
 
-		// DayPlans (igen) til TripEvent (til visning)
-		var allDayPlans = await dayPlanService.GetAll();
+        // DayPlans (igen) til TripEvent (til visning)
+        var allDayPlans = await dayPlanService.GetAll();
 
-		foreach (var te in tripEventsInTrip)
-		{
-			te.DayPlans = allDayPlans.Where(dp => dp.TripEventId == te.Id).ToList();
-		}
+        foreach (var te in tripEventsInTrip)
+        {
+            te.DayPlans = allDayPlans.Where(dp => dp.TripEventId == te.Id).ToList();
+        }
 
-		ShowAddTripEventModal(); 
-		StateHasChanged();       
-	}
-
-
-
-	private void ShowAddTripModal()
-	{
-		AddTripModal = !AddTripModal;
-	}
-
-	private void AddGroupTrip()
-	{
-		trip.TripType = "Group";
-		AddTripToBooking();
-	}
-
-	private void AddPrivateTrip()
-	{
-		trip.TripType = "Private";
-		AddTripToBooking();
-	}
-
-	private async Task AddTripToBooking()
-	{
-		try
-		{
-			await tripService.AddTripAsync(trip);
-
-			var maxtrip = await tripService.GetAllTripsAsync();
-			var xtrip = maxtrip.OrderByDescending(t => t.Id).FirstOrDefault();
-
-			booking.TripId = xtrip.Id;
-
-			await bookingService.UpdateBookingAsync(booking);
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine($"Error adding trip to booking: {ex.Message}");
-		}
-		finally
-		{
-			ShowAddTripModal();
-			StateHasChanged();
-		}
-	}
-
-	private async Task MoveUpOnList(TripEventDTO tripEvent)
-	{
-		var index = tripEventsInTrip.IndexOf(tripEvent);
-		if (index > 0)
-		{
-			var aboveTripEvent = tripEventsInTrip[index - 1];
-
-			// Swap i listen
-			tripEventsInTrip[index - 1] = tripEvent;
-			tripEventsInTrip[index] = aboveTripEvent;
-
-			// Swap prioriteter
-			int? tempPriority = tripEvent.Priority;
-			tripEvent.Priority = aboveTripEvent.Priority;
-			aboveTripEvent.Priority = tempPriority;
-
-			await tripEventService.UpdateTripEventAsync(tripEvent);
-			await tripEventService.UpdateTripEventAsync(aboveTripEvent);
-
-			StateHasChanged();
-		}
-	}
+        ShowAddTripEventModal(); 
+        StateHasChanged();       
+    }
 
 
-	private async Task MoveDownOnList(TripEventDTO tripEvent)
-	{
-		var index = tripEventsInTrip.IndexOf(tripEvent);
-		if (index < tripEventsInTrip.Count - 1)
-		{
-			var belowTripEvent = tripEventsInTrip[index + 1];
 
-			// Swap i listen
-			tripEventsInTrip[index + 1] = tripEvent;
-			tripEventsInTrip[index] = belowTripEvent;
+    private void ShowAddTripModal()
+    {
+        AddTripModal = !AddTripModal;
+    }
 
-			// Swap prioriteter
-			int? tempPriority = tripEvent.Priority;
-			tripEvent.Priority = belowTripEvent.Priority;
-			belowTripEvent.Priority = tempPriority;
+    private void AddGroupTrip()
+    {
+        trip.TripType = "Group";
+        AddTripToBooking();
+    }
 
-			await tripEventService.UpdateTripEventAsync(tripEvent);
-			await tripEventService.UpdateTripEventAsync(belowTripEvent);
+    private void AddPrivateTrip()
+    {
+        trip.TripType = "Private";
+        AddTripToBooking();
+    }
 
-			StateHasChanged();
-		}
-	}
+    private async Task AddTripToBooking()
+    {
+        try
+        {
+            await tripService.AddTripAsync(trip);
 
-	private void ToggleCollapse(int tripEventId)
-	{
-		if (expandedTripEventIds.Contains(tripEventId))
-		{
-			expandedTripEventIds.Remove(tripEventId);
-		}
-		else
-		{
-			expandedTripEventIds.Add(tripEventId);
-		}
-	}
+            var maxtrip = await tripService.GetAllTripsAsync();
+            var xtrip = maxtrip.OrderByDescending(t => t.Id).FirstOrDefault();
 
-	private decimal CalculateSum()
-	{
-		decimal sum = 0;
-		foreach (var tripEvent in tripEventsInTrip)
-		{
-			if (tripEvent.Price != null)
-			{
-				sum = tripEventsInTrip.Sum(te => te.Price) ?? 0;
-			}
-			else
-			{
-				return 0;
-			}
-		}
-		return sum;
-	}
+            booking.TripId = xtrip.Id;
 
-	// En metode til at finde summen af antal dage i en booking via dayplans
-	private int CalculateDays()
-	{
-		int days = 0;
-		foreach (var tripEvent in tripEventsInTrip)
-		{
-			if (tripEvent.DayPlans != null)
-			{
-				days += tripEvent.DayPlans.Count;
-			}
-		}
-		return days;
-	}
+            await bookingService.UpdateBookingAsync(booking);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error adding trip to booking: {ex.Message}");
+        }
+        finally
+        {
+            ShowAddTripModal();
+            StateHasChanged();
+        }
+    }
 
-	// en metode til at slette et tripevent fra trip
-	private async Task DeleteTripEvent(TripEventDTO tripEvent)
-	{
-		await tripEventService.DeleteTripEventAsync(tripEvent.Id);
-		tripEventsInTrip.Remove(tripEvent);
-		StateHasChanged();
-	}
+    private async Task MoveUpOnList(TripEventDTO tripEvent)
+    {
+        var index = tripEventsInTrip.IndexOf(tripEvent);
+        if (index > 0)
+        {
+            var aboveTripEvent = tripEventsInTrip[index - 1];
 
-	private void OpenEditModal(DayPlanDTO dayPlan)
-	{
-		selectedDayplan = dayPlan;
-		showEditModal = true;
-	}
+            // Swap i listen
+            tripEventsInTrip[index - 1] = tripEvent;
+            tripEventsInTrip[index] = aboveTripEvent;
 
-	private void CloseEditModal()
-	{
-		showEditModal = false;
-	}
+            // Swap prioriteter
+            int? tempPriority = tripEvent.Priority;
+            tripEvent.Priority = aboveTripEvent.Priority;
+            aboveTripEvent.Priority = tempPriority;
 
-	private async Task HandleValidSubmit()
-	{
-		await dayPlanService.UpdateDayPlanAsync(selectedDayplan);
-		showEditModal = false;
-	}
+            await tripEventService.UpdateTripEventAsync(tripEvent);
+            await tripEventService.UpdateTripEventAsync(aboveTripEvent);
+
+            StateHasChanged();
+        }
+    }
+
+
+    private async Task MoveDownOnList(TripEventDTO tripEvent)
+    {
+        var index = tripEventsInTrip.IndexOf(tripEvent);
+        if (index < tripEventsInTrip.Count - 1)
+        {
+            var belowTripEvent = tripEventsInTrip[index + 1];
+
+            // Swap i listen
+            tripEventsInTrip[index + 1] = tripEvent;
+            tripEventsInTrip[index] = belowTripEvent;
+
+            // Swap prioriteter
+            int? tempPriority = tripEvent.Priority;
+            tripEvent.Priority = belowTripEvent.Priority;
+            belowTripEvent.Priority = tempPriority;
+
+            await tripEventService.UpdateTripEventAsync(tripEvent);
+            await tripEventService.UpdateTripEventAsync(belowTripEvent);
+
+            StateHasChanged();
+        }
+    }
+
+    private void ToggleCollapse(int tripEventId)
+    {
+        if (expandedTripEventIds.Contains(tripEventId))
+        {
+            expandedTripEventIds.Remove(tripEventId);
+        }
+        else
+        {
+            expandedTripEventIds.Add(tripEventId);
+        }
+    }
+
+    private decimal CalculateSum()
+    {
+        decimal sum = 0;
+        foreach (var tripEvent in tripEventsInTrip)
+        {
+            if (tripEvent.Price != null)
+            {
+                sum = tripEventsInTrip.Sum(te => te.Price) ?? 0;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        return sum;
+    }
+
+    // En metode til at finde summen af antal dage i en booking via dayplans
+    private int CalculateDays()
+    {
+        int days = 0;
+        foreach (var tripEvent in tripEventsInTrip)
+        {
+            if (tripEvent.DayPlans != null)
+            {
+                days += tripEvent.DayPlans.Count;
+            }
+        }
+        return days;
+    }
+
+    // en metode til at slette et tripevent fra trip
+    private async Task DeleteTripEvent(TripEventDTO tripEvent)
+    {
+        await tripEventService.DeleteTripEventAsync(tripEvent.Id);
+        tripEventsInTrip.Remove(tripEvent);
+        StateHasChanged();
+    }
+
+    private void OpenEditModal(DayPlanDTO dayPlan)
+    {
+        selectedDayplan = dayPlan;
+        showEditModal = true;
+    }
+
+    private void CloseEditModal()
+    {
+        showEditModal = false;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await dayPlanService.UpdateDayPlanAsync(selectedDayplan);
+        showEditModal = false;
+    }
+
+    private async Task MakePdf()
+    {
+        await pdfService.DownloadTripPdfAsync(customer, tripEventsInTrip, DayPlanInTrip);
+    }
+
 }
