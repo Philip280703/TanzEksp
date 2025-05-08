@@ -1,4 +1,5 @@
 ﻿@inject BookingService bookingService
+@inject CustomerService customerService
 @inject NavigationManager navigationManager
 @attribute [Authorize(Roles = "Admin, User")]
 @using Microsoft.AspNetCore.Authorization
@@ -71,14 +72,19 @@
             <EditForm Model="@currentBooking" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
+
                 <div>
-                    <label for="customerId">Kunde ID:</label>
-                    <input type="text" id="customerId" @bind="currentBooking.CustomerId" required />
+                    <label for="customerId">Kunde:</label>
+                    <InputSelect id="customerId" class="form-control" @bind-Value="currentBooking.CustomerId">
+                        <option value="">-- Vælg kunde --</option>
+                        @foreach (var customer in customerList)
+                        {
+                            <option value="@customer.Id">@customer.FirstName @customer.LastName</option>
+                        }
+                    </InputSelect>
                 </div>
-                @*  <div>
-                    <label for="tripId">Rejse ID:</label>
-                    <input type="number" id="tripId" @bind="currentBooking.TripId"  />
-                </div> *@
+
+                
                 <div>
                     <label for="adultCount">Antal Voksne:</label>
                     <input type="number" id="adultCount" @bind="currentBooking.AdultCount" required />
@@ -115,6 +121,7 @@
     private List<BookingDTO> bookings;
     private string errorMessage;
 
+	private List<CustomerDTO> customerList = new List<CustomerDTO>();
     private BookingDTO currentBooking = new BookingDTO();
     private bool showBookingModal = false;
     private string modalTitle = "Ny Booking";
@@ -139,6 +146,7 @@
         {
             errorMessage = "En ukendt fejl opstod: " + ex.Message;
         }
+		customerList = await customerService.GetAllCustomersAsync();
     }
 
 
