@@ -404,15 +404,120 @@ body {
         padding: 8px;
     }
 
-.dayplan-subtable {
+.dayplan-table {
     width: 100%;
     background-color: #f9f9f9;
     margin-top: 5px;
     border: 1px solid #ccc;
 }
 
-    .dayplan-subtable th, .dayplan-subtable td {
+    .dayplan-table th, .dayplan-table td {
         border: 1px solid #ccc;
         padding: 6px;
         font-size: 0.9em;
     }
+
+
+.rejse-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+    .rejse-table th, .rejse-table td {
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        text-align: left;
+        vertical-align: top;
+    }
+
+        .rejse-table th:nth-child(1),
+        .rejse-table td:nth-child(1) {
+            width: 30%;
+        }
+
+        .rejse-table th:nth-child(2),
+        .rejse-table td:nth-child(2) {
+            width: 50%;
+        }
+
+        .rejse-table th:nth-child(3),
+        .rejse-table td:nth-child(3) {
+            width: 20%;
+        }
+
+.dayplan-wrapper {
+    margin-top: 0.5rem;
+}
+
+.info-table {
+    width: 100%;
+    margin: 2rem auto;
+    border-collapse: collapse;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', sans-serif;
+    text-align: left;
+}
+
+    .info-table thead {
+        background-color: #f0f0f0;
+    }
+
+    .info-table th {
+        padding: 1rem;
+        font-size: 1.2rem;
+        color: #333;
+        border-bottom: 2px solid #ccc;
+        text-align: center;
+    }
+
+    .info-table td {
+        width: 50%;
+        padding: 1.2rem;
+        background-color: #fff;
+        vertical-align: top;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+        .info-table td:first-child {
+            border-right: 2px solid #ccc;
+        }
+
+    .info-table h4 {
+        margin: 0 0 0.5rem;
+        color: #0077cc;
+    }
+
+    .info-table p {
+        margin: 0.3rem 0;
+        color: #444;
+    }
+
+@media (max-width: 768px) {
+    .info-table {
+        width: 95%;
+    }
+
+        .info-table, .info-table thead, .info-table tbody, .info-table th, .info-table td, .info-table tr {
+            display: block;
+            width: 100%;
+        }
+
+            .info-table tr {
+                margin-bottom: 1.5rem;
+            }
+
+            .info-table td {
+                border: none;
+                background: #f9f9f9;
+            }
+
+                .info-table td:first-child {
+                    border-right: none;
+                }
+
+            .info-table th {
+                display: none;
+            }
+}
+

@@ -17,10 +17,33 @@
 }
 else
 {
-	<h4>Kunde info: @customer.FirstName @customer.LastName</h4>
-	<h4>Booking ID: @bookingId</h4>
-	<h5>Afrejsedato: @booking.DepartureDate?.ToShortDateString()</h5>
-	<h5>Trip ID : @(booking.TripId?.ToString() ?? "Ingen")</h5>
+	<table class="info-table">
+		<thead>
+			<tr>
+				<th>Kunde information</th>
+				<th>Booking Information</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<h4>@customer.FirstName @customer.LastName</h4>
+					<p>@customer.Email</p>
+					<p>@customer.PhoneNumber</p>
+				</td>
+				<td>
+					<h4>Booking ID: @booking.Id</h4>
+					<p>Antal voksne: @booking.AdultCount</p>
+					<p>Antal børn: @booking.ChildCount</p>
+					<p>Afrejsedato: @booking.DepartureDate?.ToShortDateString()</p>
+					@if (booking.TripId != null)
+					{
+						<button class="btn-add" @onclick="ShowAddTripEventModal">Tilføj TripEvent</button>
+					}
+				</td>
+			</tr>
+		</tbody>
+	</table>
 
 	@if (booking.TripId == null)
 	{
@@ -28,7 +51,6 @@ else
 	}
 	else
 	{
-		<button class="btn-add" @onclick="ShowAddTripEventModal">Tilføj TripEvent</button>
 
 		<div class="table">
 			<table class="rejse-table">
@@ -44,34 +66,38 @@ else
 					{
 						<tr class="trip-event-row">
 							<td>@tripEvent.Title</td>
-							<td>@tripEvent.Price</td>
+							<td>@tripEvent.Price kr</td>
 							<td>
 								<button class="btn btn-primary" @onclick="() => MoveUpOnList(tripEvent)">Prioter op</button>
 								<button class="btn btn-primary" @onclick="() => MoveDownOnList(tripEvent)">Prioter ned</button>
+								<button class="btn btn-primary" @onclick="() => ToggleCollapse(tripEvent.Id)">
+									@(expandedTripEventIds.Contains(tripEvent.Id) ? "Skjul" : "Vis")
+								</button>
+
 							</td>
 						</tr>
 
-						@if (tripEvent.DayPlans != null && tripEvent.DayPlans.Any())
+						@if (tripEvent.DayPlans != null && tripEvent.DayPlans.Any() && expandedTripEventIds.Contains(tripEvent.Id))
 						{
 							<tr>
-								<td colspan="2">
-									<table class="dayplan-subtable">
-										<thead>
-											<tr>
-												<th>Dagsnummer</th>
-												<th>Forplejning</th>
-											</tr>
-										</thead>
-										<tbody>
-											@foreach (var dayplan in tripEvent.DayPlans)
-											{
-												<tr class="dayplan-row">
-													<td>@dayplan.Title</td>
-													<td>@dayplan.Meals</td>
+								<td colspan="3">
+									<div class="dayplan-wrapper">
+										<table class="dayplan-subtable">
+											<thead>
+												<tr>
+													<th>Dagsnummer</th>
+													<th>Beskrivelse</th>
+													<th>Forplejning</th>
 												</tr>
-											}
-										</tbody>
-									</table>
+											</thead>
+											<tbody>
+												@foreach (var dayplan in tripEvent.DayPlans)
+												{
+													<TanzEksp.Client.Pages.Trip.ChildComponent.RenderDayplan dayplan="@dayplan" />
+												}
+											</tbody>
+										</table>
+									</div>
 								</td>
 							</tr>
 						}
@@ -79,8 +105,9 @@ else
 				</tbody>
 			</table>
 		</div>
-
 	}
+<h4>Sum: @CalculateSum()</h4>
+<h4>Antal dage: @CalculateDays()</h4>
 }
 
 
@@ -144,6 +171,9 @@ else
 
 	private bool AddTripEventModal { get; set; } = false;
 	private bool AddTripModal { get; set; } = false;
+
+	private HashSet<int> expandedTripEventIds = new HashSet<int>();
+
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -325,5 +355,47 @@ else
 		}
 	}
 
+	private void ToggleCollapse(int tripEventId)
+	{
+		if (expandedTripEventIds.Contains(tripEventId))
+		{
+			expandedTripEventIds.Remove(tripEventId);
+		}
+		else
+		{
+			expandedTripEventIds.Add(tripEventId);
+		}
+	}
+
+	private decimal CalculateSum()
+	{
+		decimal sum = 0;
+		foreach (var tripEvent in tripEventsInTrip)
+		{
+			if (tripEvent.Price != null)
+			{
+				sum = tripEventsInTrip.Sum(te => te.Price) ?? 0;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		return sum;
+	}
+
+	// En metode til at finde summen af antal dage i en booking via dayplans
+	private int CalculateDays()
+	{
+		int days = 0;
+		foreach (var tripEvent in tripEventsInTrip)
+		{
+			if (tripEvent.DayPlans != null)
+			{
+				days += tripEvent.DayPlans.Count;
+			}
+		}
+		return days;
+	}
 
 }

@@ -1,0 +1,12 @@
+﻿@using TanzEksp.Shared.DTO
+
+<tr class="dayplan-row">
+	<td>@dayplan.Title</td>
+	<td>@dayplan.Description</td>
+	<td>@dayplan.Meals</td>
+</tr>
+
+@code {
+	[Parameter]
+	public DayPlanDTO dayplan { get; set; }
+}
