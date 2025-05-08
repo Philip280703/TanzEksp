@@ -58,7 +58,8 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
 			{
 				if (existingTripEvent != null)
 				{
-					existingTripEvent.Title = tripEvent.Title;
+					existingTripEvent.Priority = tripEvent.Priority;
+                    existingTripEvent.Title = tripEvent.Title;
 					existingTripEvent.Description = tripEvent.Description;
 					existingTripEvent.Days = tripEvent.Days;
 					existingTripEvent.Price = tripEvent.Price;

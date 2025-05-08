@@ -29,6 +29,8 @@ namespace TanzEksp.Shared.DTO
 
 		public bool IsTemplate { get; set; } = false;
 
+		public int ?Priority { get; set; } 
+
         public List<DayPlanDTO>? DayPlans { get; set; }
     }
 }

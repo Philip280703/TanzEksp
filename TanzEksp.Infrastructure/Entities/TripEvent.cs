@@ -30,6 +30,8 @@ namespace TanzEksp.Domain.Entities
 
         public int ?TripId { get; set; }
 
+        public int ?Priority { get; set; } 
+
 
         public List<DayPlan>? DayPlans { get; set; }
     }

@@ -36,6 +36,7 @@ else
 					<tr>
 						<th>Titel</th>
 						<th>Pris</th>
+						<th>Prioritet</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -44,6 +45,10 @@ else
 						<tr class="trip-event-row">
 							<td>@tripEvent.Title</td>
 							<td>@tripEvent.Price</td>
+							<td>
+								<button class="btn btn-primary" @onclick="() => MoveUpOnList(tripEvent)">Prioter op</button>
+								<button class="btn btn-primary" @onclick="() => MoveDownOnList(tripEvent)">Prioter ned</button>
+							</td>
 						</tr>
 
 						@if (tripEvent.DayPlans != null && tripEvent.DayPlans.Any())
@@ -215,6 +220,7 @@ else
 		tripEvents = await tripEventService.GetAllTripEventsAsync();
 		tripEventsInTrip = tripEvents
 			.Where(x => x.TripId == booking.TripId)
+			.OrderBy(x => x.Priority)
 			.ToList();
 
 		// DayPlans (igen) til TripEvent (til visning)
@@ -271,5 +277,53 @@ else
 			StateHasChanged();
 		}
 	}
+
+	private async Task MoveUpOnList(TripEventDTO tripEvent)
+	{
+		var index = tripEventsInTrip.IndexOf(tripEvent);
+		if (index > 0)
+		{
+			var aboveTripEvent = tripEventsInTrip[index - 1];
+
+			// Swap i listen
+			tripEventsInTrip[index - 1] = tripEvent;
+			tripEventsInTrip[index] = aboveTripEvent;
+
+			// Swap prioriteter
+			int? tempPriority = tripEvent.Priority;
+			tripEvent.Priority = aboveTripEvent.Priority;
+			aboveTripEvent.Priority = tempPriority;
+
+			await tripEventService.UpdateTripEventAsync(tripEvent);
+			await tripEventService.UpdateTripEventAsync(aboveTripEvent);
+
+			StateHasChanged();
+		}
+	}
+
+
+	private async Task MoveDownOnList(TripEventDTO tripEvent)
+	{
+		var index = tripEventsInTrip.IndexOf(tripEvent);
+		if (index < tripEventsInTrip.Count - 1)
+		{
+			var belowTripEvent = tripEventsInTrip[index + 1];
+
+			// Swap i listen
+			tripEventsInTrip[index + 1] = tripEvent;
+			tripEventsInTrip[index] = belowTripEvent;
+
+			// Swap prioriteter
+			int? tempPriority = tripEvent.Priority;
+			tripEvent.Priority = belowTripEvent.Priority;
+			belowTripEvent.Priority = tempPriority;
+
+			await tripEventService.UpdateTripEventAsync(tripEvent);
+			await tripEventService.UpdateTripEventAsync(belowTripEvent);
+
+			StateHasChanged();
+		}
+	}
+
 
 }
