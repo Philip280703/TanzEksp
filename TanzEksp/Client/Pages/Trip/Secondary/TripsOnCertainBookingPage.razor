@@ -68,8 +68,8 @@ else
 							<td>@tripEvent.Title</td>
 							<td>@tripEvent.Price kr</td>
 							<td>
-								<button class="btn btn-primary" @onclick="() => MoveUpOnList(tripEvent)">Prioter op</button>
-								<button class="btn btn-primary" @onclick="() => MoveDownOnList(tripEvent)">Prioter ned</button>
+								<button class="btn btn-primary" @onclick="() => MoveUpOnList(tripEvent)">↑</button>
+								<button class="btn btn-primary" @onclick="() => MoveDownOnList(tripEvent)">↓</button>
 								<button class="btn btn-primary" @onclick="() => ToggleCollapse(tripEvent.Id)">
 									@(expandedTripEventIds.Contains(tripEvent.Id) ? "Skjul" : "Vis")
 								</button>
