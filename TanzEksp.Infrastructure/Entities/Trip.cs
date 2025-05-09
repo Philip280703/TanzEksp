@@ -7,18 +7,12 @@ using System.Threading.Tasks;
 
 namespace TanzEksp.Domain.Entities
 {
-    public enum TripType
-    {
-        Group,
-        Private
-    }
+    
     public class Trip
     {
         public int Id { get; set; }
 
-        public TripType TripType { get; set; }
-
-        public bool IsTemplate { get; set; } = false;
+        public string TripType { get; set; }
 
         public List<TripEvent>? Events { get; set; }
     }

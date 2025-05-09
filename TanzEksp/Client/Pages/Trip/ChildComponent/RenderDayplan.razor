@@ -1,0 +1,21 @@
+﻿@using TanzEksp.Shared.DTO
+
+<tr class="dayplan-row">
+	<td>@dayplan.Title</td>
+	<td>@dayplan.Description</td>
+	<td>@dayplan.Meals</td>
+	<td>@dayplan.Accommodation</td>
+	<td>
+		<button class="btn btn-primary" @onclick="() => OnEditRequested.InvokeAsync(dayplan)">Rediger</button>
+	</td>
+</tr>
+
+
+@code {
+	[Parameter]
+	public DayPlanDTO dayplan { get; set; }
+
+	[Parameter]
+	public EventCallback<DayPlanDTO> OnEditRequested { get; set; }
+	public bool ShowModal { get; set; } = false;
+}

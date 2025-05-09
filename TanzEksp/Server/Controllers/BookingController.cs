@@ -23,6 +23,7 @@ namespace TanzEksp.Server.Controllers
         {
             return new Booking
             {
+                Id = bookingDTO.Id,
                 CustomerId = bookingDTO.CustomerId,
                 AdultCount = bookingDTO.AdultCount,
                 ChildCount = bookingDTO.ChildCount,
@@ -73,6 +74,23 @@ namespace TanzEksp.Server.Controllers
                 return NotFound();
             }
             await _bookingUseCase.Delete(bookingid);
+            return NoContent();
+        }
+
+        [HttpPut("{bookingId}")]
+        public async Task<IActionResult> Update(Guid bookingId, [FromBody] BookingDTO booking)
+        {
+            if (booking == null || bookingId != booking.Id)
+            {
+                return BadRequest();
+            }
+            var existingBooking = await _bookingUseCase.GetBookingById(bookingId);
+            if (existingBooking == null)
+            {
+                return NotFound();
+            }
+            var _booking = convert(booking);
+            await _bookingUseCase.Update(_booking);
             return NoContent();
         }
     }

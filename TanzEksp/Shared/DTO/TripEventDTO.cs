@@ -25,6 +25,12 @@ namespace TanzEksp.Shared.DTO
 		[Range(0, 100000, ErrorMessage = "Standart pris skal være mellem 0 og 100000")]
 		public decimal? Price { get; set; }
 
+		public int ?TripId { get; set; }
+
+		public bool IsTemplate { get; set; } = false;
+
+		public int ?Priority { get; set; } 
+
         public List<DayPlanDTO>? DayPlans { get; set; }
     }
 }
