@@ -1,9 +1,9 @@
-﻿@inject CustomerService customerservice
+﻿@inject ICustomerService customerservice
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "Admin, User")]
 @using Microsoft.AspNetCore.Authorization
 @using TanzEksp.Shared.DTO
-@using TanzEksp.Client.Services
+@using TanzEksp.Client.Services.Interfaces
 
 @page "/customers"
 

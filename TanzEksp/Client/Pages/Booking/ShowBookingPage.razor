@@ -1,10 +1,10 @@
-﻿@inject BookingService bookingService
-@inject CustomerService customerService
+﻿@inject IBookingService bookingService
+@inject ICustomerService customerService
 @inject NavigationManager navigationManager
 @attribute [Authorize(Roles = "Admin, User")]
 @using Microsoft.AspNetCore.Authorization
 @using TanzEksp.Shared.DTO
-@using TanzEksp.Client.Services
+@using TanzEksp.Client.Services.Interfaces
 
 @page "/bookings"
 
