@@ -117,7 +117,9 @@ else
             </table>
         </div>
     }
-    <h4>Sum: @CalculateSum()</h4>
+    
+    <h4>Pris pr. person: @CalculateSum().ToString("N0", System.Globalization.CultureInfo.InvariantCulture).Replace(",", ".") kr.</h4>
+    <h4>Samlet pris: @CalculateSumTimesAdults().ToString("N0", System.Globalization.CultureInfo.InvariantCulture).Replace(",", ".") kr.</h4>
     <h4>Antal dage: @CalculateDays()</h4>
     <button class="btn-add" @onclick="MakePdf">Lav PDF</button>
 
@@ -443,6 +445,23 @@ else
         }
         return sum;
     }
+
+	private decimal CalculateSumTimesAdults()
+	{
+		decimal sum = 0;
+		foreach (var tripEvent in tripEventsInTrip)
+		{
+			if (tripEvent.Price != null)
+			{
+				sum = tripEventsInTrip.Sum(te => te.Price) ?? 0;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		return sum * booking.AdultCount;
+	}
 
     // En metode til at finde summen af antal dage i en booking via dayplans
     private int CalculateDays()

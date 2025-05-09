@@ -20,6 +20,7 @@ builder.Services.AddClientServices(); // Register IOC service her
 builder.Services.AddBlazorDownloadFile();
 
 
+
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 

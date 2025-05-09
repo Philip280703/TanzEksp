@@ -10,6 +10,7 @@ using System.Text;
 using TanzEksp.Application.Interfaces;
 using TanzEksp.Infrastructure.Persistence.Repositories;
 using TanzEksp.Application.UseCases;
+using System.Globalization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +22,6 @@ builder.Services.AddRazorPages();
 
 
 builder.Services.AddServerServices(); // Register IOC service her
-
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>
