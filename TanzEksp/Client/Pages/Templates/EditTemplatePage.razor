@@ -1,8 +1,8 @@
 ﻿@page "/EditTemplatePage/{id:int}"
 
-@using TanzEksp.Client.Services
+@using TanzEksp.Client.Services.Interfaces
 @using TanzEksp.Shared.DTO
-@inject TripEventService tripeventservice
+@inject ITripEventService tripeventservice
 @inject NavigationManager NavigationManager
 
 <div class="button-wrapper">

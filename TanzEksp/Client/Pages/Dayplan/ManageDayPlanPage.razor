@@ -1,10 +1,10 @@
 ﻿@page "/ManageDayPlanPage/{id:int}"
 
 @using Microsoft.AspNetCore.Authorization
-@using TanzEksp.Client.Services
+@using TanzEksp.Client.Services.Interfaces
 @using TanzEksp.Shared.DTO
-@inject TripEventService tripeventservice
-@inject DayPlanService dayPlanService
+@inject ITripEventService tripeventservice
+@inject IDayPlanService dayPlanService
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "Admin,User")]
 

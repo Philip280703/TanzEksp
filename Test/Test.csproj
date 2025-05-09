@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TanzEksp.Application\TanzEksp.Application.csproj" />
+    <ProjectReference Include="..\TanzEksp.Infrastructure\TanzEksp.Domain.csproj" />
+    <ProjectReference Include="..\TanzEksp.Persistence\TanzEksp.Infrastructure.csproj" />
+    <ProjectReference Include="..\TanzEksp\Client\TanzEksp.Client.csproj" />
+    <ProjectReference Include="..\TanzEksp\Server\TanzEksp.Server.csproj" />
+    <ProjectReference Include="..\TanzEksp\Shared\TanzEksp.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

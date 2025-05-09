@@ -1,14 +1,16 @@
-﻿@inject TripService tripService
-@inject BookingService bookingService
-@inject CustomerService customerService
-@inject TripEventService tripEventService
-@inject DayPlanService dayPlanService
+
+@inject ITripService tripService
+@inject IBookingService bookingService
+@inject ICustomerService customerService
+@inject ITripEventService tripEventService
+@inject IDayPlanService dayPlanService
 @inject IPdfService pdfService
+
 @attribute [Authorize(Roles = "Admin, User")]
 @using Microsoft.AspNetCore.Authorization
 @using TanzEksp.Client.Services.Interfaces
 @using TanzEksp.Shared.DTO
-@using TanzEksp.Client.Services
+@using TanzEksp.Client.Services.Interfaces
 @using Microsoft.AspNetCore.Components.Forms
 @using QuestPDF.Fluent;
 @using QuestPDF.Helpers;
