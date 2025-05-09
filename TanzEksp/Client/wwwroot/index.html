@@ -13,6 +13,17 @@
     <link href="manifest.json" rel="manifest" />
     <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
+
+    <script>
+        window.BlazorDownloadFile = (filename, contentType, byteBase64) => {
+            const data = new Uint8Array(byteBase64);
+            const blob = new Blob([data], { type: contentType });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        };
+    </script>
 </head>
 
 <body>
@@ -23,6 +34,8 @@
         </svg>
         <div class="loading-progress-text"></div>
     </div>
+    <script src="_content/BlazorDownloadFile/blazorDownloadFile.js"></script>
+
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
@@ -34,3 +47,7 @@
 </body>
 
 </html>
+
+
+
+
