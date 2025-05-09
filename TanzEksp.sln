@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Infrastructure", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TanzEksp.Application", "TanzEksp.Application\TanzEksp.Application.csproj", "{DFA5E5A7-B4AD-4FD3-B0C8-06E70249F11A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{EAF32ADD-9659-4F1C-BA80-2CFEEC56CF45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{DFA5E5A7-B4AD-4FD3-B0C8-06E70249F11A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFA5E5A7-B4AD-4FD3-B0C8-06E70249F11A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFA5E5A7-B4AD-4FD3-B0C8-06E70249F11A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAF32ADD-9659-4F1C-BA80-2CFEEC56CF45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAF32ADD-9659-4F1C-BA80-2CFEEC56CF45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAF32ADD-9659-4F1C-BA80-2CFEEC56CF45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAF32ADD-9659-4F1C-BA80-2CFEEC56CF45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
