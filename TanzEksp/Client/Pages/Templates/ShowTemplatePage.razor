@@ -1,8 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Authorization
-@using TanzEksp.Client.Services
+@using TanzEksp.Client.Services.Interfaces
 @using TanzEksp.Shared.DTO
-@inject TripEventService tripeventservice
-@inject DayPlanService dayPlan
+@inject ITripEventService tripeventservice
+@inject IDayPlanService dayPlan
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "Admin,User")]
 
