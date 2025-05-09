@@ -30,7 +30,7 @@
                 <thead>
                     <tr>
                         <th>BookingId</th>
-                        <th>KundeId</th>
+                        <th>Kunde</th>
                         <th>TripId</th>
                         <th>Antal Voksne</th>
                         <th>Antal Børn</th>
@@ -43,9 +43,11 @@
                 <tbody>
                     @foreach (var booking in bookings)
                     {
+                        
+						var customer = customerList.FirstOrDefault(c => c.Id == booking.CustomerId);
                         <tr>
                             <td @onclick="() => NavigateTo(booking.Id)">@booking.Id</td>
-                            <td @onclick="() => NavigateTo(booking.Id)">@booking.CustomerId</td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@customer.FirstName @customer.LastName </td>
                             <td @onclick="() => NavigateTo(booking.Id)">@booking.TripId</td>
                             <td @onclick="() => NavigateTo(booking.Id)">@booking.AdultCount</td>
                             <td @onclick="() => NavigateTo(booking.Id)">@booking.ChildCount</td>
@@ -84,7 +86,7 @@
                     </InputSelect>
                 </div>
 
-                
+
                 <div>
                     <label for="adultCount">Antal Voksne:</label>
                     <input type="number" id="adultCount" @bind="currentBooking.AdultCount" required />
@@ -120,6 +122,7 @@
 @code {
     private List<BookingDTO> bookings;
     private string errorMessage;
+    private CustomerDTO currentCustomer;
 
 	private List<CustomerDTO> customerList = new List<CustomerDTO>();
     private BookingDTO currentBooking = new BookingDTO();
