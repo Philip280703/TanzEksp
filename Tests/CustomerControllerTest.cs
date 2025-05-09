@@ -51,9 +51,9 @@ namespace Test
             var result = await controller.Add(newCustomer);
 
             // Assert
-            var createdResult = Assert.IsType<CreatedAtActionResult>(result);
-            Assert.Equal("GetById", createdResult.ActionName);
-            Assert.Equal(newCustomer.Id, ((Customer)createdResult.Value).Id);
+            var createdResult = Assert.IsType<CreatedAtActionResult>(result);        // Sikrer at resultated er af typen CreatedAtActionResult, som bruges til at returnere 201 statuskald
+            Assert.Equal("GetById", createdResult.ActionName);                      // Sikrer at actionname er "GetById" så klienten kan bruge dette navn til at hente kunden
+            Assert.Equal(newCustomer.Id, ((Customer)createdResult.Value).Id);      // Sikrer at den id der returneres er den samme som den id der blev sendt til controlleren
         }
     }
 }
