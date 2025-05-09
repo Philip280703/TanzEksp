@@ -303,13 +303,12 @@ body {
     margin-top: 20px; /* Space above the action buttons */
 }
 
-.trip-event-actions button {
+    .trip-event-actions button {
         font-size: 0.8rem; /* 50% smaller font size */
         padding: 6px 12px; /* Adjust padding to make the button smaller */
         border-radius: 6px; /* Keep the rounded corners consistent */
         font-weight: normal; /* Optionally, make the font weight lighter */
-
-}
+    }
 
 /* === Styling for Trip Event Title with Underline === */
 .trip-event-title {
@@ -355,6 +354,7 @@ body {
         height: 2px;
         background-color: #f16f21;
     }
+
 .button-wrapper {
     display: flex;
     gap: 1rem;
