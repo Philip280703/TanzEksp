@@ -38,7 +38,7 @@ namespace TanzEksp.Server.Helpers
                     row.RelativeItem().Column(col =>
                     {
                         col.Item().Text("Rejseplanen til dit livs oplevelse").FontSize(20).Bold().FontColor(Colors.Blue.Medium);
-                        col.Item().Text($"Ref. Nr: {DateTime.Now:yyyyMMddHHmm}").FontSize(10).FontColor(Colors.Grey.Darken2);
+                        col.Item().Text($"Ref. Nr: {DateTime.Now:ddMMyyyy}").FontSize(10).FontColor(Colors.Grey.Darken2);
                     });
 
                     row.ConstantItem(100).Height(60).Image(logoPath, ImageScaling.FitArea);
