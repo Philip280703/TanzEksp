@@ -11,5 +11,6 @@ namespace TanzEksp.Shared.DTO
         public CustomerDTO Customer { get; set; } = default!;
         public List<TripEventDTO> TripEvents { get; set; } = new();
         public List<DayPlanDTO> DayPlans { get; set; } = new();
+        public BookingDTO Booking { get; set; } = default!;
     }
 }
