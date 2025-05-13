@@ -12,7 +12,7 @@ namespace TanzEksp.Server.Controllers
         public IActionResult GeneratePdf([FromBody] PdfRequestDTO request)
         {
             QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
-            var pdfBytes = PdfHelper.GenerateTripPdf(request.Customer, request.TripEvents, request.DayPlans);
+            var pdfBytes = PdfHelper.GenerateTripPdf(request.Customer, request.TripEvents, request.DayPlans, request.Booking);
             return File(pdfBytes, "application/pdf", "rejseplan.pdf");
         }
     }

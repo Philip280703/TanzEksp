@@ -19,13 +19,14 @@ namespace TanzEksp.Client.Services
             _blazorDownloadFileService = blazorDownloadFileService;
         }
 
-        public async Task DownloadTripPdfAsync(CustomerDTO customer, List<TripEventDTO> events, List<DayPlanDTO> plans)
+        public async Task DownloadTripPdfAsync(CustomerDTO customer, List<TripEventDTO> events, List<DayPlanDTO> plans, BookingDTO booking)
         {
             var request = new
             {
                 Customer = customer,
                 TripEvents = events,
-                DayPlans = plans
+                DayPlans = plans,
+                Booking = booking
             };
 
 
