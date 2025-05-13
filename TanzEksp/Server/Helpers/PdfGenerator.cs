@@ -40,6 +40,7 @@ namespace TanzEksp.Server.Helpers
                     {
                         col.Item().Text("Rejseplanen til dit livs oplevelse").FontSize(20).Bold().FontColor(Colors.Blue.Medium);
                         col.Item().Text($"Booking Nr: {booking.Id}").FontSize(10).FontColor(Colors.Grey.Darken2);
+                        col.Item().Text($"Rejsene: voksne: {booking.AdultCount}, børn {booking.ChildCount}");
                     });
 
                     row.ConstantItem(100).Height(60).Image(logoPath, ImageScaling.FitArea);
