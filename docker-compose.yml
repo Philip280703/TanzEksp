@@ -4,7 +4,5 @@ services:
     build:
       context: .
       dockerfile: TanzEksp/Server/Dockerfile
-    ports:
-        - "9597:9597"
-    environment:
-     ASPNETCORE_HTTP_PORTS: 9597
+    ports: 
+    - "8080:8080"
