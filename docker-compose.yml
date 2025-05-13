@@ -1,0 +1,8 @@
+services:
+  tanzeksp.server:
+    image: ${DOCKER_REGISTRY-}tanzekspserver
+    build:
+      context: .
+      dockerfile: TanzEksp/Server/Dockerfile
+    ports: 
+    - "8080:8080"
