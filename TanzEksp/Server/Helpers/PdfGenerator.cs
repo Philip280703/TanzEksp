@@ -34,8 +34,6 @@ namespace TanzEksp.Server.Helpers
             {
                 page.Margin(30);
 
-                var logoPath = Path.Combine(Directory.GetCurrentDirectory(), "img", "logo.png");
-
                 page.Header().Row(row =>
                 {
                     row.RelativeItem().Column(col =>
@@ -43,6 +41,9 @@ namespace TanzEksp.Server.Helpers
                         col.Item().Text("Rejseplanen til dit livs oplevelse").FontSize(20).Bold().FontColor(Colors.Orange.Medium);
                         col.Item().Text($"Booking Nr: {booking.Id}").FontSize(10).FontColor(Colors.Grey.Darken2);
                     });
+
+                    var basePath = AppContext.BaseDirectory;
+                    var logoPath = Path.Combine(basePath, "Resources", "logo.png");
 
                     row.ConstantItem(100).Height(60).Image(logoPath, ImageScaling.FitArea);
                 });
