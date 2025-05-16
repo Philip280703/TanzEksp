@@ -20,6 +20,7 @@ COPY ["TanzEksp/Shared/TanzEksp.Shared.csproj", "TanzEksp/Shared/"]
 RUN dotnet restore "./TanzEksp/Server/TanzEksp.Server.csproj"
 COPY . .
 WORKDIR "/src/TanzEksp/Server"
+COPY TanzEksp/Server/Resources /app/Resources
 RUN dotnet build "./TanzEksp.Server.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

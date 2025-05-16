@@ -27,6 +27,8 @@ namespace TanzEksp.Domain.Entities
 
         public string? TripLength { get; set; }
 
+        public string? Status { get; set; }
+
         public DateTime? DepartureDate { get; set; }
 
         [Timestamp]
