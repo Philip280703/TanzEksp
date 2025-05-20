@@ -15,6 +15,8 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddTransient<CustomAuthorizationMessageHandler>();
+
 builder.Services.AddScoped(sp =>
 {
     var localStorage = sp.GetRequiredService<ILocalStorageService>();
