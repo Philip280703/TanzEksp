@@ -7,19 +7,35 @@ using TanzEksp.Client.Auth;
 using TanzEksp.Client.DI;
 using TanzEksp.Client.Services;
 using BlazorDownloadFile;
+using Blazored.LocalStorage;
+
 
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddTransient<CustomAuthorizationMessageHandler>();
+
+builder.Services.AddScoped(sp =>
+{
+    var localStorage = sp.GetRequiredService<ILocalStorageService>();
+    var handler = new CustomAuthorizationMessageHandler(localStorage)
+    {
+        InnerHandler = new HttpClientHandler()
+    };
+
+    return new HttpClient(handler)
+    {
+        BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+    };
+});
 
 builder.Services.AddClientServices(); // Register IOC service her
 
 builder.Services.AddBlazorDownloadFile();
 
-
+builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();

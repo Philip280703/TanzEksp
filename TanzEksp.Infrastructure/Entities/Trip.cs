@@ -15,5 +15,6 @@ namespace TanzEksp.Domain.Entities
         public string TripType { get; set; }
 
         public List<TripEvent>? Events { get; set; }
+
     }
 }
