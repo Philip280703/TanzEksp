@@ -11,6 +11,7 @@ using TanzEksp.Application.Interfaces;
 using TanzEksp.Infrastructure.Persistence.Repositories;
 using TanzEksp.Application.UseCases;
 using System.Globalization;
+using Swashbuckle.AspNetCore;
 
 
 
@@ -25,7 +26,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerServices(); // Register IOC service her
 
 
-
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -106,6 +107,18 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
+}
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TanzEksp API v1");
+        c.RoutePrefix = "swagger"; // så det ligger på /swagger
+    });
+
+    app.UseWebAssemblyDebugging();
 }
 
 
