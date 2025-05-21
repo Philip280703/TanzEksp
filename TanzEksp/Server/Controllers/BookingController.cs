@@ -30,7 +30,8 @@ namespace TanzEksp.Server.Controllers
                 Airport = bookingDTO.Airport,
                 DepartureDate = bookingDTO.DepartureDate,
                 TripLength = bookingDTO.TripLength,
-                TripId = bookingDTO.TripId
+                TripId = bookingDTO.TripId,
+                Status = bookingDTO.Status,
             };
         }
 

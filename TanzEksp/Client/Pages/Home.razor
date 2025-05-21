@@ -1,6 +1,156 @@
-﻿
-@page "/home"
+﻿@page "/home"
+@using TanzEksp.Shared.DTO
+@using TanzEksp.Client.Services.Interfaces;
+@inject NavigationManager navigationManager
+@inject IBookingService bookingService
+@inject ICustomerService customerService
+
+<div class="admin-container">
+    @if (errorMessage != null)
+    {
+        <p class="error">@errorMessage</p>
+    }
+
+    @if (bookings == null)
+    {
+        <p>Henter Bookinger...</p>
+    }
+    else
+    {
+        <div class="table-wrapper">
+            <table class="bookings-table">
+                <thead>
+                    <tr>
+                        <th>BookingId</th>
+                        <th>Kunde</th>
+                        <th>Status</th>
+                        <th>Antal Voksne</th>
+                        <th>Antal Børn</th>
+                        <th>Lufthavn</th>
+                        <th>Afgangsdato</th>
+                        <th>Varighed</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var booking in bookings)
+                    {
+
+                        var customer = customerList.FirstOrDefault(c => c.Id == booking.CustomerId);
+                        <tr>
+                            <td @onclick="() => NavigateTo(booking.Id)">@booking.Id</td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@customer.FirstName @customer.LastName </td>
+                           @*  <td @onclick="() => NavigateTo(booking.Id)">@booking.Status</td> *@
+                            <td class="@GetStatusBgClass(booking.Status)">
+                                <select value="@booking.Status" @onchange="async e => await UpdateBookingStatus(booking, ((ChangeEventArgs)e).Value?.ToString())">
+                                    @foreach (var status in statusOptions)
+                                    {
+                                        <option value="@status">@status</option>
+                                    }
+                                </select>
+                            </td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@booking.AdultCount</td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@booking.ChildCount</td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@booking.Airport</td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@booking.DepartureDate</td>
+                            <td @onclick="() => NavigateTo(booking.Id)">@booking.TripLength</td>
+                            <td class="action-buttons">
+                                <button class="btn-delete" @onclick="() => DeleteBooking(booking.Id)">Slet</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+
+
+
 
 @code {
+
+    private string errorMessage;
+    private List<CustomerDTO> customerList;
+    private List<BookingDTO> bookings;
+    private Guid? BookingId;
+
+    private List<string> statusOptions = new() { "Udkast", "Sendt", "Godkendt", "Afvist", "Betalt" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            bookings = await bookingService.GetAllBookingsAsync();
+            if (bookings == null)
+            {
+                errorMessage = "Kunne ikke hente bookinger fra serveren.";
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = "Der opstod en HTTP-fejl ved hentning af bookinger: " + ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "En ukendt fejl opstod: " + ex.Message;
+        }
+        customerList = await customerService.GetAllCustomersAsync();
+    }
+
+    private void NavigateTo(Guid bookingId)
+    {
+        navigationManager.NavigateTo($"/TripsOnCertainBooking/{bookingId}");
+    }
+
+    private async Task DeleteBooking(Guid bookingId)
+    {
+        try
+        {
+            await bookingService.DeleteBookingAsync(bookingId);
+            bookings = await bookingService.GetAllBookingsAsync();
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = "Der opstod en fejl ved sletning af booking: " + ex.Message;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "En ukendt fejl opstod: " + ex.Message;
+        }
+    }
+
+    private async Task UpdateBookingStatus(BookingDTO bookingDTO, string newStatus)
+    {
+        if (string.IsNullOrEmpty(newStatus) || bookingDTO.Status == newStatus)
+            return; // Ingen ændring
+
+        bookingDTO.Status = newStatus.Trim();
+        try
+        {
+            await bookingService.UpdateBookingAsync(bookingDTO);
+            // Hvis du vil opdatere hele listen:
+            // bookings = await bookingService.GetAllBookingsAsync();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Fejl ved opdatering af status: " + ex.Message;
+        }
+    }
+
+    private string GetStatusBgClass(string? status)
+    {
+        return status?.ToLower() switch
+        {
+            "udkast" => "status-bg-udkast",
+            "sendt" => "status-bg-sendt",
+            "godkendt" => "status-bg-godkendt",
+            "afvist" => "status-bg-afvist",
+            "betalt" => "status-bg-betalt",
+            _ => ""
+        };
+    }
 
 }

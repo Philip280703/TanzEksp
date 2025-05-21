@@ -121,6 +121,8 @@ else
     <h4>Pris pr. person: @CalculateSum().ToString("N0", System.Globalization.CultureInfo.InvariantCulture).Replace(",", ".") kr.</h4>
     <h4>Samlet pris: @CalculateSumTimesAdults().ToString("N0", System.Globalization.CultureInfo.InvariantCulture).Replace(",", ".") kr.</h4>
     <h4>Antal dage: @CalculateDays()</h4>
+
+    <h4>Status: @booking.Status</h4>
     <button class="btn-add" @onclick="MakePdf">Lav PDF</button>
 
 }

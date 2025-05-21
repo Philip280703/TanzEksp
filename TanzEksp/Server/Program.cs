@@ -13,6 +13,7 @@ using TanzEksp.Application.UseCases;
 using System.Globalization;
 
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -22,6 +23,8 @@ builder.Services.AddRazorPages();
 
 
 builder.Services.AddServerServices(); // Register IOC service her
+
+
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>

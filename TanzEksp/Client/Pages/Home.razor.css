@@ -1,0 +1,281 @@
+﻿/* Header Styling */
+.customer-heading, .booking-heading {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+    font-size: 2rem;
+    width: 100%;
+}
+
+/* Button Styling */
+.btn-delete, .btn-add, .btn-update {
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Delete Button */
+.btn-delete {
+    background-color: #e63946;
+}
+
+    .btn-delete:hover {
+        background-color: #d62828;
+        transform: scale(1.05);
+    }
+
+    .btn-delete:active {
+        background-color: #a4161a;
+        transform: scale(0.98);
+    }
+
+/* Add Button */
+.btn-add {
+    background-color: #38b000;
+}
+
+    .btn-add:hover {
+        background-color: #2d6a4f;
+        transform: scale(1.05);
+    }
+
+    .btn-add:active {
+        background-color: #1b4332;
+        transform: scale(0.98);
+    }
+
+/* Update Button */
+.btn-update {
+    background-color: #0077b6;
+}
+
+    .btn-update:hover {
+        background-color: #023e8a;
+        transform: scale(1.05);
+    }
+
+    .btn-update:active {
+        background-color: #03045e;
+        transform: scale(0.98);
+    }
+
+/* Button Wrapper */
+.button-wrapper {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+/* Table Wrapper */
+.table-wrapper {
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 2rem;
+    overflow-x: auto;
+}
+
+/* Customer Table Styling */
+.customer-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+    .customer-table th, .customer-table td {
+        border: 1px solid #ddd;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .customer-table th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .customer-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .customer-table tr:hover {
+        background-color: #e9ecef;
+    }
+
+/* Booking Table Styling */
+.bookings-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+    .bookings-table th, .bookings-table td {
+        border: 1px solid #ddd;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .bookings-table th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .bookings-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .bookings-table tr:hover {
+        background-color: #e9ecef;
+    }
+
+/* Flexbox for Action Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    width: auto;
+}
+
+/* Error Message Styling */
+.error {
+    color: #e63946;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+/* General Admin Container */
+.admin-container {
+    padding: 2rem;
+}
+
+/* Modal Styling */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 450px;
+    max-width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+    .modal-content form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .modal-content label {
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+        color: #555;
+    }
+
+    .modal-content input {
+        padding: 0.8rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 1rem;
+        background-color: #f8f9fa;
+        width: 100%;
+        box-sizing: border-box;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .modal-content input:focus {
+            border-color: #38b000;
+            background-color: #ffffff;
+            box-shadow: 0 0 8px rgba(56, 176, 0, 0.5);
+        }
+
+    .modal-content button {
+        margin-top: 1.25rem;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+        .modal-content button.btn-delete {
+            background-color: #e63946;
+            color: white;
+        }
+
+            .modal-content button.btn-delete:hover {
+                background-color: #d62828;
+                transform: scale(1.05);
+            }
+
+            .modal-content button.btn-delete:active {
+                background-color: #a4161a;
+                transform: scale(0.98);
+            }
+
+        .modal-content button.btn-add {
+            background-color: #38b000;
+            color: white;
+        }
+
+            .modal-content button.btn-add:hover {
+                background-color: #2d6a4f;
+                transform: scale(1.05);
+            }
+
+            .modal-content button.btn-add:active {
+                background-color: #1b4332;
+                transform: scale(0.98);
+            }
+
+.status-bg-udkast {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+}
+
+.status-bg-sendt {
+    background-color: #e3f0ff;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.status-bg-godkendt {
+    background-color: #e6f9ec;
+    color: #38b000;
+    font-weight: bold;
+}
+
+.status-bg-afvist {
+    background-color: #ffeaea;
+    color: #e63946;
+    font-weight: bold;
+}
+
+.status-bg-betalt {
+    background-color: #fffbe6;
+    color: #f9a825;
+    font-weight: bold;
+}

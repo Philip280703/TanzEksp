@@ -53,6 +53,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
                     existingBooking.Airport = booking.Airport;
                     existingBooking.DepartureDate = booking.DepartureDate;
                     existingBooking.TripLength = booking.TripLength;
+                    existingBooking.Status = booking.Status;
                 }
                      
                 //if (booking.Customer != null)
