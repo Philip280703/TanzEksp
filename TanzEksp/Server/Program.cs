@@ -84,13 +84,25 @@ using (var scope = app.Services.CreateScope())
             await roleManager.CreateAsync(new IdentityRole(role));
     }
 
-    var admin = await userManager.FindByNameAsync("admin");
+    var config = builder.Configuration;
+
+    var admin = await userManager.FindByNameAsync(config["AdminUser:UserName"]);
     if (admin == null)
     {
-        var adminUser = new ApplicationUser { UserName = "admin@tanzaniaeksperten.dk", Email = "admin@example.com", FullName = "Administrator" };
-        var result = await userManager.CreateAsync(adminUser, "Admin123!");
-        if (result.Succeeded) await userManager.AddToRoleAsync(adminUser, "Admin");
+        var adminUser = new ApplicationUser
+        {
+            UserName = config["AdminUser:UserName"],
+            Email = config["AdminUser:Email"],
+            FullName = config["AdminUser:FullName"]
+        };
+
+        var result = await userManager.CreateAsync(adminUser, config["AdminUser:Password"]);
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
     }
+
 }
 
 
