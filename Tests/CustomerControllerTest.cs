@@ -55,5 +55,36 @@ namespace Test
             Assert.Equal("GetById", createdResult.ActionName);                      // Sikrer at actionname er "GetById" så klienten kan bruge dette navn til at hente kunden
             Assert.Equal(newCustomer.Id, ((Customer)createdResult.Value).Id);      // Sikrer at den id der returneres er den samme som den id der blev sendt til controlleren
         }
+
+        [Fact]
+        public async Task UpdateCustomerTest()
+        {
+            // Arrange
+            var mockRepository = new Mock<ICustomerRepository>();
+
+            Guid id = Guid.Parse("33442A82-D297-433F-92AB-08DD88E57474");
+            var customerToUpdate = new Customer
+            {
+                Id = id,
+                FirstName = "John"
+            };
+
+            mockRepository.Setup(repo => repo.Update(It.IsAny<Customer>()))
+                          .Returns(Task.CompletedTask); // Optional, if method is async void
+
+            var customerUseCase = new CustomerUseCase(mockRepository.Object);
+            var controller = new CustomerController(customerUseCase);
+            
+            // Act
+            var result = await controller.Update(id, customerToUpdate);
+
+            // Assert
+            mockRepository.Verify(repo => repo.Update(It.Is<Customer>(c =>
+                c.Id == customerToUpdate.Id && c.FirstName == customerToUpdate.FirstName)), Times.Once);
+
+            Assert.IsType<NoContentResult>(result);
+        }
+        
+
     }
 }

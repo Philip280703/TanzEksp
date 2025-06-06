@@ -55,29 +55,6 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
                     existingBooking.TripLength = booking.TripLength;
                     existingBooking.Status = booking.Status;
                 }
-                     
-                //if (booking.Customer != null)
-                //{
-                //    existingBooking.Customer.FirstName = booking.Customer.FirstName;
-                //    existingBooking.Customer.LastName = booking.Customer.LastName;
-                //    existingBooking.Customer.PhoneNumber = booking.Customer.PhoneNumber;
-                //    existingBooking.Customer.Email = booking.Customer.Email;
-                //}
-
-                //if (booking.Trip != null)  
-                //{
-                //    var existingTrip = await _db.TripEF.FindAsync(booking.Trip.Id);
-                //    if (existingTrip != null)
-                //    {
-                //        existingTrip.TripType = booking.Trip.TripType;
-                //        existingTrip.StartDate = booking.Trip.StartDate;
-                //        // vi skal måske tilføje slutdato, pris, description, navn, Start lokation osv.
-                //    }
-                //    else
-                //    {
-                //        existingBooking.TripId = booking.TripId;
-                //    }
-                //}
 
                 _unitOfWork.Commit();
                 await _db.SaveChangesAsync();
