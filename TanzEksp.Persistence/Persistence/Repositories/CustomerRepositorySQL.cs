@@ -57,8 +57,8 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
                     existingCustomer.LastName = customer.LastName;
                     existingCustomer.Email = customer.Email;
                     existingCustomer.PhoneNumber = customer.PhoneNumber;
-                    existingCustomer.
-                   
+                    existingCustomer.RowVersion = customer.RowVersion; // Opdater RowVersion for at undgå concurrency problemer
+
                 }
                 _unitOfWork.Commit();
                 await _db.SaveChangesAsync(); // Brug asynkrone version

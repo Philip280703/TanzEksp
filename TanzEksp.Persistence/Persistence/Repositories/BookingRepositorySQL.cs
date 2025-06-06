@@ -54,6 +54,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
                     existingBooking.DepartureDate = booking.DepartureDate;
                     existingBooking.TripLength = booking.TripLength;
                     existingBooking.Status = booking.Status;
+                    existingBooking.RowVersion = booking.RowVersion; 
                 }
 
                 _unitOfWork.Commit();
