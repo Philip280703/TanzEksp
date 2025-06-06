@@ -51,7 +51,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
                     existingdayplan.Description = dayPlan.Description;
                     existingdayplan.Title = dayPlan.Title;
                     existingdayplan.Accommodation = dayPlan.Accommodation;
-                    existingdayplan.RowVersion = dayPlan.RowVersion; // Opdater RowVersion for at undgå concurrency problemer
+                    //existingdayplan.RowVersion = dayPlan.RowVersion; // Opdater RowVersion for at undgå concurrency problemer
                 }
                 await _db.SaveChangesAsync(); // Brug asynkrone version
                 _unitOfWork.Commit();
