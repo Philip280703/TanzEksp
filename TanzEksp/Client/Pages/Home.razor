@@ -1,9 +1,11 @@
 ﻿@page "/home"
 @using TanzEksp.Shared.DTO
 @using TanzEksp.Client.Services.Interfaces;
+@using Microsoft.AspNetCore.Authorization
 @inject NavigationManager navigationManager
 @inject IBookingService bookingService
 @inject ICustomerService customerService
+@attribute [Authorize(Roles = "Admin, User")]
 
 <div class="admin-container">
     @if (errorMessage != null)

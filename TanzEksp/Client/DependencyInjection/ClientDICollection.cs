@@ -7,7 +7,7 @@ namespace TanzEksp.Client.DI
     {
         public static IServiceCollection AddClientServices(this IServiceCollection services)
         {
-            // Register IOC service her
+            // Register IOC services her
             services.AddScoped<ITripService, TripService>();
             services.AddScoped<UserService>();
             services.AddScoped<IPdfService, PdfService>();

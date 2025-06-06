@@ -34,8 +34,8 @@ namespace TanzEksp.Domain.Entities
 
         public string ?Image { get; set; }
 
-        [Timestamp]
-        public byte[] RowVersion { get; set; }
+        //[Timestamp]
+        //public byte[] RowVersion { get; set; }
 
         public List<DayPlan>? DayPlans { get; set; }
     }

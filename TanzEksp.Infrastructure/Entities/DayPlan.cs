@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
         public int TripEventId { get; set; }
 
-        [Timestamp]
-        public byte[] RowVersion { get; set; }
+        //[Timestamp]
+        //public byte[] RowVersion { get; set; }
     }
 }
