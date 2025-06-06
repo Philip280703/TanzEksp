@@ -57,6 +57,7 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
                     existingCustomer.LastName = customer.LastName;
                     existingCustomer.Email = customer.Email;
                     existingCustomer.PhoneNumber = customer.PhoneNumber;
+                    existingCustomer.
                    
                 }
                 _unitOfWork.Commit();

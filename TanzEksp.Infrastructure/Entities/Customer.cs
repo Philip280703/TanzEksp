@@ -33,6 +33,8 @@ namespace TanzEksp.Domain.Entities
         [Phone(ErrorMessage = "Ugyldigt telefonnummerformat")]
         public string PhoneNumber { get; set; }
 
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
 
         public List<Booking>? Bookings { get; set; } = new List<Booking>();
 

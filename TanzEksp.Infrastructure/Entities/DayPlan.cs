@@ -23,5 +23,8 @@ using System.Threading.Tasks;
         public string? Meals { get; set; }
 
         public int TripEventId { get; set; }
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 }
