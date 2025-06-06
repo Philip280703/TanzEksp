@@ -57,8 +57,8 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
                     existingBooking.RowVersion = booking.RowVersion; 
                 }
 
-                _unitOfWork.Commit();
                 await _db.SaveChangesAsync();
+                _unitOfWork.Commit();
             }
             catch (Exception ex)
             {

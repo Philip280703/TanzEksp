@@ -60,8 +60,8 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
                     existingCustomer.RowVersion = customer.RowVersion; // Opdater RowVersion for at undgå concurrency problemer
 
                 }
-                _unitOfWork.Commit();
                 await _db.SaveChangesAsync(); // Brug asynkrone version
+                _unitOfWork.Commit();
             }
             catch (Exception ex)
             {

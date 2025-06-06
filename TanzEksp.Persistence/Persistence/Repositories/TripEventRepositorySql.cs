@@ -65,8 +65,8 @@ namespace TanzEksp.Infrastructure.Persistence.Repositories
 					existingTripEvent.Price = tripEvent.Price;
 					existingTripEvent.RowVersion = tripEvent.RowVersion; // Opdater RowVersion for at undgå concurrency problemer
                 }
-				_unitOfWork.Commit();
 				await _db.SaveChangesAsync();
+				_unitOfWork.Commit();
 			}
 			catch (Exception ex)
 			{
