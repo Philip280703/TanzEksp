@@ -252,8 +252,6 @@ else
             tripEventsInTrip = tripEvents.Where(x => x.TripId == booking.TripId).ToList();			
         }
 
-        // dayPlans = await dayPlanService.GetAll();
-        // DayPlanInTrip = dayPlans.Where(x => x.TripEventId == ).ToList();
     }
 
     private void ShowAddTripEventModal()
@@ -310,7 +308,7 @@ else
             await dayPlanService.AddDayPlanAsync(newDayPlan);
         }
 
-        // 💡 HENT TRIPEVENTS + DAYPLANS FRA DATABASEN IGEN
+        // HENT TRIPEVENTS + DAYPLANS FRA DATABASEN IGEN
         tripEvents = await tripEventService.GetAllTripEventsAsync();
         tripEventsInTrip = tripEvents
             .Where(x => x.TripId == booking.TripId)
@@ -465,7 +463,7 @@ else
 		return sum * booking.AdultCount;
 	}
 
-    // En metode til at finde summen af antal dage i en booking via dayplans
+  
     private int CalculateDays()
     {
         int days = 0;
@@ -479,7 +477,7 @@ else
         return days;
     }
 
-    // en metode til at slette et tripevent fra trip
+    
     private async Task DeleteTripEvent(TripEventDTO tripEvent)
     {
         await tripEventService.DeleteTripEventAsync(tripEvent.Id);
