@@ -15,7 +15,7 @@ namespace TanzEksp.Server.Controllers
 
         public UsersController(UserManager<ApplicationUser> userManager)
         {
-            _userManager = userManager;
+            _userManager = userManager; // gemmer det
         }
 
         [HttpGet]

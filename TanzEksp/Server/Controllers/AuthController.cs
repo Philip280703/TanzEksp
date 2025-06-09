@@ -18,7 +18,7 @@ namespace TanzEksp.Server.Controllers
 
         public AuthController(UserManager<ApplicationUser> userManager, IConfiguration config)
         {
-            _userManager = userManager;
+            _userManager = userManager;  // gemmer det
             _config = config;
         }
 

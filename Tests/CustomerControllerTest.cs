@@ -8,6 +8,7 @@ using TanzEksp.Domain.Entities;
 using TanzEksp.Client.Services;
 using System.Net.Http.Json;
 using System.Net;
+using System.Runtime.InteropServices;
 
 namespace Test
 {
@@ -74,7 +75,7 @@ namespace Test
 
             var customerUseCase = new CustomerUseCase(mockRepository.Object);
             var controller = new CustomerController(customerUseCase);
-            
+
             // Act
             var result = await controller.Update(id, customerToUpdate);
 
@@ -84,7 +85,54 @@ namespace Test
 
             Assert.IsType<NoContentResult>(result);
         }
+
+
+        [Fact]
+        public async Task DeleteCustomer_ControllerTest()
+        {
+            //arrange
+            var mockRepository = new Mock<ICustomerRepository>();
+            var id = Guid.Parse("33442A82-D297-433F-92AB-08DD88E57475");
+
+            // Først henter vi kunden med metoden GetById og tjekker om kunden eksistere
+
+            mockRepository.Setup(r => r.GetById(id)).ReturnsAsync(new Customer { Id = id, FirstName = "Andreas" });
+
+            // Hvis kunden eksistere, så kalder vi delete metoden (id)
         
+            mockRepository.Setup(r => r.Delete(id)).Returns(Task.CompletedTask);
+            // Delete metoden retunere en completed task 
+
+            var usecase = new CustomerUseCase(mockRepository.Object);
+            var controller = new CustomerController(usecase);
+
+            // Tjekker resultatet: 
+            //act 
+            var result = await controller.Delete(id);
+
+            //assert
+            mockRepository.Verify(r => r.Delete(id), Times.Once);
+            Assert.IsType<NoContentResult>(result);
+        }
+
+
+        [Fact]
+        public async Task DeleteCusotmer_UseCaseTest()
+        {
+            //arrange
+            var mockRepository = new Mock<ICustomerRepository>();
+            var id = Guid.Parse("33442A82-D297-433F-92AB-08DD88E57475");
+
+            mockRepository.Setup(r => r.Delete(It.IsAny<Guid>())).Returns(Task.CompletedTask);
+            var useCase = new CustomerUseCase(mockRepository.Object);
+
+            //act
+            await useCase.Delete(id);
+
+            //assert
+
+            mockRepository.Verify(r => r.Delete(id), Times.Once);
+        }
 
     }
 }
